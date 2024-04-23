@@ -1,0 +1,379 @@
+<div class="col-12" style="padding-bottom: 10px;">
+  <h2 style="font-family: 'Times New Roman', Times, serif;color: #0f2a9e; text-align: center;justify-content: center;">Parametrages des Collaborateurs Pour Notre Unité </h2>
+</div>
+
+    <nb-card>     
+      <nb-card-body >
+          <ng2-smart-table [settings]="settingsRUO" [source]="sourceRUO"(create)="createCollab(addCollab)" (delete)="OnDeleteConfirm($event)" (edit)="modifier($event)" >
+          </ng2-smart-table>
+        </nb-card-body>
+    </nb-card>
+   
+  
+    <!-- <ng-template #dialogEdit let-data let-ref="dialogRef">
+
+      <nb-card class="col-12 " style="width: 800px;">
+  
+        <nb-card-header>Modifier Responsable Unité Opérationnelle </nb-card-header>
+  
+        <nb-card-body>
+          <div class="form-group row col-12">
+  
+            <label for="nouveauSalaire" class="label col-4 col-form-label"> Image : </label>
+
+            <div class="col-sm-6">
+
+              <input id="file" #fileInput accept="image/*" class="input-file" type="file" (change)="handleInputChange(fileInput)">
+            </div>
+
+          </div>
+          <div class="form-group row col-12">
+  
+            <label for="nouveauSalaire" class="label col-4 col-form-label"> Matricule : </label>
+
+            <div class="col-sm-6">
+
+              <input type="text" class="form-control col-sm-12" required fullWidth id="matricule"
+
+                [ngModel]="user1.matricule" (ngModelChange)="user1.matricule= $event" #matricule="ngModel"
+
+                name="matricule"
+
+                [ngClass]="{'alert alert-danger':matricule.invalid && (matricule.dirty || matricule.touched)}">
+
+            </div>
+
+          </div>
+
+          <div class="form-group row col-12">
+  
+            <label for="nouveauSalaire" class="label col-4 col-form-label"> Nom : </label>
+
+            <div class="col-sm-6">
+
+              <input type="text" class="form-control col-sm-12" required fullWidth id="username"
+
+                [ngModel]="user1.username" (ngModelChange)="user1.username= $event" #username="ngModel"
+
+                name="username"
+
+                [ngClass]="{'alert alert-danger':username.invalid && (username.dirty || username.touched)}">
+
+            </div>
+          </div>
+          <div class="form-group row col-12">
+  
+            <label for="nouveauSalaire" class="label col-4 col-form-label"> Prenom : </label>
+
+            <div class="col-sm-6">
+
+              <input type="text" class="form-control col-sm-12" required fullWidth id="prenom"
+
+                [ngModel]="user1.prenom" (ngModelChange)="user1.prenom= $event" #prenom="ngModel"
+
+                name="prenom"
+
+                [ngClass]="{'alert alert-danger':prenom.invalid && (prenom.dirty || prenom.touched)}">
+
+            </div>
+          </div>
+
+          <div class="form-group row col-12">
+  
+            <label for="nouveauSalaire" class="label col-4 col-form-label"> Email : </label>
+
+            <div class="col-sm-6">
+
+              <input type="text" class="form-control col-sm-12" required fullWidth id="email"
+
+                [ngModel]="user1.email" (ngModelChange)="user1.email= $event" #email="ngModel"
+
+                name="email"
+
+                [ngClass]="{'alert alert-danger':email.invalid && (email.dirty || email.touched)}">
+
+            </div>
+
+          </div>
+
+        
+  
+        </nb-card-body>
+  
+   
+  
+        <nb-card-footer>
+  
+          <button nbButton (click)="ref.close()" class=" float-right btn btn-danger "
+  
+            style="background-color: crimson;color: aliceblue;">Fermer</button>
+  
+          <button nbButton (click)="modifierRUO(ref)" class=" float-right btn btn-success mr-1"
+  
+            style="background-color: green;color: aliceblue;">Modifier</button>
+  
+   
+  
+        </nb-card-footer>
+  
+      </nb-card>
+  
+    </ng-template> -->
+
+    <ng-template #addCollab let-data let-ref="dialogRef">
+
+      <nb-card class="col-12 " style="width: 800px;">
+  
+    
+          <nb-card-header>Ajouter Une Nouveau Collaborateur </nb-card-header>
+    
+          <nb-card-body *ngIf="userConnecte =='RPS'">
+           
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                <label for="inputWebsite" class="label" style="color: black;margin-left: 5px;">Nom <span style="color: red;">*</span></label>
+                  <input type="text" nbInput fullWidth id="username" shape="semi-round"status="info"  placeholder="Entrer le nom du collaborateur" 
+
+                  [ngModel]="user.username" (ngModelChange)="user.username= $event" #username="ngModel"
+
+                  name="username"
+                  [ngClass]="{'alert alert-danger':username.invalid && (username.dirty || username.touched)}">
+             </div>
+              </div>
+            
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="inputLastName" class="label" style="color: black;">Prenom : <span style="color: red;">*</span></label>
+                  <input type="text" nbInput fullWidth placeholder="Entrer le prenom du collaborateur" shape="semi-round"status="info" id="prenom"
+                  [ngModel]="user.prenom" (ngModelChange)="user.prenom= $event" #prenom="ngModel"
+                  name="prenom"
+                  [ngClass]="{'alert alert-danger':prenom.invalid && (prenom.dirty || prenom.touched)}">
+                </div>
+              </div>
+            
+            </div>
+            <div class="row">          
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="inputLastName" class="label" style="color: black;">Matricule : <span style="color: red;">*</span></label>
+                  <input type="text" nbInput fullWidth placeholder="Entrer la matricule du collaborateur" shape="semi-round"status="info" id="matricule"
+                  [ngModel]="user.matricule" (ngModelChange)="user.matricule= $event" #matricule="ngModel"
+                  name="matricule"
+                  [ngClass]="{'alert alert-danger':matricule.invalid && (matricule.dirty || matricule.touched)}">
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                <label for="inputWebsite" class="label" style="color: black;margin-left: 5px;">Email </label>
+                <input type="text"  nbInput fullWidth  shape="semi-round"status="info"  required fullWidth id="email"  placeholder="Entrer l'E-mail du collaborateur" 
+                [ngModel]="user.email" (ngModelChange)="user.email= $event" #email="ngModel"
+                name="email"
+                [ngClass]="{'alert alert-danger':email.invalid && (email.dirty || email.touched)}">
+             </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                <label for="inputWebsite" class="label" style="color: black;margin-left: 5px;">Unité Opérationnelle : <span style="color: red;">*</span>  </label>
+                <nb-select class="type-select" fullWidth shape="semi-round" status="info"  id="uo" [(ngModel)]="selectedUnite" #uo="ngModel" name="uo"
+                [ngClass]="{'alert alert-danger': uo.invalid && (uo.dirty || uo.touched)}">
+                <nb-option >Sélectionnez une unité opérationnelle</nb-option>
+                <nb-option *ngFor="let uo of listeUnite" [value]="uo.id">
+                  {{ uo.ref }} - {{ uo.nom }}
+                </nb-option>
+              </nb-select>  
+              </div>
+              </div>
+            </div> 
+            <div class="text-center" >
+              <button nbButton status="danger" hero style="margin-bottom: 10px;"  (click)="ref.close()">Annuler</button>
+              <button nbButton status="success" hero style="margin-bottom: 10px;; margin-left: 10px;" (click)="SaveRUO(ref)">Ajout Responsable UO </button>
+           </div>
+          </nb-card-body>
+          <nb-card-body *ngIf="userConnecte!='RPS'">
+            <div class="row">
+              <div class="col-sm-6" >
+                <div class="form-group">
+                  <label for="inputWebsite" class="label" style="color: black;margin-left: 5px;">Role <span style="color: red;">*</span></label>
+                  <nb-select class="type-select" fullWidth shape="semi-round" status="info" id="role" [(ngModel)]="selectedRole" (ngModelChange)="onRoleChange()" #role="ngModel" name="role"
+                      [ngClass]="{'alert alert-danger': role.invalid && (role.dirty || role.touched)}">
+                      <nb-option >Sélectionnez un Role</nb-option>
+                      <nb-option *ngFor="let role of listeRole" [value]="role.id">
+                        {{ role.nom }}
+                      </nb-option>
+                   </nb-select>
+                  </div>
+              </div>
+            
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="inputLastName" class="label" style="color: black;">Matricule : <span style="color: red;">*</span></label>
+                  <input type="text" nbInput fullWidth placeholder="Entrer la matricule du collaborateur" shape="semi-round"status="info" id="matricule"
+                  [ngModel]="user.matricule" (ngModelChange)="user.matricule= $event" #matricule="ngModel"
+                  name="matricule"
+                  [ngClass]="{'alert alert-danger':matricule.invalid && (matricule.dirty || matricule.touched)}">
+                </div>
+              </div>
+            
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                <label for="inputWebsite" class="label" style="color: black;margin-left: 5px;">Nom <span style="color: red;">*</span></label>
+                  <input type="text" nbInput fullWidth id="username" shape="semi-round"status="info"  placeholder="Entrer le nom du collaborateur" 
+
+                  [ngModel]="user.username" (ngModelChange)="user.username= $event" #username="ngModel"
+
+                  name="username"
+                  [ngClass]="{'alert alert-danger':username.invalid && (username.dirty || username.touched)}">
+             </div>
+              </div>
+            
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="inputLastName" class="label" style="color: black;">Prenom : <span style="color: red;">*</span></label>
+                  <input type="text" nbInput fullWidth placeholder="Entrer le prenom du collaborateur" shape="semi-round"status="info" id="prenom"
+                  [ngModel]="user.prenom" (ngModelChange)="user.prenom= $event" #prenom="ngModel"
+                  name="prenom"
+                  [ngClass]="{'alert alert-danger':prenom.invalid && (prenom.dirty || prenom.touched)}">
+                </div>
+              </div>
+            
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                <label for="inputWebsite" class="label" style="color: black;margin-left: 5px;">Email </label>
+                <input type="text"  nbInput fullWidth  shape="semi-round"status="info"  required fullWidth id="email"  placeholder="Entrer l'E-mail du collaborateur" 
+                [ngModel]="user.email" (ngModelChange)="user.email= $event" #email="ngModel"
+                name="email"
+                [ngClass]="{'alert alert-danger':email.invalid && (email.dirty || email.touched)}">
+             </div>
+              </div>
+            
+             
+            
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                <label for="inputWebsite" class="label" style="color: black;margin-left: 5px;">Unité Opérationnelle : <span style="color: red;">*</span>  </label>
+                <nb-select class="type-select" fullWidth shape="semi-round" status="info"  id="uo" [(ngModel)]="selectedUnite" (ngModelChange)="loadActivites()" #uo="ngModel" name="uo"
+                [ngClass]="{'alert alert-danger': uo.invalid && (uo.dirty || uo.touched)}">
+                <nb-option >Sélectionnez une unité opérationnelle</nb-option>
+                <nb-option *ngFor="let uo of listeUnite" [value]="uo.id">
+                  {{ uo.ref }} - {{ uo.nom }}
+                </nb-option>
+              </nb-select>  
+              </div>
+              </div>
+            </div>
+            <div class="row"  *ngIf="showActivites">
+              <div class="col-sm-12">
+                <div class="form-group">
+                <label for="inputWebsite" class="label" style="color: black;margin-left: 5px;">Activité  <span style="color: red;">*</span>  </label>
+                <nb-select class="type-select" fullWidth shape="semi-round" status="info"  id="act" [(ngModel)]="selectedActivite" #act="ngModel" name="act"
+                [ngClass]="{'alert alert-danger': act.invalid && (act.dirty || act.touched)}">
+                <nb-option >Sélectionnez une activité</nb-option>
+                <nb-option *ngFor="let act of activite" [value]="act.id">
+                  {{ act.ref }} - {{ act.nom }}
+                </nb-option>
+              </nb-select>
+             </div>
+              </div>
+            
+              </div> 
+           
+            <div class="text-center" >
+              <button nbButton status="danger" hero style="margin-bottom: 10px;"  (click)="ref.close()">Annuler</button>
+              <button nbButton status="success" hero style="margin-bottom: 10px;; margin-left: 10px;" (click)="SaveCollab(ref)">Ajout Collaborateur</button>
+           </div>
+          </nb-card-body>
+        </nb-card>
+    
+      </ng-template>
+      <ng-template #dialogEdit let-data let-ref="dialogRef">
+
+        <nb-card class="col-12 " style="width: 800px;">
+    
+      
+            <nb-card-header>Mise à Jours du Compte Collaborateur </nb-card-header>
+      
+            <nb-card-body>
+              <div class="row">
+                <div class="col-sm-12" >
+                  <div class="form-group">
+                    <label for="inputWebsite" class="label" style="color: black;margin-left: 5px;">Image :</label>
+                  
+                    <input id="file"  nbInput fullWidth shape="semi-round"status="info"   #fileInput accept="image/*" class="input-file" type="file" (change)="handleInputChange(fileInput)">
+          
+                    </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                  <label for="inputWebsite" class="label" style="color: black;margin-left: 5px;">Nom :</label>
+                    <input type="text" nbInput fullWidth id="username" shape="semi-round"status="info"  placeholder="Entrer le nom du collaborateur" 
+  
+                    [ngModel]="user1.username" (ngModelChange)="user1.username= $event" #username="ngModel"
+  
+                    name="username"
+                    [ngClass]="{'alert alert-danger':username.invalid && (username.dirty || username.touched)}">
+               </div>
+                </div>
+              
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="inputLastName" class="label" style="color: black;">Prenom : </label>
+                    <input type="text" nbInput fullWidth placeholder="Entrer le prenom du collaborateur" shape="semi-round"status="info" id="prenom"
+                    [ngModel]="user1.prenom" (ngModelChange)="user1.prenom= $event" #prenom="ngModel"
+                    name="prenom"
+                    [ngClass]="{'alert alert-danger':prenom.invalid && (prenom.dirty || prenom.touched)}">
+                  </div>
+                </div>
+              
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="inputLastName" class="label" style="color: black;">Matricule :</label>
+                    <input type="text" nbInput fullWidth placeholder="Entrer la matricule du collaborateur" shape="semi-round"status="info" id="matricule"
+                    [ngModel]="user1.matricule" (ngModelChange)="user1.matricule= $event" #matricule="ngModel"
+                    name="matricule"
+                    [ngClass]="{'alert alert-danger':matricule.invalid && (matricule.dirty || matricule.touched)}">
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                  <label for="inputWebsite" class="label" style="color: black;margin-left: 5px;">Email </label>
+                  <input type="text"  nbInput fullWidth  shape="semi-round"status="info"  required fullWidth id="email"  placeholder="Entrer l'E-mail du collaborateur" 
+                  [ngModel]="user1.email" (ngModelChange)="user1.email= $event" #email="ngModel"
+                  name="email"
+                  [ngClass]="{'alert alert-danger':email.invalid && (email.dirty || email.touched)}">
+               </div>
+                </div>
+                
+               
+              
+              </div>
+     
+              <div class="text-center" >
+                <button nbButton status="danger" hero style="margin-bottom: 10px;"  (click)="ref.close()">Annuler</button>
+                <button nbButton status="success" hero style="margin-bottom: 10px;; margin-left: 10px;" (click)="modifierRUO(ref)">Modifier</button>
+             </div>
+            </nb-card-body>
+          </nb-card>
+      
+        </ng-template>
+  
+   
+  
+
+   
+   
+ 
+  
+

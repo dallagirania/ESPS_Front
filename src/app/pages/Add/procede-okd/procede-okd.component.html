@@ -1,0 +1,845 @@
+<div class="accordions-container row">
+    <div class="accordion-container col-md-12">
+      <nb-card>
+        <!-- <nb-card-header>Toggle Accordion By Button</nb-card-header> -->
+        <nb-card-body style="display: flex;align-items: center;justify-content: center; gap: 20px;">
+          <button nbButton status="success" hero (click)="toggleCC()"><i class="fas fa-plus" style="font-size: 10px; color: rgb(255, 255, 255);margin-right: 5px;"></i>Carte De Controle</button>
+          <button nbButton status="warning" hero (click)="toggleOKD()"><i class="fas fa-plus" style="font-size: 10px; color: rgb(255, 255, 255);margin-right: 5px;"></i> OK DEMARRAGE</button>
+          <button nbButton status="info" hero (click)="toggleCritere()"><i class="fas fa-plus" style="font-size: 10px; color: rgb(255, 255, 255);margin-right: 5px;"></i>Liste D'Habilitation</button>
+          <button type="submit" nbButton status="danger" hero   routerLink="/pages/ListProcede" [disabled]="!nb_habilistation && !nb_OKD">Cancel</button>
+        </nb-card-body>
+      </nb-card>
+  
+      <nb-accordion>
+       
+        <nb-accordion-item #CC>
+          <nb-accordion-item-header>
+            Ajout Du Nouveau Carte De Controle
+          </nb-accordion-item-header>
+          <nb-accordion-item-body>
+            <nb-card>
+                <nb-card-body>
+                  <nb-card style="padding: 20px;">
+                    <div class="row">
+                      <div class="col-sm-4">
+                        <div class="form-group">
+                          <label for="inputFirstName" class="label"style="color: black;">Réference : <span style="color: red;">*</span></label>
+                          <input type="text" nbInput fullWidth placeholder="Entrer la réference du Carte de Controle" shape="semi-round"status="info"id="ref"
+                          [ngModel]="carte.ref" (ngModelChange)="carte.ref= $event" #ref="ngModel"
+                          name="ref"
+                          [ngClass]="{'alert alert-danger':ref.invalid && (ref.dirty || ref.touched)}">
+                        </div>
+                      </div>
+                      
+                      <div class="col-sm-4">
+                          <div class="form-group">
+                            <label for="inputLastName" class="label" style="color: black;">Nom : <span style="color: red;">*</span></label>
+                            <input type="text" nbInput fullWidth placeholder="Entrer le nom du Carte de Controle" shape="semi-round"status="info" id="nom"
+                            [ngModel]="carte.nom" (ngModelChange)="carte.nom= $event" #nom="ngModel"
+                            name="nom"
+                            [ngClass]="{'alert alert-danger':nom.invalid && (nom.dirty || nom.touched)}">
+                          </div>
+                        </div>
+                        <div class="col-sm-4 " style="margin-top: 35px;">
+                          <div class="form-group">
+                            <nb-checkbox status="success"  [(ngModel)]="showFunctionInput" (ngModelChange)="checkInput()">Posséde Fonction </nb-checkbox>
+                          </div>
+                      </div>
+                        
+                       
+                    </div>
+                    <div class="row">
+
+                      <div class="col-sm-3">
+                        <div class="form-group">
+                          <label for="inputFirstName" class="label" style="color: black;">Valeur  Min : <span style="color: red;">*</span></label>
+                          <input type="number" nbInput fullWidth placeholder="Entrer la valeur min de l'intervalle" shape="semi-round" status="info" [(ngModel)]="carte.min" 
+                          (ngModelChange)="carte.min= $event" #min="ngModel"
+                          name="min"
+                          [ngClass]="{'alert alert-danger':min.invalid && (min.dirty || min.touched)}">
+                        </div>
+                      </div>
+
+                      <div class="col-sm-3">
+                        <div class="form-group">
+                          <label for="inputLastName" class="label" style="color: black;">Valeur  Max : <span style="color: red;">*</span></label>
+                          <input type="number" nbInput fullWidth placeholder="Entrer la valeur max de l'intervalle" shape="semi-round" status="info" [(ngModel)]="carte.max" 
+                          (ngModelChange)="carte.max= $event" #max="ngModel"
+                          name="max"
+                          [ngClass]="{'alert alert-danger':max.invalid && (max.dirty || max.touched)}">
+                        </div>
+                      </div>
+                      <div class="col-sm-3">
+                        <div class="form-group">
+                          <label for="inputFirstName" class="label"style="color: black;">Nombre Valeurs  <span style="color: red;">*</span></label>
+                          <input type="number" nbInput fullWidth placeholder="Entrer le nb de valeur pour la Carte de Controle" shape="semi-round"status="info" id="nb_valeur"
+                          [ngModel]="carte.nb_valeur" (ngModelChange)="carte.nb_valeur= $event" #nb_valeur="ngModel"
+                          name="nb_valeur"
+                          [ngClass]="{'alert alert-danger':nb_valeur.invalid && (nb_valeur.dirty || nb_valeur.touched)}">
+                        </div>
+                      </div>
+                        
+                      <!-- <div class="col-sm-3" style="margin-top: 35px;">
+                        <div class="form-group">
+                          <nb-checkbox status="success"  [(ngModel)]="showFunctionInput" (ngModelChange)="checkInput()">Posséde Fonction </nb-checkbox>
+                        </div>
+                    </div> -->
+                        
+                        <!-- fonction de verification calide sans parenthese :  pattern="(V\d+|\d+)([+\-*\/](V\d+|\d+))*" -->
+
+                        <div class="col-sm-3" *ngIf="showFunctionInput">
+                          <div class="form-group">
+                              <label for="inputLastName" class="label" style="color: black;">Fonction : <span style="color: red;">*</span></label>
+                              <input type="text" nbInput fullWidth placeholder="Entrer la fonction du carte de Controle" shape="semi-round" status="info" id="fonction"
+                                  [(ngModel)]="carte.fonction" (ngModelChange)="carte.fonction = $event" #fonction="ngModel" name="fonction"
+                                  [ngClass]="{'alert alert-danger': fonction.invalid && (fonction.dirty || fonction.touched)}"
+                                  pattern="(\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\)|V\d+|\d+)([+\-*\/](\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\)|V\d+|\d+))*"
+                                   title="La fonction doit être une expression mathématique avec des inconnues de la forme 'V' suivie d'un chiffre et des opérateurs mathématiques">
+                            <p class="description-input" style="font-size: 10px;color: rgb(123, 170, 12);">
+                                    V1:Premier valeur ; V2:Deuxième valeur ; V3:Troisième valeur ==> Exemple Fonction: (V1+V2+V3)/3
+                            </p>
+                              <div *ngIf="fonction.invalid && (fonction.dirty || fonction.touched)" class="text-danger">
+                                  La fonction doit être une expression mathématique avec des inconnues de la forme 'V' suivie d'un chiffre et des opérateurs mathématiques
+                              </div>
+                          </div>
+                      </div>
+                      
+                    </div>
+                    <div class="form-group row">
+                      <div class="offset-sm-4 col-sm-8">
+                        <button type="submit" nbButton status="success" hero style="margin-top:20px;margin-left: 90px;" (click)="SaveCC()">Ajouter</button>
+                     </div>
+                    </div>
+                      </nb-card>
+                     <nb-card>
+                     <nb-card-header>La Lite Des Cartes Des Controles Pour Cet PS </nb-card-header> 
+                     <ng2-smart-table [settings]="SettingsCarte" [source]="sourceCarte" (delete)="OnDeleteConfirmCarte($event)"  (edit)="modifier($event)" ></ng2-smart-table>
+               
+                     </nb-card> 
+                  </nb-card-body>
+              </nb-card>
+          </nb-accordion-item-body>
+        </nb-accordion-item>
+  
+        <nb-accordion-item #OKD>
+          <nb-accordion-item-header>
+            Ajout Du Nouveau Check-Liste "OK DEMARRAGE"
+          </nb-accordion-item-header>
+          <nb-accordion-item-body>
+            <nb-card>
+                <nb-card-body>
+                    <div class="row">
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label for="inputFirstName" class="label"style="color: black;">Réference : <span style="color: red;">*</span></label>
+                            <input type="text" nbInput fullWidth placeholder="Entrer la réference du check-list 'OK DEMARRAGE'" shape="semi-round"status="info"id="reference"
+                            [ngModel]="okd.ref" (ngModelChange)="okd.ref= $event" #reference="ngModel"
+                            name="reference"
+                            [ngClass]="{'alert alert-danger':reference.invalid && (reference.dirty || reference.touched)}">
+                          </div>
+                        </div>
+                        
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                              <label for="inputLastName" class="label" style="color: black;">Nom : <span style="color: red;">*</span></label>
+                              <input type="text" nbInput fullWidth placeholder="Entrer le nom du check-list 'OK DEMARRAGE'" shape="semi-round"status="info" id="nom"
+                              [ngModel]="okd.nom" (ngModelChange)="okd.nom= $event" #nom="ngModel"
+                              name="nom"
+                              [ngClass]="{'alert alert-danger':nom.invalid && (nom.dirty || nom.touched)}">
+                            </div>
+                          </div>
+                      </div>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label for="inputEmail" class="label" style="color: black;">Désignation  <span style="color: red;">*</span></label>
+                        <textarea type="textarea" rows="3" nbInput fullWidth shape="round" placeholder="Entrer la description du check-list 'OK DEMARRAGE'" status="info"id="designation"
+                        [ngModel]="okd.designation" (ngModelChange)="okd.designation= $event" #designation="ngModel"
+                        name="designation"
+                        [ngClass]="{'alert alert-danger':designation.invalid && (designation.dirty || designation.touched)}">
+        
+                        </textarea>
+                      
+                      </div>
+                    </div>
+                    
+                  </div>
+                  
+                  <div class="form-group row">
+                    <div class="offset-sm-4 col-sm-8">
+                      <button type="submit" nbButton status="success" hero style="margin: 20px;" (click)="SaveOKD()">Enregister et Continuer </button>
+                      </div>
+                  </div>
+                  <nb-card *ngIf="showSmartTable">
+                    <nb-card-header>
+                          Ajouter Les Critéres Associés à Cet OKD
+                    </nb-card-header> 
+                    <nb-card-body>
+                      <div *ngFor="let critere of criteres; let i = index">
+                        <form #critereForm="ngForm">
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <div class="form-group">
+                                <label for="inputFirstName" class="label" style="color: black;">Nom : <span style="color: red;">*</span></label>
+                                <input type="text" nbInput fullWidth placeholder="Entrer le nom du critère" shape="semi-round" status="info" [(ngModel)]="critere.nom" name="nom{{i}}" required>
+                              </div>
+                            </div>
+                            <div class="col-sm-6">
+                              <div class="form-group">
+                                <label for="inputLastName" class="label" style="color: black;">Type : <span style="color: red;">*</span></label>
+                               
+                                <nb-select  class="type-select" fullWidth shape="semi-round" status="info" [(ngModel)]="critere.type" name="type{{i}}" required>
+                                  <nb-option disabled>Sélectionnez le type du critére</nb-option>
+                                  <nb-option value="ok/nok">ok/nok</nb-option>
+                                  <nb-option value="valeur">valeur</nb-option>
+                                </nb-select>
+                                </div>
+                            </div>
+                          </div>
+                          <!-- En cas ou le type est un valeur  -->
+                          <div class="row" *ngIf="critere.type === 'valeur'">
+                            <div class="col-sm-6">
+                              <div class="form-group">
+                                <label for="inputFirstName" class="label" style="color: black;">Valeur  Min : <span style="color: red;">*</span></label>
+                                <input type="number" nbInput fullWidth placeholder="Entrer la valeur min de l'intervalle" shape="semi-round" status="info" [(ngModel)]="critere.min" name="min{{i}}" required>
+                              </div>
+                            </div>
+                            <div class="col-sm-6">
+                              <div class="form-group">
+                                <label for="inputLastName" class="label" style="color: black;">Valeur  Max : <span style="color: red;">*</span></label>
+                                <input type="number" nbInput fullWidth placeholder="Entrer la valeur max de l'intervalle" shape="semi-round" status="info" [(ngModel)]="critere.max" name="max{{i}}" required>
+                              </div>
+                            </div>
+                          </div>
+                        </form>
+                        <button nbButton status="danger" (click)="removeCritere(i)" style="margin-bottom: 10px;" ghost>Supprimer</button>
+                      </div>
+                      <div class="text-center" >
+                          <button nbButton status="info" hero (click)="addCritere()" style="margin-bottom: 10px;">Ajout Critère</button>
+                          <button nbButton status="success" hero (click)="SaveCriteres()" style="margin-bottom: 10px;; margin-left: 10px;">Enregistrer</button>
+                       </div>
+                    </nb-card-body>
+                  </nb-card>
+                  <nb-card>
+                    <nb-card-header>
+                     La Liste De "OK DEMMARAGE" pour Cet Procédé
+                     </nb-card-header>
+                     <nb-card-body>
+                          <ng2-smart-table [settings]="SettingsOKD" [source]="sourceOKD"  (delete)="OnDeleteConfirmOKD($event)" (edit)="editOKD($event)" ></ng2-smart-table>
+                     </nb-card-body> 
+                  </nb-card>
+                 
+                </nb-card-body>
+              </nb-card>
+          </nb-accordion-item-body>
+        </nb-accordion-item>
+        <nb-accordion-item #Critere>
+          <nb-accordion-item-header>
+            Ajout Une Nouvelle Liste D'Habilitation
+          </nb-accordion-item-header>
+          <nb-accordion-item-body>
+            <nb-card>
+                <nb-card-body>
+                    <div class="row"*ngIf="nb_habilistation ==0">
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label for="inputFirstName" class="label"style="color: black;">Réference : <span style="color: red;">*</span></label>
+                            <input type="text" nbInput fullWidth placeholder="Entrer la réference du la liste D'Habilitation" shape="semi-round"status="info"id="reference"
+                            [ngModel]="habilitation.ref" (ngModelChange)="habilitation.ref= $event" #reference="ngModel"
+                            name="reference"
+                            [ngClass]="{'alert alert-danger':reference.invalid && (reference.dirty || reference.touched)}">
+                          </div>
+                        </div>
+                        
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                              <label for="inputLastName" class="label" style="color: black;">Titre : <span style="color: red;">*</span></label>
+                              <input type="text" nbInput fullWidth placeholder="Entrer le titre du la liste D'Habilitation" shape="semi-round"status="info" id="titre"
+                              [ngModel]="habilitation.titre" (ngModelChange)="habilitation.titre= $event" #titre="ngModel"
+                              name="titre"
+                              [ngClass]="{'alert alert-danger':titre.invalid && (titre.dirty || titre.touched)}">
+                            </div>
+                          </div>
+                      </div>
+                      <div class="row"*ngIf="nb_habilistation > 0">
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label for="inputFirstName" class="label"style="color: black;">Réference : <span style="color: red;">*</span></label>
+                            <input type="text" nbInput fullWidth placeholder="Entrer la réference du la liste D'Habilitation" shape="semi-round"status="info"id="reference"
+                            [ngModel]="habilitation.ref" (ngModelChange)="habilitation.ref= $event" #reference="ngModel"
+                            name="reference"
+                            [ngClass]="{'alert alert-danger':reference.invalid && (reference.dirty || reference.touched)}" readonly>
+                          </div>
+                        </div>
+                        
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                              <label for="inputLastName" class="label" style="color: black;">Titre : <span style="color: red;">*</span></label>
+                              <input type="text" nbInput fullWidth placeholder="Entrer le titre du la liste D'Habilitation" shape="semi-round"status="info" id="titre"
+                              [ngModel]="habilitation.titre" (ngModelChange)="habilitation.titre= $event" #titre="ngModel"
+                              name="titre"
+                              [ngClass]="{'alert alert-danger':titre.invalid && (titre.dirty || titre.touched)}" readonly>
+                            </div>
+                          </div>
+                      </div>
+                  <div class="form-group row" *ngIf="nb_habilistation == 0">
+                    <div class="offset-sm-4 col-sm-8">
+                      <button type="submit" nbButton status="success" hero style="margin: 20px;" (click)="SaveHabilitation()">Enregistrer et continuer </button>
+                      </div>
+                  </div>
+                  <nb-card >
+                    <!-- *ngIf="showSmartTable1" -->
+                    <nb-card-header>
+                          Ajouter Les Formations associés à cette Liste D'Habilitation
+                    </nb-card-header> 
+                    <nb-card-body>
+                      <div *ngFor="let formation of formations; let i = index">
+                        <form #critereForm="ngForm">
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <div class="form-group">
+                                <i class="fa fa-paperclip"></i>
+                                <label for="inputWebsite" class="label" style="color: black;margin-left: 5px;">Télécharger La Fiche De Formation : <span style="color: red;">*</span></label>
+                                <input type="file" accept="*"  nbInput fullWidth id="inputWebsite" placeholder="Entrer votre Deuxième document "shape="semi-round"status="info"(change)="uploadFiles($event)">
+                              </div>
+                            </div>
+                           
+                            <div class="col-sm-6">
+                              <div class="form-group">
+                                <label for="inputLastName" class="label" style="color: black;">Matricule Collaborateur : <span style="color: red;">*</span></label>
+                                <ng-multiselect-dropdown
+                                [placeholder]="'Sélectionnez un collaborateur'"
+                                [settings]="dropdownSettings"
+                                [data]="listeUser"
+                                [(ngModel)]="selectedUsers[i]" 
+                                name="utilisateur{{i}}" 
+                                (ngModelChange)="userDetail(i)" >
+                              </ng-multiselect-dropdown>
+                              </div>
+                            </div>
+                          </div>
+                        
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <div class="form-group">
+                                <label for="inputFirstName" class="label" style="color: black;">Nom : <span style="color: red;">*</span> </label>
+                                <input type="text" nbInput fullWidth placeholder="Entrer le nom du l'operateur " shape="semi-round" status="info" [value]="selectedUserDetails[i]?.nom" name="UserNom" readonly>
+                              </div>
+                            </div>
+                            <div class="col-sm-6">
+                              <div class="form-group">
+                                <label for="inputLastName" class="label" style="color: black;"> Prenom  <span style="color: red;">*</span> </label>
+                                <input type="text" nbInput fullWidth placeholder="choisir le prenom du l'operateur" shape="semi-round" status="info" [value]="selectedUserDetails[i]?.prenom" name="UserPrenom" readonly>
+                               </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <div class="form-group">
+                                <label for="inputFirstName" class="label" style="color: black;">Date Formation : <span style="color: red;">*</span> </label>
+                                <input type="date" nbInput fullWidth placeholder="Entrer la Date Formation" shape="semi-round" status="info" [(ngModel)]="formation.date_init" name="date_init{{i}}"   (ngModelChange)="onDateInitChange1(i)" required>
+                              </div>
+                            </div>
+                            <div class="col-sm-6">
+                              <div class="form-group">
+                                <label for="inputLastName" class="label" style="color: black;"> Date Fin Habilitation  <span style="color: red;">*</span> </label>
+                                <input type="date" nbInput fullWidth placeholder="choisir la Date Fin Habilitation" shape="semi-round"status="info" [(ngModel)]="formation.date_fin" name="date_fin{{i}}" readonly>
+                               </div>
+                            </div>
+                          </div>
+                        </form>
+                        <button nbButton status="danger" (click)="removeFormation(i)" style="margin-bottom: 10px;" ghost>Supprimer</button>
+                      </div>
+                      <div class="text-center" >
+                          <button nbButton status="info" hero (click)="addFormation()" style="margin-bottom: 10px;">Ajout Formation</button>
+                          <button nbButton status="success" hero (click)="SaveFormation()" style="margin-bottom: 10px;; margin-left: 10px;">Enregistrer</button>
+                       </div>
+                    </nb-card-body>
+                  </nb-card>
+                  <nb-card>
+                    <nb-card-header>
+                     La Liste Des Habilitations pour Cet Procédé
+                     </nb-card-header>
+                     <nb-card-body>
+                          <ng2-smart-table [settings]="SettingsListe" [source]="sourceListe"(delete)="OnDeleteConfirm($event)" (edit)="editHabilitation($event)" ></ng2-smart-table>
+                     </nb-card-body> 
+                  </nb-card>
+                 
+                </nb-card-body>
+              </nb-card>
+          </nb-accordion-item-body>
+        </nb-accordion-item>
+        
+      </nb-accordion>
+    </div>
+  
+  </div>
+  
+
+  <ng-template #dialogEdit let-data let-ref="dialogRef">
+
+    <nb-card class="col-12 " style="width: 800px;">
+
+      <nb-card-header>Mettre à jours les Caractéristiques d'une Carte de Controle </nb-card-header>
+
+      <nb-card-body>
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label for="inputFirstName" class="label"style="color: black;">Réference</label>
+              <input type="text" nbInput fullWidth placeholder="Entrer la réference du Carte de Controle" shape="semi-round"status="info"id="ref"
+              [ngModel]="carte1.ref" (ngModelChange)="carte1.ref= $event" #ref="ngModel"
+              name="ref"
+              [ngClass]="{'alert alert-danger':ref.invalid && (ref.dirty || ref.touched)}">
+            </div>
+          </div>
+          
+          <div class="col-sm-4">
+              <div class="form-group">
+                <label for="inputLastName" class="label" style="color: black;">Nom</label>
+                <input type="text" nbInput fullWidth placeholder="Entrer le nom du Carte de Controle" shape="semi-round"status="info" id="nom"
+                [ngModel]="carte1.nom" (ngModelChange)="carte1.nom= $event" #nom="ngModel"
+                name="nom"
+                [ngClass]="{'alert alert-danger':nom.invalid && (nom.dirty || nom.touched)}">
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label for="inputFirstName" class="label" style="color: black;">Valeur  Min : <span style="color: red;">*</span></label>
+                <input type="number" nbInput fullWidth placeholder="Entrer la valeur min de l'intervalle" shape="semi-round" status="info"id="min" [(ngModel)]="carte1.min" 
+                (ngModelChange)="carte1.min= $event" #min="ngModel"
+                name="min"
+                [ngClass]="{'alert alert-danger':min.invalid && (min.dirty || min.touched)}">
+              </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="carte1.fonction!=null">
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label for="inputFirstName" class="label" style="color: black;">Valeur  Max : <span style="color: red;">*</span></label>
+              <input type="number" nbInput fullWidth placeholder="Entrer la valeur min de l'intervalle" shape="semi-round" status="info" id="max"[(ngModel)]="carte1.max" 
+              (ngModelChange)="carte1.max= $event" #min="ngModel"
+              name="max"
+              [ngClass]="{'alert alert-danger':max.invalid && (max.dirty || max.touched)}">
+            </div>
+          </div>
+          <div class="col-sm-4">
+              <div class="form-group">
+                <label for="inputFirstName" class="label"style="color: black;">Nombre Valeurs</label>
+                <input type="number" nbInput fullWidth placeholder="Entrer le nb de valeur pour la Carte de Controle" shape="semi-round"status="info" id="nb_valeur"
+                [ngModel]="carte1.nb_valeur" (ngModelChange)="carte1.nb_valeur= $event" #nb_valeur="ngModel"
+                name="nb_valeur"
+                [ngClass]="{'alert alert-danger':nb_valeur.invalid && (nb_valeur.dirty || nb_valeur.touched)}">
+              </div>
+            </div>
+      
+              <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="inputLastName" class="label" style="color: black;">Fonction </label>
+                    <input type="text" nbInput fullWidth placeholder="Entrer la fonction du carte de Controle" shape="semi-round" status="info" id="fonction"
+                        [(ngModel)]="carte1.fonction" (ngModelChange)="carte1.fonction = $event" #fonction="ngModel" name="fonction"
+                        pattern="(\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\)|V\d+|\d+)([+\-*\/](\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\)|V\d+|\d+))*"
+                                   title="La fonction doit être une expression mathématique avec des inconnues de la forme 'V' suivie d'un chiffre et des opérateurs mathématiques">
+                    <p class="description-input" style="font-size: 12px;color: rgb(123, 170, 12);">
+                        V1:Premier valeur ; V2:Deuxième valeur ; V3:Troisième valeur <br>Exemple Fonction: (V1+V2+V3)/3
+                    </p>
+                    <!-- <div *ngIf="fonction.invalid && (fonction.dirty || fonction.touched)" class="text-danger">
+                        La fonction doit contenir la lettre 'V' suivie d'un chiffre et des opérandes mathématiques
+
+                         pattern="(V[1-100][+\-*/])*V[1-100]" title="La fonction doit contenir la lettre 'V' suivie d'un chiffre et des opérandes mathématiques"
+                    </div> -->
+                </div>
+            </div>
+            
+          
+        </div>
+        <div class="row" *ngIf="carte1.fonction==null" style=" display: flex; justify-content:center ;align-items: center">
+          <div class="col-sm-4 d-flex justify-content-center align-items-center">
+            <div class="form-group">
+              <label for="inputFirstName" class="label" style="color: black;">Valeur  Max : <span style="color: red;">*</span></label>
+              <input type="number" nbInput fullWidth placeholder="Entrer la valeur min de l'intervalle" shape="semi-round" status="info" id="max"[(ngModel)]="carte1.max" 
+              (ngModelChange)="carte1.max= $event" #min="ngModel"
+              name="max"
+              [ngClass]="{'alert alert-danger':max.invalid && (max.dirty || max.touched)}">
+            </div>
+          </div>
+          <div class="col-sm-4" >
+              <div class="form-group">
+                <label for="inputFirstName" class="label"style="color: black;">Nombre Valeurs</label>
+                <input type="number" nbInput fullWidth placeholder="Entrer le nb de valeur pour la Carte de Controle" shape="semi-round"status="info" id="nb_valeur"
+                [ngModel]="carte1.nb_valeur" (ngModelChange)="carte1.nb_valeur= $event" #nb_valeur="ngModel"
+                name="nb_valeur"
+                [ngClass]="{'alert alert-danger':nb_valeur.invalid && (nb_valeur.dirty || nb_valeur.touched)}">
+              </div>
+            </div> 
+        </div>
+        
+        <div class="form-group row">
+          <div class="offset-sm-5 col-sm-7">
+            <button type="submit" nbButton status="danger" hero style="margin: 20px;" (click)="ref.close()">Annuler</button>
+            <button type="submit" nbButton status="success" hero style="margin: 20px;" (click)="modifierCarte(ref)">Modifier</button>
+           </div>
+        </div>
+      </nb-card-body>
+      
+    </nb-card>
+
+  </ng-template>
+     
+  <!-- Gestion Des OK DEMARRAGE -->
+  <ng-template #dialogEditOKD let-data let-ref="dialogRef">
+
+    <nb-card class="col-12 " style="width: 800px;">
+
+      <nb-card-body>
+        <nb-stepper orientation="horizontal">
+          <nb-step [label]="labelOne">
+            <ng-template #labelOne>Génèralités</ng-template>
+            <h4 style="text-align: center;color: rgb(23, 9, 176);">Mettre à jours les Caractéristiques d'une OK DEMARRAGE</h4>
+           
+    
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="inputFirstName" class="label"style="color: black;">Réference</label>
+                  <input type="text" nbInput fullWidth placeholder="Entrer la réference du check-list 'OK DEMARRAGE'" shape="semi-round"status="info"id="reference"
+                  [ngModel]="okd1.ref" (ngModelChange)="okd1.ref= $event" #reference="ngModel"
+                  name="reference"
+                  [ngClass]="{'alert alert-danger':reference.invalid && (reference.dirty || reference.touched)}">
+                </div>
+              </div>
+              
+              <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="inputLastName" class="label" style="color: black;">Nom</label>
+                    <input type="text" nbInput fullWidth placeholder="Entrer le nom du check-list 'OK DEMARRAGE'" shape="semi-round"status="info" id="nom"
+                    [ngModel]="okd1.nom" (ngModelChange)="okd1.nom= $event" #nom="ngModel"
+                    name="nom"
+                    [ngClass]="{'alert alert-danger':nom.invalid && (nom.dirty || nom.touched)}">
+                  </div>
+                </div>
+            </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label for="inputEmail" class="label" style="color: black;">Désignation</label>
+              <textarea type="textarea" rows="3" nbInput fullWidth shape="round" placeholder="Entrer la description du check-list 'OK DEMARRAGE'" status="info"id="designation"
+              [ngModel]="okd1.designation" (ngModelChange)="okd1.designation= $event" #designation="ngModel"
+              name="designation"
+              [ngClass]="{'alert alert-danger':designation.invalid && (designation.dirty || designation.touched)}">
+
+              </textarea>
+            
+            </div>
+          </div>
+          
+        </div>
+            <div class="text-center">
+              <button nbButton disabled nbStepperNext status="info" hero style="margin: 20px; text-align: center;">prev</button>
+              <button nbButton nbStepperNext status="warning" hero style="margin: 20px; text-align: center;">next</button>
+           </div>
+          </nb-step>
+          <nb-step [label]="labelTwo">
+            <ng-template #labelTwo>Les Critéres</ng-template>
+              <h4 style="text-align: center;color: rgb(23, 9, 176);">Gestion Des Critéres</h4>
+              <nb-card-body>
+                <ng2-smart-table [settings]="settingCritere" [source]="sourceCritere" (delete)="OnDeleteConfirmCritere($event)" (edit)="editCritere($event)"  (create)="add(ajoutCritere)" ></ng2-smart-table>
+                    
+              </nb-card-body>
+            
+            <div class="text-center">
+                <button nbButton nbStepperPrevious  status="warning" hero style="margin: 20px; text-align: center;">prev</button>
+                <button type="submit" nbButton status="success" hero style="margin: 20px; text-align: center;" (click)="modifierOKD(ref)" >Enregistrer</button>
+                <button nbButton nbStepperPrevious  status="danger" hero style="margin: 20px; text-align: center;"(click)="ref.close()" >Annuler</button>
+     
+            </div>
+          </nb-step>
+         
+        </nb-stepper> 
+      </nb-card-body>
+    </nb-card>
+
+  </ng-template>
+
+  <ng-template #dialogEditcritere let-data let-ref="dialogRef">
+
+    <nb-card class="col-12 " style="width: 800px;">
+      <nb-card-header>Mettre à jour un Critére </nb-card-header>
+      <nb-card-body>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputFirstName" class="label" style="color: black;">Nom</label>
+              <input type="text" nbInput fullWidth placeholder="Entrer le nom du critère" shape="semi-round" status="info" [(ngModel)]="critere1.nom" name="nom" required>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputLastName" class="label" style="color: black;">Type</label>
+             
+              <nb-select  class="type-select" fullWidth shape="semi-round" status="info" [(ngModel)]="critere1.type" name="type" required>
+                <nb-option disabled>Sélectionnez le type du critére</nb-option>
+                <nb-option value="ok/nok">ok/nok</nb-option>
+                <nb-option value="valeur">valeur</nb-option>
+              </nb-select>
+              </div>
+          </div>
+        </div>
+      
+        <div class="row" *ngIf="critere1.type === 'valeur'">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputFirstName" class="label" style="color: black;">Valeur  Min</label>
+              <input type="number" nbInput fullWidth placeholder="Entrer la valeur min de l'intervalle" shape="semi-round" status="info" [(ngModel)]="critere1.min" name="min" required>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputLastName" class="label" style="color: black;">Valeur  Max</label>
+              <input type="number" nbInput fullWidth placeholder="Entrer la valeur max de l'intervalle" shape="semi-round" status="info" [(ngModel)]="critere1.max" name="max" required>
+            </div>
+          </div>
+        </div>
+        <div class="text-center">
+
+          <button type="submit" nbButton status="success" hero style="margin: 20px; text-align: center;" (click)="modifierCritere(ref)" >Enregistrer</button>
+          <button nbButton  status="danger" hero style="margin: 20px; text-align: center;"(click)="ref.close()" >Annuler</button>
+
+      </div>
+      </nb-card-body>
+    </nb-card>
+
+  </ng-template>
+  <ng-template #ajoutCritere let-data let-ref="dialogRef">
+
+    <nb-card class="col-12 " style="width: 800px;">
+      <nb-card-header>Ajouter un Critére </nb-card-header>
+      <nb-card-body>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputFirstName" class="label" style="color: black;">Nom : <span style="color: red;">*</span></label>
+              <input type="text" nbInput fullWidth placeholder="Entrer le nom du critère" shape="semi-round" status="info" [(ngModel)]="newCritere.nom" name="nom" required>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputLastName" class="label" style="color: black;">Type : <span style="color: red;">*</span></label>
+             
+              <nb-select  class="type-select" fullWidth shape="semi-round" status="info" [(ngModel)]="newCritere.type" name="type" required>
+                <nb-option disabled>Sélectionnez le type du critére</nb-option>
+                <nb-option value="ok/nok">ok/nok</nb-option>
+                <nb-option value="valeur">valeur</nb-option>
+              </nb-select>
+              </div>
+          </div>
+        </div>
+      
+        <div class="row" *ngIf="newCritere.type === 'valeur'">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputFirstName" class="label" style="color: black;">Valeur  Min : <span style="color: red;">*</span></label>
+              <input type="number" nbInput fullWidth placeholder="Entrer la valeur min de l'intervalle" shape="semi-round" status="info" [(ngModel)]="newCritere.min" name="min" required>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputLastName" class="label" style="color: black;">Valeur  Max : <span style="color: red;">*</span></label>
+              <input type="number" nbInput fullWidth placeholder="Entrer la valeur max de l'intervalle" shape="semi-round" status="info" [(ngModel)]="newCritere.max" name="max" required>
+            </div>
+          </div>
+        </div>
+        <div class="text-center">
+
+          <button type="submit" nbButton status="success" hero style="margin: 20px; text-align: center;" (click)="AddCri(ref)" >Enregistrer</button>
+          <button nbButton  status="danger" hero style="margin: 20px; text-align: center;"(click)="ref.close()" >Annuler</button>
+
+      </div>
+      </nb-card-body>
+    </nb-card>
+
+  </ng-template>
+
+
+   <!-- Gestion Des Habilitation -->
+   <ng-template #dialogEditHabilitation let-data let-ref="dialogRef">
+
+    <nb-card class="col-12 " style="width: 800px;">
+
+      <nb-card-body>
+        <nb-stepper orientation="horizontal">
+          <nb-step [label]="labelOne">
+            <ng-template #labelOne>Génèralités</ng-template>
+            <h4 style="text-align: center;color: rgb(23, 9, 176);">Mettre à jours les Caractéristiques d'une liste D'Habilitation'</h4>
+           
+    
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="inputFirstName" class="label"style="color: black;">Réference</label>
+                  <input type="text" nbInput fullWidth placeholder="Entrer la réference du check-list 'OK DEMARRAGE'" shape="semi-round"status="info"id="reference"
+                  [ngModel]="habilitation1.ref" (ngModelChange)="habilitation1.ref= $event" #reference="ngModel"
+                  name="reference"
+                  [ngClass]="{'alert alert-danger':reference.invalid && (reference.dirty || reference.touched)}">
+                </div>
+              </div>
+              
+              <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="inputLastName" class="label" style="color: black;">Titre</label>
+                    <input type="text" nbInput fullWidth placeholder="Entrer le nom du check-list 'OK DEMARRAGE'" shape="semi-round"status="info" id="Titre"
+                    [ngModel]="habilitation1.titre" (ngModelChange)="habilitation1.titre= $event" #Titre="ngModel"
+                    name="Titre"
+                    [ngClass]="{'alert alert-danger':Titre.invalid && (Titre.dirty || Titre.touched)}">
+                  </div>
+                </div>
+            </div>
+            <div class="text-center">
+              <button nbButton disabled nbStepperNext status="info" hero style="margin: 20px; text-align: center;">prev</button>
+              <button nbButton nbStepperNext status="warning" hero style="margin: 20px; text-align: center;">next</button>
+           </div>
+          </nb-step>
+          <nb-step [label]="labelTwo">
+            <ng-template #labelTwo>Les Critéres</ng-template>
+              <h4 style="text-align: center;color: rgb(23, 9, 176);">Gestion Des Habilitations</h4>
+              <nb-card-body>
+                <ng2-smart-table [settings]="settingFormation" [source]="sourceFormation" (delete)="OnDeleteConfirmFor($event)" (edit)="editFormation($event)"  (create)="addFor(ajoutNewForm)" ></ng2-smart-table>
+                    
+              </nb-card-body>
+            
+            <div class="text-center">
+                <button nbButton nbStepperPrevious  status="warning" hero style="margin: 20px; text-align: center;">prev</button>
+                <button type="submit" nbButton status="success" hero style="margin: 20px; text-align: center;" (click)="modifierHabilitation(ref)" >Enregistrer</button>
+                <button nbButton nbStepperPrevious  status="danger" hero style="margin: 20px; text-align: center;"(click)="ref.close()" >Annuler</button>
+     
+            </div>
+          </nb-step>
+         
+        </nb-stepper> 
+      </nb-card-body>
+    </nb-card>
+
+  </ng-template>
+ 
+  <ng-template #ajoutNewForm let-data let-ref="dialogRef">
+
+    <nb-card class="col-12 " style="width: 800px;">
+  
+      <nb-card-header>Ajouter Une Nouvelle Habilitation </nb-card-header>
+
+      <nb-card-body>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <i class="fa fa-paperclip"></i>
+              <label for="inputWebsite" class="label" style="color: black;margin-left: 5px;">Télécharger La Fiche De Formation :  <span style="color: red;">*</span></label>
+              <input type="file" accept="*"  nbInput fullWidth id="inputWebsite" placeholder="Entrer votre Deuxième document "shape="semi-round"status="info"(change)="uploadFiles($event)">
+            </div>
+          </div>
+          <!-- <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputWebsite" class="label" style="color: black;">Matricule Collaborateur  <span style="color: red;">*</span></label>
+             
+                <nb-select class="type-select" id="utilisateur" fullWidth shape="semi-round" status="info" [(ngModel)]="selectedCollab"
+                #utilisateur="ngModel" name="utilisateur"
+                [ngClass]="{'alert alert-danger': utilisateur.invalid && (utilisateur.dirty || utilisateur.touched)}">
+                <nb-option disabled>Sélectionnez une utilisateur</nb-option>
+                <nb-option *ngFor="let utilisateur of listeUser"  [value]="utilisateur.id">
+                    {{ utilisateur.matricule }} - {{ utilisateur.username }}
+                </nb-option>
+                </nb-select>
+             </div>
+          </div> -->
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputLastName" class="label" style="color: black;">Matricule Collaborateur : <span style="color: red;">*</span></label>
+              <ng-multiselect-dropdown fullWidth  shape="semi-round" status="info" 
+              [placeholder]="'Sélectionnez un collaborateur'"
+              [settings]="dropdownSettings"
+              [data]="listeUserNotInListe"
+              [(ngModel)]="selectedCollab" 
+              name="selectedCollab" 
+              (ngModelChange)="userDetail1()" >
+            </ng-multiselect-dropdown>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputFirstName" class="label" style="color: black;">Nom : <span style="color: red;">*</span> </label>
+              <input type="text" nbInput fullWidth placeholder="Entrer le nom du l'operateur " shape="semi-round" status="info" [(ngModel)]="UserNom1"  name="UserNom1" readonly>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputLastName" class="label" style="color: black;"> Prenom  <span style="color: red;">*</span> </label>
+              <input type="text" nbInput fullWidth placeholder="choisir le prenom du l'operateur" shape="semi-round"status="info" [(ngModel)]="UserPrenom1"  name="UserPrenom1" readonly>
+             </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputFirstName" class="label" style="color: black;">Date Formation : <span style="color: red;">*</span> </label>
+              <input type="date" nbInput fullWidth placeholder="Entrer la Date Formation" shape="semi-round" status="info" [(ngModel)]="newFormation.date_init" name="date_init" (ngModelChange)="onDateInitChange()" required>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputLastName" class="label" style="color: black;"> Date Fin Habilitation :  <span style="color: red;">*</span></label>
+              <input type="date" nbInput fullWidth placeholder="choisir la Date Fin Habilitation" shape="semi-round"status="info" [(ngModel)]="newFormation.date_fin" name="date_fin" readonly required>
+             </div>
+          </div>
+        </div>
+        <div class="text-center" >
+          <button nbButton status="danger" hero style="margin-bottom: 10px;"  (click)="ref.close()">Annuler</button>
+          <button nbButton status="success" hero (click)="SaveNewFormation(ref)" style="margin-bottom: 10px;; margin-left: 10px;">Ajout Habilitation</button>
+       </div>
+      </nb-card-body>
+      
+    </nb-card>
+
+  </ng-template>
+
+  <ng-template #dialogEditFormation let-data let-ref="dialogRef">
+
+    <nb-card class="col-12 " style="width: 800px;">
+  
+      <nb-card-header>Modifier les données d'Une Habilitation </nb-card-header>
+
+      <nb-card-body>
+       <form>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <i class="fa fa-paperclip"></i>
+              <label for="inputWebsite" class="label" style="color: black;margin-left: 5px;">Télécharger La Fiche De Formation</label>
+              <input type="file" accept="*"  nbInput fullWidth id="inputWebsite" placeholder="Entrer votre Deuxième document "shape="semi-round"status="info"(change)="uploadFiche($event)">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputFirstName" class="label" style="color: black;">Date Formation </label>
+              <input type="date" nbInput fullWidth placeholder="Entrer la Date Formation" shape="semi-round" status="info" [(ngModel)]="formation1.date_init" name="date_init"  (ngModelChange)="onDateInitChangeUpdate()"required>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputLastName" class="label" style="color: black;"> Date Fin Habilitation </label>
+              <input type="date" nbInput fullWidth placeholder="choisir la Date Fin Habilitation" shape="semi-round"status="info" [(ngModel)]="formation1.date_fin" name="date_fin" readonly>
+             </div>
+          </div>
+        </div>
+        <div class="text-center" >
+          <button nbButton status="danger" hero style="margin-bottom: 10px;"  (click)="ref.close()">Annuler</button>
+          <button nbButton status="success" hero (click)="modifierFormation(ref)" style="margin-bottom: 10px;; margin-left: 10px;">Modifier Habilitation</button>
+       </div>
+      </form> 
+      </nb-card-body>
+      
+    </nb-card>
+
+  </ng-template>

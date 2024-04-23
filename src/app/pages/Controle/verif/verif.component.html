@@ -1,0 +1,27 @@
+<nb-card class="col-md-12"  >
+    <nb-card-body>
+      <nb-tabset fullWidth> 
+        <nb-tab tabTitle="Cartes De Controles">
+          <h4 style="text-align: center;color: rgb(23, 9, 176);"> Les Listes des cartes de Controle</h4>
+          <nb-card>
+             <nb-card-body>
+              <ng2-smart-table [settings]="SettingsMesure" [source]="sourceMesure" > </ng2-smart-table>
+            </nb-card-body> 
+          </nb-card>
+         
+        </nb-tab>
+     
+      <nb-tab tabTitle="Check-list 'OK DEMMARAGE'">
+          <h4 style="text-align: center;color: rgb(23, 9, 176);"> Les Liste des Check-List "OK DEMMARAGE"</h4>
+     
+          <nb-card>
+            <nb-card-body>
+              <!-- <ng2-smart-table [settings]="SettingsOKD" [source]="sourceOKD" (edit)="RemplirMesureOKD($event)"  ></ng2-smart-table> -->
+            
+           </nb-card-body> 
+         </nb-card>       
+      </nb-tab>
+      
+    </nb-tabset>
+    </nb-card-body>
+  </nb-card>

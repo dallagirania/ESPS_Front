@@ -1,0 +1,66 @@
+$couleur-primaire: #0077b5;
+$couleur-secondaire: #ddd;
+
+#list-des-personnes-formee-pulverisation {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: sans-serif;
+
+    header {
+        text-align: center;
+        margin-bottom: 20px;
+
+        h1 {
+            font-size: 24px;
+            margin-top: 0;
+            color: $couleur-primaire;
+        }
+
+        h2 {
+            font-size: 18px;
+            margin: 5px 0;
+            color: $couleur-primaire;
+        }
+
+        h3 {
+            font-size: 16px;
+            margin: 5px 0;
+            color: $couleur-secondaire;
+        }
+
+        p {
+            font-size: 14px;
+            margin: 0;
+            color: $couleur-secondaire;
+        }
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+
+        th, td {
+            border: 1px solid $couleur-secondaire;
+            padding: 5px;
+            text-align: left;
+        }
+
+        th {
+            font-weight: bold;
+        }
+
+        tfoot {
+            font-style: italic;
+        }
+    }
+
+    .center {
+        text-align: center;
+    }
+
+    .right {
+        text-align: right;
+    }
+}

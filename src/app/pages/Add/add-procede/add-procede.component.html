@@ -1,0 +1,156 @@
+<nb-card class="col-md-12 col-lg-12 col-xxxl-12">
+  <nb-card-body>
+    <nb-stepper orientation="horizontal">
+      <nb-step [label]="labelOne">
+        <ng-template #labelOne>First step</ng-template>
+        <h4 style="text-align: center;color: rgb(23, 9, 176);">Ajouter Les Caractéristiques D'un Procédé Spéciale</h4>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputFirstName" class="label" style="color: black;flex: 1;">Image</label>
+              <input id="file" nbInput fullWidth #fileInput accept="image/*" class="input-file" type="file" shape="semi-round" status="info" (change)="uploadFiles($event)">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputLastName" class="label" style="color: black;">Nom  <span style="color: red;">*</span></label>
+              <input type="text" nbInput fullWidth placeholder="Entrer le nom du procéd" shape="semi-round"status="info" id="nom"
+              [ngModel]="procede.nom" (ngModelChange)="procede.nom= $event" #nom="ngModel"
+              name="nom"
+              [ngClass]="{'alert alert-danger':nom.invalid && (nom.dirty || nom.touched)}">
+            </div>
+          </div>
+        </div>
+        <div class="row"> 
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputEmail" class="label" style="color: black;">Activité  <span style="color: red;">*</span></label>
+                <!-- <label for="uo" class="label col-4 col-form-label"> Unité  : </label> -->
+                <nb-select class="type-select" fullWidth shape="semi-round" status="info" id="activite" [(ngModel)]="selectedActivite" (ngModelChange)="loadActivites()" 
+                #activite="ngModel" name="activite"
+                  [ngClass]="{'alert alert-danger': activite.invalid && (activite.dirty || activite.touched)}">
+                  <nb-option disabled>Sélectionnez une Activite </nb-option>
+                  
+                  <nb-option *ngFor="let activite of activites" [value]="activite.id">
+                    {{ activite.ref }} - {{ activite.nom }}
+                  </nb-option>
+                </nb-select >
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputWebsite" class="label" style="color: black;">Atelier  <span style="color: red;">*</span></label>
+                <nb-select class="type-select" id="atelier" fullWidth shape="semi-round" status="info" [(ngModel)]="selectedAtelier"
+                  #atelier="ngModel" name="atelier"
+                  [ngClass]="{'alert alert-danger': atelier.invalid && (atelier.dirty || atelier.touched)}">
+                  <nb-option disabled>Sélectionnez une Atelier</nb-option>
+                  <nb-option *ngFor="let atelier of listeAtelier"  [value]="atelier.id">
+                      {{ atelier.ref }} - {{ atelier.nom }}
+                  </nb-option>
+              </nb-select>
+  
+             </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label for="inputFirstName" class="label"style="color: black;">Code<span style="color: red;">*</span></label>
+              <input type="text" nbInput fullWidth placeholder="Entrer le code du procédé" shape="semi-round"status="info" id="code"
+              [ngModel]="procede.code" (ngModelChange)="procede.code= $event" #code="ngModel"
+              name="code"
+              [ngClass]="{'alert alert-danger':code.invalid && (code.dirty || code.touched)}" readonly>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label for="inputFirstName" class="label"style="color: black;">Révision<span style="color: red;">*</span></label>
+              <input type="text" nbInput fullWidth placeholder="Entrer le nb de revision du procédé" shape="semi-round"status="info" id="rev"
+              [ngModel]="procede.rev" (ngModelChange)="procede.rev= $event" #rev="ngModel"
+              name="rev"
+              [ngClass]="{'alert alert-danger':rev.invalid && (rev.dirty || rev.touched)}">
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label for="inputLastName" class="label" style="color: black;">Réference  <span style="color: red;">*</span></label>
+              <input type="text" nbInput fullWidth placeholder="Entrer la réference du procédé" shape="semi-round"status="info" id="reference"
+              [ngModel]="procede.ref" (ngModelChange)="procede.ref= $event" #reference="ngModel"
+              name="reference"
+              [ngClass]="{'alert alert-danger':reference.invalid && (reference.dirty || reference.touched)}" >
+            </div>
+          </div>
+          
+        </div>
+
+       
+       
+        <div class="text-center">
+          <button nbButton disabled nbStepperNext status="info" hero style="margin: 20px; text-align: center;">prev</button>
+          <button nbButton nbStepperNext status="danger" hero style="margin: 20px; text-align: center;">next</button>
+       </div>
+      </nb-step>
+      <nb-step [label]="labelTwo">
+        <ng-template #labelTwo>Second step</ng-template>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputEmail" class="label" style="color: black;">Date initiale  <span style="color: red;">*</span></label>
+              <input type="date" nbInput fullWidth placeholder="choisir la date initiale du Procédé" shape="semi-round"status="info" id="date_init"
+              [ngModel]="procede.date_init" (ngModelChange)="procede.date_init= $event" #date_init="ngModel"
+              name="date_init"
+              [ngClass]="{'alert alert-danger':date_init.invalid && (date_init.dirty || date_init.touched)}">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="inputWebsite" class="label" style="color: black;">Date Fin  <span style="color: red;">*</span></label>
+              <input type="date" nbInput fullWidth  placeholder="choisir la date initiale du Procédé" shape="semi-round"status="info" id="date_fin"
+              [ngModel]="procede.date_fin" (ngModelChange)="procede.date_fin= $event" #date_fin="ngModel"
+              name="date_fin"
+              [ngClass]="{'alert alert-danger':date_fin.invalid && (date_fin.dirty || date_fin.touched)}">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <i class="fa fa-paperclip"></i>
+              <label for="inputEmail" class="label" style="color: black;margin-left: 5px;">Télécharger Votre Rapport De Qualification  <span style="color: red;">*</span></label>
+              <input type="file" accept="*" nbInput fullWidth id="file1" placeholder="Entrer votre Premier document "shape="semi-round"status="info"  (change)="uploadFiles($event)">
+              <!-- <div [innerHtml]="message"></div> -->
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <i class="fa fa-paperclip"></i>
+              <label for="inputWebsite" class="label" style="color: black;margin-left: 5px;">Télécharger Votre Certifiact De Qualification  <span style="color: red;">*</span></label>
+              <input type="file" accept="*"  nbInput fullWidth id="file2" placeholder="Entrer votre Deuxième document "shape="semi-round"status="info" (change)="uploadFiles($event)">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label for="inputEmail" class="label" style="color: black;">Désignation  <span style="color: red;">*</span></label>
+              <textarea type="textarea" rows="3" nbInput fullWidth shape="round" placeholder="Entrer la description du Procédé" status="info" id="designation"
+              [ngModel]="procede.designation" (ngModelChange)="procede.designation= $event" #designation="ngModel"
+              name="designation"
+              [ngClass]="{'alert alert-danger':designation.invalid && (designation.dirty || designation.touched)}">
+
+              </textarea>
+            
+            </div>
+          </div>
+          
+        </div>
+        <div class="text-center">
+            <button nbButton nbStepperPrevious  status="danger" hero style="margin: 20px; text-align: center;">prev</button>
+            <button type="submit" nbButton status="success" hero style="margin: 20px; text-align: center;" (click)="SaveProcede()" >Ajouter</button>
+        </div>
+      </nb-step>
+     
+    </nb-stepper>
+  </nb-card-body>
+</nb-card>
+

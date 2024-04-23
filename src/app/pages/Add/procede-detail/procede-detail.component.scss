@@ -1,0 +1,27 @@
+    /* Style pour le tableau */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    /* Style pour l'en-tête du tableau */
+    th {
+        background-color: #007BFF; /* Bleu clair */
+        color: white;
+        border: 2px solid #343a40; /* Bordure foncée */
+        padding: 8px;
+        text-align: left;
+    }
+
+    /* Style pour les cellules du tableau */
+    td {
+        border: 2px solid #343a40; /* Bordure foncée */
+        padding: 8px;
+        text-align: left;
+    }
+
+    /* Style pour les lignes impaires du tableau */
+    tbody tr:nth-child(odd) {
+        background-color: #e6f7ff; /* Bleu clair plus clair */
+    }
+

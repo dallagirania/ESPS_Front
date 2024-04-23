@@ -1,0 +1,177 @@
+<!-- <button nbButton status="info" ghost (click)="navigate()" > <i class="fas fa-eye"></i></button> -->
+<!-- <button nbButton status="info" ghost (click)="detail(ProcedeDetails)" > <i class="fas fa-eye"></i></button>-->
+
+<nb-icon icon="eye" status="info" ghost nbTooltip="Liste des critères
+" [options]="{ animation: { type: 'zoom' } }" (click)="detail(ProcedeDetails)"></nb-icon>
+
+<ng-template #ProcedeDetails let-data let-ref="dialogRef">
+  <nb-card class="col-md-12 col-lg-12 col-xxxl-12">
+    <nb-card-body>
+      <nb-tabset fullWidth>
+        <nb-tab tabTitle="Génèralités">
+         
+          <div class="row">
+            <div class="col-xxxl-3 col-md-3">
+                <nb-card>
+                    <!-- <nb-card-header>Toggle Accordion By Button</nb-card-header> --> 
+                    <!-- background: linear-gradient(to bottom right, #ffff, #e83e8c); -->
+                    <nb-card-body style="display: flex;flex-direction: column;align-items: center;justify-content: center;text-align:center ;gap: 20px; border-radius: 10px;  background: linear-gradient(to bottom right,  #fff1c2,rgba(249, 238, 135, 0.48))">
+                      <!-- background: linear-gradient(to bottom right, #ffff, #f1f365); -->
+                       <div style="font-family: 'Times New Roman', Times, serif;color: #0f2a9e;font-size: 20px;font-weight: bold;">Réference</div> 
+                       <div style="font-family: 'Times New Roman', Times, serif;color: #0f2a9e;font-size: 20px;font-weight: bold;">{{currentProcede.ref}}</div>
+                      </nb-card-body>
+                  </nb-card>
+            </div>
+            <div class="col-xxxl-3 col-md-6">
+                <nb-card>
+                    <!-- <nb-card-header>Toggle Accordion By Button</nb-card-header> -->
+                    <nb-card-body style="display: flex;flex-direction: column;align-items: center;justify-content: center; gap: 20px;border-radius: 10px; background: linear-gradient(to bottom right, #c7e2ff, #2ce69b); ">
+                        <div style="font-family: 'Times New Roman', Times, serif;color: black;font-size: 20px;font-weight: bold;">{{currentProcede.nom}}</div> 
+                        <div style="font-family: 'Times New Roman', Times, serif;color: black;font-size: 20px;font-weight: bold;">{{currentProcede.atelier?.nom}}</div>  
+                    </nb-card-body>
+                  </nb-card>
+            </div>
+            <div class="col-xxxl-3 col-md-3">
+                <nb-card>
+                    <!-- <nb-card-header>Toggle Accordion By Button</nb-card-header> -->
+                    <nb-card-body style="display: flex;align-items: center;justify-content: center; gap: 20px; flex-direction: column;border-radius: 10px;background: linear-gradient(to bottom right,  #fff1c2,rgba(249, 238, 135, 0.48)) ">
+                        <div style="font-family: 'Times New Roman', Times, serif;color: #279e0f;font-size: 20px;font-weight: bold;" *ngIf="etatQualif=='Qualifié'">{{etatQualif}} </div>
+                        <div style="font-family: 'Times New Roman', Times, serif;color: #b90d0d;font-size: 20px;font-weight: bold;" *ngIf="etatQualif=='A Requalifier'">{{etatQualif}} </div>
+                        <div style="font-family: 'Times New Roman', Times, serif;color: #0f2a9e;font-size: 20px;font-weight: bold;">{{currentProcede.date_fin}}</div> 
+                    </nb-card-body>
+                  </nb-card>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xxxl-3 col-md-12">
+                <nb-card>
+                    <nb-card-body style=" flex-direction: row; display: flex;">
+                      <div *ngIf="currentProcede && currentProcede.files && currentProcede.files.length > 0">
+                      
+                            <div >
+                                <img src="{{imageUrl}}" alt="Image" style="height: 150px; width: 300px;" *ngIf="hasImageToDisplay()"> 
+                                <img src="../assets/images/safran.jpg" alt="Image par défaut" style="height: 150px; width: 300px;" *ngIf="!hasImageToDisplay()">
+                           
+                            </div >
+                        
+                    </div>
+                    
+                    <div>
+                        <img src="../assets/images/safran.jpg" alt="Image par défaut" style="height: 150px; width: 300px;" *ngIf="(currentProcede.files && currentProcede.files.length === 0)">
+                    </div>
+                    
+                        <div style=" flex-direction: column; display: flex;margin: 20px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                            <div style=" flex-direction: row; display: flex;">
+                              <div style="font-family:'Times New Roman', Times, serif;font-size: 18px;font-weight: bold;color: rgb(23, 9, 176);">Date Début :</div>
+                              <div style="font-family:'Times New Roman', Times, serif;font-size: 18px;">{{currentProcede.date_init}} </div>
+                            </div> 
+                          <div style=" flex-direction: row; display: flex;">
+                            <div style="font-family:'Times New Roman', Times, serif;font-size: 18px;font-weight: bold;color: rgb(23, 9, 176);"> Date Fin: </div>
+                            <div style="font-family:'Times New Roman', Times, serif;font-size: 18px;">{{currentProcede.date_fin}} </div>
+                          </div>
+                         
+                          
+                           <div >
+                            <div style="font-family:'Times New Roman', Times, serif;font-size: 18px;font-weight: bold;color: rgb(23, 9, 176);">Les Documents Associés:</div> 
+                          
+                            <ng-container *ngFor="let file of currentProcede.files">
+                              <div *ngIf="file.nom.endsWith('.pdf') || file.nom.endsWith('.doc')">
+                                  {{ file.nom }}
+                                  <img src="../../assets/images/pdf.png" (click)="download(file.nom)" style="width: 30px; margin-left: 10px;">
+                              </div>
+                          </ng-container>
+                          </div>
+                          <div style=" flex-direction: row; display: flex;">
+                            <div style="font-family:'Times New Roman', Times, serif;font-size: 18px;font-weight: bold;color: rgb(23, 9, 176);">Designation:</div> 
+                            <div style="font-family:'Times New Roman', Times, serif;font-size: 18px;">{{currentProcede.designation}}</div>
+                            <!-- <button (click)="generatePDF()">Generate PDF</button> -->
+                          </div>   
+                        </div>  
+                        
+                    </nb-card-body>
+                  </nb-card>
+            </div>
+          </div>
+         
+        </nb-tab>
+
+        <nb-tab tabTitle="Cartes De Controles">
+          <h4 style="text-align: center;color: rgb(23, 9, 176);"> Les Listes des cartes de Controle</h4>
+           <table class="table table-hover">
+            <thead style="background-color: rgba(255, 244, 146, 0.48);">
+              <tr>
+                <th scope="col">Réference</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Nb Valeur</th>
+                <th scope="col">Fonction</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-primary" *ngFor="let carte of listeCarte">
+                <th scope="row">{{carte.ref}}</th>
+                <td>{{carte.nom}}</td>
+                <td>{{carte.nb_valeur}}</td>
+                <td>{{carte.fonction}}</td>
+              </tr>
+              
+            </tbody>
+          </table>
+         
+        </nb-tab>
+     
+      <nb-tab tabTitle="Check-list 'OK DEMMARAGE'">
+          <h4 style="text-align: center;color: rgb(23, 9, 176);"> Les Liste des Check-List "OK DEMMARAGE"</h4>
+        
+         <nb-card *ngFor="let okdAvecCrits of listeOKDAvecCriteres">
+          <caption style="background-color: rgba(255, 170, 0, 0.48);padding: 10px;color:black">{{okdAvecCrits.okd.ref}} - {{okdAvecCrits.okd.nom}}</caption>
+          <table class="table table-hover" style="text-align: center;justify-content: center; ">
+            <thead style="background-color: #c7e2ff;">
+              <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-light" *ngFor="let critere of okdAvecCrits.crits">
+                <th scope="row">{{critere.nom}}</th>
+                <ng-container *ngIf="critere.type === 'valeur'">
+                  {{ critere.type }} entre [ {{ critere.min }} , {{ critere.max }} ]
+                </ng-container>
+                <ng-container *ngIf="critere.type === 'ok/nok'">
+                  {{ critere.type }}
+                </ng-container>
+              </tr>
+            </tbody>
+          </table>
+        </nb-card>
+         
+      </nb-tab>
+      <nb-tab tabTitle="Liste Habilitation">
+          <h4 style="text-align: center;color: rgb(23, 9, 176);"> La Liste des Habilitation</h4>
+          <nb-card *ngFor="let habilitation of listeHabilitation">
+            <caption style="background-color: rgba(255, 170, 0, 0.48);padding: 10px;color:black">{{habilitation.ref}} - {{habilitation.titre}}</caption>
+            <table class="table table-hover" style="text-align: center;justify-content: center; ">
+              <thead style="background-color: #c7e2ff;">
+                <tr>
+                  <th scope="col">Opérateur</th>
+                  <th scope="col">Date Formation</th>
+                  <th scope="col">Date Fin Habilitation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="table-light" *ngFor="let formation of listeFormation">
+                  <th>{{formation.utilisateur?.username}}</th>
+                  <th>{{formation.date_init}}</th>
+                  <th >{{formation.date_fin}}</th>
+              
+                
+                </tr>
+              </tbody>
+            </table>
+          </nb-card>
+        </nb-tab>
+    </nb-tabset>
+    </nb-card-body>
+  </nb-card>
+
+</ng-template>

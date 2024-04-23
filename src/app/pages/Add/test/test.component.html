@@ -1,0 +1,21 @@
+<div class="profile-container">
+   <div class="profile-header">
+     <img  
+       [src]="currentUser?.image ? currentUser.image : 'assets/images/imgUser.png'"  
+       alt="Profile Picture" 
+       class="profile-picture">
+     <div class="profile-details">
+       <h3>{{currentUser.username}} {{currentUser.prenom}}</h3>
+     </div>
+   </div>
+   <div class="profile-body">
+     <h2>Informations Personnelles</h2>
+     <ul>
+       <li><strong><i class="fas fa-envelope"></i> Email:</strong> {{currentUser.email}}</li>
+       <li><strong><i class="fas fa-id-card"></i> Matricule:</strong> {{currentUser.matricule}}</li>
+       <li><strong><i class="fas fa-user-tag"></i> Role:</strong> {{currentUser.role.nom}}</li>
+       <li><strong><i class="fas fa-building"></i> Unité Opérationnelle:</strong> {{currentUser.unite.nom}}</li>
+     </ul>
+   </div>
+ </div>
+ 

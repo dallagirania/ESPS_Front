@@ -1,0 +1,184 @@
+
+<div class="col-12" style="padding-bottom: 10px;text-align: center;justify-content: center;">
+  <h2 style="font-family: 'Times New Roman', Times, serif;color: #0f2a9e;">Parametrages des Listes D'habilitation </h2>
+  <!-- <img src="../assets/images/avion1.png" alt="Image par défaut" style="width: 900px;"> -->
+</div>
+<nb-card>
+    <!-- <nb-card-header style="color: #1927bd;">
+     La Liste Des Procédés 
+    </nb-card-header> -->
+  
+    <nb-card-body>
+      <ng2-smart-table [settings]="settings" [source]="source" (edit)="createHabilitation($event)" (delete)="OnDeleteConfirm($event)">
+      </ng2-smart-table>
+    </nb-card-body>
+  </nb-card>
+  <ng-template #dialogEdit let-data let-ref="dialogRef">
+
+    <nb-card class="col-12 " style="width: 800px;">
+
+      <nb-card-header>Modifier Les Caractéristiques d'une Liste D'Habilitation </nb-card-header>
+
+      <nb-card-body>
+        <nb-stepper orientation="horizontal">
+          <nb-step [label]="labelOne">
+            <ng-template #labelOne>Génèralités</ng-template>
+            <h4 style="text-align: center;color: rgb(23, 9, 176);">Modifier Les Caractéristiques d'une Liste D'Habilitation</h4>
+           
+    
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="inputFirstName" class="label"style="color: black;">Réference</label>
+                  <input type="text" nbInput fullWidth placeholder="Entrer la réference du liste d'habilitation" shape="semi-round"status="info"id="reference"
+                  [ngModel]="habilitation1.ref" (ngModelChange)="habilitation1.ref= $event" #reference="ngModel"
+                  name="reference"
+                  [ngClass]="{'alert alert-danger':reference.invalid && (reference.dirty || reference.touched)}">
+                </div>
+              </div>
+              
+              <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="inputLastName" class="label" style="color: black;">Titre</label>
+                    <input type="text" nbInput fullWidth placeholder="Entrer le nom du liste d'habilitation" shape="semi-round"status="info" id="titre"
+                    [ngModel]="habilitation1.titre" (ngModelChange)="habilitation1.titre= $event" #titre="ngModel"
+                    name="titre"
+                    [ngClass]="{'alert alert-danger':titre.invalid && (titre.dirty || titre.touched)}">
+                  </div>
+                </div>
+            </div>
+            <div class="text-center">
+              <button nbButton disabled nbStepperNext status="info" hero style="margin: 20px; text-align: center;">prev</button>
+              <button nbButton nbStepperNext status="warning" hero style="margin: 20px; text-align: center;">next</button>
+           </div>
+          </nb-step>
+          <nb-step [label]="labelTwo">
+            <ng-template #labelTwo>Les Habilitations</ng-template>
+              <h4 style="text-align: center;color: rgb(23, 9, 176);">Gestion Des Habilitations</h4>
+              <nb-card-body >
+                <ng2-smart-table [settings]="settingFormation" [source]="sourceFormation"(delete)="OnDeleteConfirmFormation($event)" (create)="add(addformation)" (edit)="editFormation($event)" ></ng2-smart-table>
+                    
+              </nb-card-body>
+            
+            <div class="text-center">
+                <button nbButton nbStepperPrevious  status="warning" hero style="margin: 20px; text-align: center;">prev</button>
+                <button type="submit" nbButton status="success" hero style="margin: 20px; text-align: center;" (click)="modifier(ref)">Enregistrer</button>
+                <button nbButton nbStepperPrevious  status="danger" hero style="margin: 20px; text-align: center;"   (click)="ref.close()" >Annuler</button>
+     
+            </div>
+          </nb-step>
+         
+        </nb-stepper> 
+      </nb-card-body>
+    </nb-card>
+    <ng-template #addformation let-data let-ref="dialogRef">
+
+      <nb-card class="col-12 " style="width: 900px;">
+  
+        <nb-card-header>Ajouter Une Nouvelle Habilitation </nb-card-header>
+  
+        <nb-card-body>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <i class="fa fa-paperclip"></i>
+                <label for="inputWebsite" class="label" style="color: black;margin-left: 5px;">Télécharger La Fiche De Formation</label>
+                <input type="file" accept="*"  nbInput fullWidth id="inputWebsite" placeholder="Entrer votre Deuxième document "shape="semi-round"status="info"(change)="uploadFiles($event)">
+              </div>
+            </div>
+           
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputLastName" class="label" style="color: black;">Matricule Collaborateur : <span style="color: red;">*</span></label>
+                <ng-multiselect-dropdown fullWidth  shape="semi-round" status="info" 
+                [placeholder]="'Sélectionnez un collaborateur'"
+                [settings]="dropdownSettings"
+                [data]="listeUserNotInListe"
+                [(ngModel)]="selectedcollab" 
+                name="selectedcollab" 
+                (ngModelChange)="userDetail()" >
+              </ng-multiselect-dropdown>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputFirstName" class="label" style="color: black;">Nom : <span style="color: red;">*</span> </label>
+                <input type="text" nbInput fullWidth placeholder="Entrer le nom du l'operateur " shape="semi-round" status="info" [(ngModel)]="UserNom"  name="UserNom" readonly>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputLastName" class="label" style="color: black;"> Prenom  <span style="color: red;">*</span> </label>
+                <input type="text" nbInput fullWidth placeholder="choisir le prenom du l'operateur" shape="semi-round"status="info" [(ngModel)]="UserPrenom"  name="UserPrenom" readonly>
+               </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputFirstName" class="label" style="color: black;">Date Formation </label>
+                <input type="date" nbInput fullWidth placeholder="Entrer la Date Formation" shape="semi-round" status="info" [(ngModel)]="formation.date_init" name="date_init"  (ngModelChange)="onDateInitChange()" required>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputLastName" class="label" style="color: black;"> Date Fin Habilitation </label>
+                <input type="date" nbInput fullWidth placeholder="choisir la Date Fin Habilitation" shape="semi-round"status="info" [(ngModel)]="formation.date_fin" name="date_fin" readlonly>
+               </div>
+            </div>
+          </div>
+          <div class="text-center" >
+            <button nbButton status="danger" hero style="margin-bottom: 10px;"  (click)="close(ref)">Annuler</button>
+            <button nbButton status="success" hero (click)="SaveFormation(ref)" style="margin-bottom: 10px;; margin-left: 10px;">Ajout Habilitation</button>
+         </div>
+        </nb-card-body>
+        
+      </nb-card>
+  
+    </ng-template>
+
+    <ng-template #dialogEditFormation let-data let-ref="dialogRef">
+  
+      <nb-card class="col-12 " style="width: 800px;">
+    
+        <nb-card-header>Modifier les données d'Une Habilitation </nb-card-header>
+  
+        <nb-card-body>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <i class="fa fa-paperclip"></i>
+                <label for="inputWebsite" class="label" style="color: black;margin-left: 5px;">Télécharger La Fiche De Formation</label>
+                <input type="file" accept="*"  nbInput fullWidth id="inputWebsite" placeholder="Entrer votre Deuxième document "shape="semi-round"status="info"(change)="uploadFiles($event)">
+              </div>
+            </div>
+           
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputFirstName" class="label" style="color: black;">Date Formation </label>
+                <input type="date" nbInput fullWidth placeholder="Entrer la Date Formation" shape="semi-round" status="info" [(ngModel)]="modFormation.date_init" name="date_init"  (ngModelChange)="onDateInitChange1()" required>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputLastName" class="label" style="color: black;"> Date Fin Habilitation </label>
+                <input type="date" nbInput fullWidth placeholder="choisir la Date Fin Habilitation" shape="semi-round"status="info" [(ngModel)]="modFormation.date_fin" name="date_fin" readonly>
+               </div>
+            </div>
+          </div>
+          <div class="text-center" >
+            <button nbButton status="danger" hero style="margin-bottom: 10px;"  (click)="ref.close()">Annuler</button>
+            <button nbButton status="success" hero (click)="AddHistorique(ref)" style="margin-bottom: 10px;; margin-left: 10px;">Modifier Habilitation</button>
+         </div>
+        </nb-card-body>
+        
+      </nb-card>
+  
+    </ng-template>
+  </ng-template>
+
+ 

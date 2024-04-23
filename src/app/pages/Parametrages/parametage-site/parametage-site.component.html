@@ -1,0 +1,909 @@
+
+<div class="col-12" style="padding-bottom: 10px;">
+  <h2 style="font-family: 'Times New Roman', Times, serif;color: #0f2a9e;text-align: center;justify-content: center;">Parametrages des Sites </h2>
+</div>
+<div class="col-12">
+
+    <nb-card  class="animate__animated animate__slideInUp" style="animation-delay: 0.1s;">
+  
+      <nb-tabset>
+        <nb-tab tabTitle="Site">
+  
+          <ng2-smart-table [settings]="settingsSite" [source]="sourceSite" (create)="create(addSite)" (delete)="OnDeleteConfirm($event)" (edit)="modifier($event)" >
+  
+          </ng2-smart-table>
+  
+        </nb-tab>
+        <nb-tab tabTitle="Unité Opérationnelle">
+  
+          <ng2-smart-table [settings]="settingsUo" [source]="sourceUO" (create)="createUO(addUO)" (delete)="OnDeleteUnite($event)" (edit)="modifierUO($event)" >
+  
+          </ng2-smart-table>
+  
+        </nb-tab>
+  
+        <nb-tab tabTitle="Activité">
+  
+          <ng2-smart-table [settings]="settingsActivite" [source]="sourceActivite" (create)="createAct(addAct)"  (delete)="OnDeleteAct($event)" (edit)="modifierAct($event)">
+  
+          </ng2-smart-table>
+  
+        </nb-tab>
+  
+        <nb-tab tabTitle="Atelier" >
+  
+          <ng2-smart-table [settings]="settingsAtelier" [source]="sourceAtelier" (create)="createAt(addAt)" (delete)="OnDeleteAt($event)" (edit)="modifierAt($event)">
+            <!-- (delete)="OnDeleteAt($event)" (edit)="modifierAt($event)" -->
+          </ng2-smart-table>
+  
+         
+  
+        </nb-tab>
+     
+  
+      </nb-tabset>
+    
+    </nb-card>
+    <ng-template #addSite let-data let-ref="dialogRef">
+
+      <nb-card class="col-12 " style="width: 800px;">
+  
+        <nb-card-header>Ajouter Nouveau site </nb-card-header>
+  
+        <nb-card-body>
+          <div class="row">
+             <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Image : </label>
+              <div class="col-sm-6">
+                    <div class="change-btn d-flex align-items-center flex-wrap">
+                      <input id="file" #fileInput accept="image/*" class="input-file" type="file" (change)="handleInputChange(fileInput)">
+                    </div>
+              </div>
+  
+            </div> 
+  
+           <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Réference :  <span style="color: red;">*</span> </label>
+  
+              <div class="col-sm-6">
+  
+                <input type="text" class="form-control col-sm-12" required fullWidth id="reference"
+  
+                  [ngModel]="site1.ref" (ngModelChange)="site1.ref= $event" #reference="ngModel"
+  
+                  name="reference"
+  
+                  [ngClass]="{'alert alert-danger':reference.invalid && (reference.dirty || reference.touched)}">
+  
+              </div>
+  
+            </div>
+  
+   
+  
+            <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label">Nom :  <span style="color: red;">*</span></label>
+  
+              <div class="col-sm-6">
+  
+                <input type="text" class="form-control col-sm-12" required fullWidth id="nom" [ngModel]="site1.nom"
+  
+                  (ngModelChange)="site1.nom= $event" #nom="ngModel" name="nom"
+  
+                  [ngClass]="{'alert alert-danger':nom.invalid && (nom.dirty || nom.touched)}">
+  
+              </div>
+  
+            </div>
+  
+    
+            <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Designation :  <span style="color: red;">*</span> </label>
+  
+              <div class="col-sm-6">
+  
+                <textarea type="number" class="form-control col-sm-12" required fullWidth id="designation" [ngModel]="site1.designation"
+  
+                  (ngModelChange)="site1.designation= $event" #designation="ngModel" name="designation"
+  
+                  [ngClass]="{'alert alert-danger':designation.invalid && (designation.dirty || designation.touched)}"></textarea>
+  
+              </div>
+  
+            </div> 
+          </div>
+  
+   
+  
+        </nb-card-body>
+  
+   
+  
+        <nb-card-footer>
+  
+          <button nbButton (click)="ref.close()" class=" float-right btn btn-danger "  style="background-color: crimson;color: aliceblue;">Fermer</button>
+  
+          <button nbButton (click)="SaveSite(ref)" class=" float-right btn btn-success mr-1"
+  
+            style="background-color: green;color: aliceblue;">Enregistrer</button>
+  
+   
+  
+        </nb-card-footer>
+  
+      </nb-card>
+  
+    </ng-template>
+
+
+    <ng-template #addUO let-data let-ref="dialogRef">
+
+      <nb-card class="col-12 " style="width: 800px;">
+  
+        <nb-card-header>Ajouter Nouveau U.O </nb-card-header>
+  
+        <nb-card-body>
+  
+          <div class="row">
+  
+   
+  
+          <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Image : </label>
+  
+              <div class="col-sm-6">
+  
+            
+                    <div class="change-btn d-flex align-items-center flex-wrap">
+                      <input id="file" #fileInput accept="image/*" class="input-file" type="file" (change)="handleInputChange(fileInput)">
+                    </div>
+              </div>
+  
+            </div> 
+  
+   
+  
+           <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Réference :  <span style="color: red;">*</span></label>
+  
+              <div class="col-sm-6">
+  
+                <input type="text" class="form-control col-sm-12" required fullWidth id="reference"
+  
+                  [ngModel]="unite1.ref" (ngModelChange)="unite1.ref= $event" #reference="ngModel"
+  
+                  name="reference"
+  
+                  [ngClass]="{'alert alert-danger':reference.invalid && (reference.dirty || reference.touched)}">
+  
+              </div>
+  
+            </div>
+  
+   
+  
+            <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label">Nom :  <span style="color: red;">*</span> </label>
+  
+              <div class="col-sm-6">
+  
+                <input type="text" class="form-control col-sm-12" required fullWidth id="nom" [ngModel]="unite1.nom"
+  
+                  (ngModelChange)="unite1.nom= $event" #nom="ngModel" name="nom"
+  
+                  [ngClass]="{'alert alert-danger':nom.invalid && (nom.dirty || nom.touched)}">
+  
+              </div>
+  
+            </div>
+            
+     
+              <div class="form-group row col-12">
+                <label for="uo" class="label col-4 col-form-label"> Unité Opérationnelle :  <span style="color: red;">*</span> </label>
+              
+                <div class="col-sm-6">
+                  <select class="custom-font-size" id="uo" [(ngModel)]="selectedSite" #uo="ngModel" name="uo"
+                    [ngClass]="{'alert alert-danger': uo.invalid && (uo.dirty || uo.touched)}">
+                    <option [ngValue]="null">Sélectionnez une unité opérationnelle</option>
+                    <option *ngFor="let site of listeSite" [ngValue]="site.id">
+                      {{ site.ref }} - {{ site.nom }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+    
+            <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Designation :  <span style="color: red;">*</span></label>
+  
+              <div class="col-sm-6">
+  
+                <textarea type="number" class="form-control col-sm-12" required fullWidth id="designation" [ngModel]="unite1.designation"
+  
+                  (ngModelChange)="unite1.designation= $event" #designation="ngModel" name="designation"
+  
+                  [ngClass]="{'alert alert-danger':designation.invalid && (designation.dirty || designation.touched)}"></textarea>
+  
+              </div>
+  
+            </div> 
+            
+          </div>
+        </nb-card-body>
+        <nb-card-footer>
+  
+          <button nbButton (click)="ref.close()" class=" float-right btn btn-danger "
+  
+            style="background-color: crimson;color: aliceblue;">Fermer</button>
+  
+          <button nbButton (click)="SaveUO(ref)" class=" float-right btn btn-success mr-1"
+  
+            style="background-color: green;color: aliceblue;">Enregistrer</button>
+  
+   
+  
+        </nb-card-footer>
+  
+      </nb-card>
+  
+    </ng-template>
+
+    <ng-template #addAct let-data let-ref="dialogRef">
+
+      <nb-card class="col-12 " style="width: 800px;">
+  
+        <nb-card-header>Ajouter Nouveau Activite </nb-card-header>
+  
+        <nb-card-body>
+  
+          <div class="row">
+  
+   
+  
+          <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Image : </label>
+  
+              <div class="col-sm-6">
+  
+            
+                    <div class="change-btn d-flex align-items-center flex-wrap">
+                      <input id="file" #fileInput accept="image/*" class="input-file" type="file" (change)="handleInputChange(fileInput)">
+                    </div>
+              </div>
+  
+            </div> 
+  
+   
+  
+           <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Réference :  <span style="color: red;">*</span> </label>
+  
+              <div class="col-sm-6">
+  
+                <input type="text" class="form-control col-sm-12" required fullWidth id="reference"
+  
+                  [ngModel]="activite1.ref" (ngModelChange)="activite1.ref= $event" #reference="ngModel"
+  
+                  name="reference"
+  
+                  [ngClass]="{'alert alert-danger':reference.invalid && (reference.dirty || reference.touched)}">
+  
+              </div>
+  
+            </div>
+  
+   
+  
+            <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label">Nom :  <span style="color: red;">*</span> </label>
+  
+              <div class="col-sm-6">
+  
+                <input type="text" class="form-control col-sm-12" required fullWidth id="nom" [ngModel]="activite1.nom"
+  
+                  (ngModelChange)="activite1.nom= $event" #nom="ngModel" name="nom"
+  
+                  [ngClass]="{'alert alert-danger':nom.invalid && (nom.dirty || nom.touched)}">
+  
+              </div>
+  
+            </div>
+  
+            <div class="form-group row col-12">
+              <label for="uo" class="label col-4 col-form-label"> Unité Opérationnelle :  <span style="color: red;">*</span> </label>
+            
+              <div class="col-sm-6">
+                <select class="custom-font-size" id="uo" [(ngModel)]="selectedUnite" #uo="ngModel" name="uo"
+                  [ngClass]="{'alert alert-danger': uo.invalid && (uo.dirty || uo.touched)}">
+                  <option [ngValue]="null">Sélectionnez une unité opérationnelle</option>
+                  <option *ngFor="let uo of listeUnite" [ngValue]="uo.id">
+                    {{ uo.ref }} - {{ uo.nom }}
+                  </option>
+                </select>
+              </div>
+            </div>
+  
+            <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Designation :  <span style="color: red;">*</span> </label>
+  
+              <div class="col-sm-6">
+  
+                <textarea type="number" class="form-control col-sm-12" required fullWidth id="designation" [ngModel]="activite1.designation"
+  
+                  (ngModelChange)="activite1.designation= $event" #designation="ngModel" name="designation"
+  
+                  [ngClass]="{'alert alert-danger':designation.invalid && (designation.dirty || designation.touched)}"></textarea>
+  
+              </div>
+  
+            </div> 
+          </div>
+  
+   
+  
+        </nb-card-body>
+  
+   
+  
+        <nb-card-footer>
+  
+          <button nbButton (click)="ref.close()" class=" float-right btn btn-danger "
+  
+            style="background-color: crimson;color: aliceblue;">Fermer</button>
+  
+          <button nbButton (click)="SaveAct(ref)" class=" float-right btn btn-success mr-1"
+  
+            style="background-color: green;color: aliceblue;">Enregistrer</button>
+  
+   
+  
+        </nb-card-footer>
+  
+      </nb-card>
+  
+    </ng-template>
+
+    <ng-template #addAt let-data let-ref="dialogRef">
+
+      <nb-card class="col-12 " style="width: 800px;">
+  
+        <nb-card-header>Ajouter Nouveau Atelier </nb-card-header>
+  
+        <nb-card-body>
+  
+          <div class="row">
+  
+   
+  
+          <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Image : </label>
+  
+              <div class="col-sm-6">
+  
+            
+                    <div class="change-btn d-flex align-items-center flex-wrap">
+                      <input id="file" #fileInput accept="image/*" class="input-file" type="file" (change)="handleInputChange(fileInput)">
+                    </div>
+              </div>
+  
+            </div> 
+  
+   
+  
+           <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Réference :  <span style="color: red;">*</span> </label>
+  
+              <div class="col-sm-6">
+  
+                <input type="text" class="form-control col-sm-12" required fullWidth id="reference"
+  
+                  [ngModel]="atelier1.ref" (ngModelChange)="atelier1.ref= $event" #reference="ngModel"
+  
+                  name="reference"
+  
+                  [ngClass]="{'alert alert-danger':reference.invalid && (reference.dirty || reference.touched)}">
+  
+              </div>
+  
+            </div>
+  
+   
+  
+            <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label">Nom :  <span style="color: red;">*</span></label>
+  
+              <div class="col-sm-6">
+  
+                <input type="text" class="form-control col-sm-12" required fullWidth id="nom" [ngModel]="atelier1.nom"
+  
+                  (ngModelChange)="atelier1.nom= $event" #nom="ngModel" name="nom"
+  
+                  [ngClass]="{'alert alert-danger':nom.invalid && (nom.dirty || nom.touched)}">
+  
+              </div>
+  
+            </div>
+  
+            <div class="form-group row col-12">
+               <label for="uo" class="label col-4 col-form-label"> Unité  :  <span style="color: red;">*</span> </label>
+              <div class="col-sm-6">
+                <!-- <label for="uo" class="label col-4 col-form-label"> Unité  : </label> -->
+                <select class="custom-font-size" id="unite" [(ngModel)]="selectedUn" (ngModelChange)="loadActivites()" #unite="ngModel" name="unite"
+                  [ngClass]="{'alert alert-danger': unite.invalid && (unite.dirty || unite.touched)}">
+                  <option [ngValue]="null">Sélectionnez une Unité Operationnelle </option>
+                  
+                  <option *ngFor="let unite of listeUnite" [ngValue]="unite.id">
+                    {{ unite.ref }} - {{ unite.nom }}
+                  </option>
+                </select>
+              </div>
+              
+               <label for="uo" class="label col-4 col-form-label"> Activité  :  <span style="color: red;">*</span></label>
+              <div class="col-sm-6">
+                <!-- <label for="uo" class="label col-4 col-form-label"> Activité  : </label> -->
+                <select class="custom-font-size" id="acti" [(ngModel)]="selectedActivite" #acti="ngModel" name="acti"
+                  [ngClass]="{'alert alert-danger': acti.invalid && (acti.dirty || acti.touched)}">
+                  <option [ngValue]="null">Sélectionnez une activité </option>
+                  
+                  <option *ngFor="let act of listeAct" [ngValue]="act.id">
+                    {{ act.ref }} - {{ act.nom }}
+                  </option>
+                </select>
+              </div>
+
+            </div>
+  
+            <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Designation :  <span style="color: red;">*</span></label>
+  
+              <div class="col-sm-6">
+  
+                <textarea type="number" class="form-control col-sm-12" required fullWidth id="designation" [ngModel]="atelier1.designation"
+  
+                  (ngModelChange)="atelier1.designation= $event" #designation="ngModel" name="designation"
+  
+                  [ngClass]="{'alert alert-danger':designation.invalid && (designation.dirty || designation.touched)}"></textarea>
+  
+              </div>
+  
+            </div> 
+          </div>
+  
+   
+  
+        </nb-card-body>
+  
+   
+  
+        <nb-card-footer>
+  
+          <button nbButton (click)="ref.close()" class=" float-right btn btn-danger semi-round " hero >Fermer</button>
+          <!-- style="background-color: crimson;color: aliceblue;" -->
+  
+          <button nbButton (click)="SaveAt(ref)" class=" float-right btn btn-success mr-1" hero>Enregistrer</button>
+            <!-- style="background-color: green;color: aliceblue;" -->
+  
+        </nb-card-footer>
+  
+      </nb-card>
+  
+    </ng-template>
+
+    <ng-template #dialogEdit let-data let-ref="dialogRef">
+
+      <nb-card class="col-12 " style="width: 800px;">
+  
+        <nb-card-header>Modifier Site </nb-card-header>
+  
+        <nb-card-body>
+  
+          <div class="row">
+          <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Image : </label>
+  
+              <div class="col-sm-6">
+  
+                    <div class="change-btn d-flex align-items-center flex-wrap">
+                      <input id="file" #fileInput accept="image/*" class="input-file" type="file" (change)="handleInputChange(fileInput)">
+                    </div>
+              </div>
+  
+            </div> 
+  
+   
+  
+           <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Réference : </label>
+  
+              <div class="col-sm-6">
+  
+                <input type="text" class="form-control col-sm-12" required fullWidth id="reference"
+  
+                  [ngModel]="site.ref" (ngModelChange)="site.ref= $event" #reference="ngModel"
+  
+                  name="reference"
+  
+                  [ngClass]="{'alert alert-danger':reference.invalid && (reference.dirty || reference.touched)}">
+  
+              </div>
+  
+            </div>
+  
+   
+  
+            <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label">Nom : </label>
+  
+              <div class="col-sm-6">
+  
+                <input type="text" class="form-control col-sm-12" required fullWidth id="nom" [ngModel]="site.nom"
+  
+                  (ngModelChange)="site.nom= $event" #nom="ngModel" name="nom"
+  
+                  [ngClass]="{'alert alert-danger':nom.invalid && (nom.dirty || nom.touched)}">
+  
+              </div>
+  
+            </div>
+  
+    
+            <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Designation : </label>
+  
+              <div class="col-sm-6">
+  
+                <textarea type="number" class="form-control col-sm-12" required fullWidth id="designation" [ngModel]="site.designation"
+  
+                  (ngModelChange)="site.designation= $event" #designation="ngModel" name="designation"
+  
+                  [ngClass]="{'alert alert-danger':designation.invalid && (designation.dirty || designation.touched)}"></textarea>
+  
+              </div>
+  
+            </div> 
+  
+          </div>
+  
+   
+  
+        </nb-card-body>
+  
+   
+  
+        <nb-card-footer>
+  
+          <button nbButton (click)="ref.close()" class=" float-right btn btn-danger "
+  
+            style="background-color: crimson;color: aliceblue;">Fermer</button>
+  
+          <button nbButton (click)="modifierSite(ref)" class=" float-right btn btn-success mr-1"
+  
+            style="background-color: green;color: aliceblue;">Modifier</button>
+  
+   
+  
+        </nb-card-footer>
+  
+      </nb-card>
+  
+    </ng-template>
+
+    
+    <ng-template #dialogEditUnite let-data let-ref="dialogRef">
+
+      <nb-card class="col-12 " style="width: 800px;">
+  
+        <nb-card-header>Modifier Unité Operationnelle </nb-card-header>
+  
+        <nb-card-body>
+  
+          <div class="row">
+          <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Image : </label>
+  
+              <div class="col-sm-6">
+  
+                    <div class="change-btn d-flex align-items-center flex-wrap">
+                      <input id="file" #fileInput accept="image/*" class="input-file" type="file" (change)="handleInputChange(fileInput)">
+                    </div>
+              </div>
+  
+            </div> 
+  
+   
+  
+           <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Réference : </label>
+  
+              <div class="col-sm-6">
+  
+                <input type="text" class="form-control col-sm-12" required fullWidth id="reference"
+  
+                  [ngModel]="unite.ref" (ngModelChange)="unite.ref= $event" #reference="ngModel"
+  
+                  name="reference"
+  
+                  [ngClass]="{'alert alert-danger':reference.invalid && (reference.dirty || reference.touched)}">
+  
+              </div>
+  
+            </div>
+  
+   
+  
+            <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label">Nom : </label>
+  
+              <div class="col-sm-6">
+  
+                <input type="text" class="form-control col-sm-12" required fullWidth id="nom" [ngModel]="unite.nom"
+  
+                  (ngModelChange)="unite.nom= $event" #nom="ngModel" name="nom"
+  
+                  [ngClass]="{'alert alert-danger':nom.invalid && (nom.dirty || nom.touched)}">
+  
+              </div>
+  
+            </div>
+  
+    
+            <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Designation : </label>
+  
+              <div class="col-sm-6">
+  
+                <textarea type="number" class="form-control col-sm-12" required fullWidth id="designation" [ngModel]="unite.designation"
+  
+                  (ngModelChange)="unite.designation= $event" #designation="ngModel" name="designation"
+  
+                  [ngClass]="{'alert alert-danger':designation.invalid && (designation.dirty || designation.touched)}"></textarea>
+  
+              </div>
+  
+            </div> 
+  
+          </div>
+  
+   
+  
+        </nb-card-body>
+  
+   
+  
+        <nb-card-footer>
+  
+          <button nbButton (click)="ref.close()" class=" float-right btn btn-danger "
+  
+            style="background-color: crimson;color: aliceblue;">Fermer</button>
+  
+          <button nbButton (click)="modifierUnite(ref)" class=" float-right btn btn-success mr-1"
+  
+            style="background-color: green;color: aliceblue;">Modifier</button>
+  
+   
+  
+        </nb-card-footer>
+  
+      </nb-card>
+  
+    </ng-template>
+
+    <ng-template #dialogActivite let-data let-ref="dialogRef">
+
+      <nb-card class="col-12 " style="width: 800px;">
+  
+        <nb-card-header>Modifier Activite </nb-card-header>
+  
+        <nb-card-body>
+  
+          <div class="row">
+          <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Image : </label>
+  
+              <div class="col-sm-6">
+  
+                    <div class="change-btn d-flex align-items-center flex-wrap">
+                      <input id="file" #fileInput accept="image/*" class="input-file" type="file" (change)="handleInputChange(fileInput)">
+                    </div>
+              </div>
+  
+            </div> 
+  
+   
+  
+           <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Réference : </label>
+  
+              <div class="col-sm-6">
+  
+                <input type="text" class="form-control col-sm-12" required fullWidth id="reference"
+  
+                  [ngModel]="activite.ref" (ngModelChange)="activite.ref= $event" #reference="ngModel"
+  
+                  name="reference"
+  
+                  [ngClass]="{'alert alert-danger':reference.invalid && (reference.dirty || reference.touched)}">
+  
+              </div>
+  
+            </div>
+  
+   
+  
+            <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label">Nom : </label>
+  
+              <div class="col-sm-6">
+  
+                <input type="text" class="form-control col-sm-12" required fullWidth id="nom" [ngModel]="activite.nom"
+  
+                  (ngModelChange)="activite.nom= $event" #nom="ngModel" name="nom"
+  
+                  [ngClass]="{'alert alert-danger':nom.invalid && (nom.dirty || nom.touched)}">
+  
+              </div>
+  
+            </div>
+  
+    
+            <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Designation : </label>
+  
+              <div class="col-sm-6">
+  
+                <textarea type="number" class="form-control col-sm-12" required fullWidth id="designation" [ngModel]="activite.designation"
+  
+                  (ngModelChange)="activite.designation= $event" #designation="ngModel" name="designation"
+  
+                  [ngClass]="{'alert alert-danger':designation.invalid && (designation.dirty || designation.touched)}"></textarea>
+  
+              </div>
+  
+            </div> 
+  
+          </div>
+  
+        </nb-card-body>
+        <nb-card-footer>
+  
+          <button nbButton (click)="ref.close()" class=" float-right btn btn-danger "
+  
+            style="background-color: crimson;color: aliceblue;">Fermer</button>
+  
+          <button nbButton (click)="modifierActivite(ref)" class=" float-right btn btn-success mr-1"
+  
+            style="background-color: green;color: aliceblue;">Modifier</button>
+  
+   
+  
+        </nb-card-footer>
+  
+      </nb-card>
+  
+    </ng-template>
+    <ng-template #dialogAtelier let-data let-ref="dialogRef">
+
+      <nb-card class="col-12 " style="width: 800px;">
+  
+        <nb-card-header>Modifier Atelier </nb-card-header>
+  
+        <nb-card-body>
+  
+          <div class="row">
+          <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Image : </label>
+  
+              <div class="col-sm-6">
+  
+                    <div class="change-btn d-flex align-items-center flex-wrap">
+                      <input id="file" #fileInput accept="image/*" class="input-file" type="file" (change)="handleInputChange(fileInput)">
+                    </div>
+              </div>
+  
+            </div> 
+  
+   
+  
+           <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Réference : </label>
+  
+              <div class="col-sm-6">
+  
+                <input type="text" class="form-control col-sm-12" required fullWidth id="reference"
+  
+                  [ngModel]="atelier.ref" (ngModelChange)="atelier.ref= $event" #reference="ngModel"
+  
+                  name="reference"
+  
+                  [ngClass]="{'alert alert-danger':reference.invalid && (reference.dirty || reference.touched)}">
+  
+              </div>
+  
+            </div>
+  
+   
+  
+            <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label">Nom : </label>
+  
+              <div class="col-sm-6">
+  
+                <input type="text" class="form-control col-sm-12" required fullWidth id="nom" [ngModel]="atelier.nom"
+  
+                  (ngModelChange)="atelier.nom= $event" #nom="ngModel" name="nom"
+  
+                  [ngClass]="{'alert alert-danger':nom.invalid && (nom.dirty || nom.touched)}">
+  
+              </div>
+  
+            </div>
+  
+    
+            <div class="form-group row col-12">
+  
+              <label for="nouveauSalaire" class="label col-4 col-form-label"> Designation : </label>
+  
+              <div class="col-sm-6">
+  
+                <textarea type="number" class="form-control col-sm-12" required fullWidth id="designation" [ngModel]="atelier.designation"
+  
+                  (ngModelChange)="atelier.designation= $event" #designation="ngModel" name="designation"
+  
+                  [ngClass]="{'alert alert-danger':designation.invalid && (designation.dirty || designation.touched)}"></textarea>
+  
+              </div>
+  
+            </div> 
+  
+          </div>
+  
+        </nb-card-body>
+        <nb-card-footer>
+  
+          <button nbButton (click)="ref.close()" class=" float-right btn btn-danger "
+  
+            style="background-color: crimson;color: aliceblue;" hero>Fermer</button>
+  
+          <button nbButton (click)="modifierAtelier(ref)" class=" float-right btn btn-success mr-1"
+  
+            style="background-color: green;color: aliceblue;" hero>Modifier</button>
+  
+   
+  
+        </nb-card-footer>
+  
+      </nb-card>
+  
+    </ng-template>
+  </div>
+

@@ -1,0 +1,91 @@
+<div  id="contentToConvert">
+
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <div class="middle">
+      <h6 class="orange-text mb-3" style="font-size: small;text-align: center;color: orange;">C2 - Confidential</h6>
+     <div style="flex-direction: row ;padding: 20px;">
+       <img src="../assets/images/safran.jpg" width="100"height="80" style="margin-right: 350px;">
+        <label  style="line-height: 0.5; font-family: 'Times New Roman', Times, serif;">Date MAJ , le {{dateAjour}}</label>
+    </div>
+     
+  </div>
+
+  <fieldset id="contentToConvert" class="print-container">
+
+
+      <div class="form-group row col-12">
+
+          <div class="col-sm-12">
+
+              <h2 align="center" style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">
+
+                  <u>LISTE DES PERSONNES FORMEE</u>
+                  
+
+              </h2>
+              <h2 align="center" style="font-family: 'Times New Roman', Times, serif; font-size: 20px; color:blue">
+
+               {{habilitation.procede?.nom}}
+
+                
+
+            </h2>
+             
+
+          </div>
+
+      </div>
+      <h6 style="margin-bottom: 10px;">La Liste Des Formateurs</h6>
+      <table  class="table table-hover" style=" border-collapse: collapse;">
+        <thead>
+            <tr>
+              
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Section</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr  *ngFor="let qualite of listeUser">
+                <td>{{qualite.username}}</td>
+                <td>{{qualite.prenom}}</td>
+                <td>{{qualite.unite?.nom}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <h6 style="margin-bottom: 10px;">La Liste Des Opérateurs</h6>
+    <table  class="table table-hover">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Section</th>
+                <th>Date de formation</th>
+                <th>Date de recyclage</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let formation of listeFormation">
+               
+                <td>{{formation.utilisateur?.username}}</td>
+                <td>{{formation.utilisateur?.prenom}}</td>
+                <td>Atelier {{currentProcede.atelier?.nom}}</td>
+                <td>{{formation.date_init}}</td>
+                <td>{{formation.date_fin}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+      <br>
+
+      
+
+  </fieldset>
+
+</div>
+
+<div style="text-align: right; margin: 20px;">
+    <button nbButton status="danger" hero (click)="downloadPdf()" style="margin-right: 0;">Telecharger</button>
+</div>
