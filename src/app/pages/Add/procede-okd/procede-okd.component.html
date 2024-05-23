@@ -211,6 +211,17 @@
                               </div>
                             </div>
                           </div>
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <div class="form-group">
+                                <label for="inputEmail" class="label" style="color: black;">Mesure à Prendre En Cas De Non Conformité  <span style="color: red;">*</span></label>
+                                <textarea type="textarea" rows="2" nbInput fullWidth shape="round" placeholder="Mesure à Prendre En Cas De Non Conformité " status="info"[(ngModel)]="critere.mesureNC" name="mesureNC{{i}}">
+                                </textarea>
+                              
+                              </div>
+                            </div>
+                            
+                          </div>
                         </form>
                         <button nbButton status="danger" (click)="removeCritere(i)" style="margin-bottom: 10px;" ghost>Supprimer</button>
                       </div>
@@ -240,7 +251,7 @@
           <nb-accordion-item-body>
             <nb-card>
                 <nb-card-body>
-                    <div class="row"*ngIf="nb_habilistation ==0">
+                    <div class="row" *ngIf="nb_habilistation ==0">
                         <div class="col-sm-6">
                           <div class="form-group">
                             <label for="inputFirstName" class="label"style="color: black;">Réference : <span style="color: red;">*</span></label>
@@ -287,8 +298,8 @@
                       <button type="submit" nbButton status="success" hero style="margin: 20px;" (click)="SaveHabilitation()">Enregistrer et continuer </button>
                       </div>
                   </div>
-                  <nb-card >
-                    <!-- *ngIf="showSmartTable1" -->
+                  <nb-card  *ngIf="showSmartTable1">
+                   
                     <nb-card-header>
                           Ajouter Les Formations associés à cette Liste D'Habilitation
                     </nb-card-header> 
@@ -600,6 +611,17 @@
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label for="inputEmail" class="label" style="color: black;">Mesure à Prendre En Cas De Non Conformité  <span style="color: red;">*</span></label>
+              <textarea type="textarea" rows="2" nbInput fullWidth shape="round" placeholder="Mesure à Prendre En Cas De Non Conformité " status="info"[(ngModel)]="critere1.mesureNC" name="mesureNC">
+              </textarea>
+            
+            </div>
+          </div>
+          
+        </div>
         <div class="text-center">
 
           <button type="submit" nbButton status="success" hero style="margin: 20px; text-align: center;" (click)="modifierCritere(ref)" >Enregistrer</button>
@@ -649,6 +671,18 @@
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label for="inputEmail" class="label" style="color: black;">Mesure à Prendre En Cas De Non Conformité  <span style="color: red;">*</span></label>
+              <textarea type="textarea" rows="2" nbInput fullWidth shape="round" placeholder="Mesure à Prendre En Cas De Non Conformité " status="info"[(ngModel)]="newCritere.mesureNC" name="mesureNC">
+              </textarea>
+            
+            </div>
+          </div>
+          
+        </div>
+
         <div class="text-center">
 
           <button type="submit" nbButton status="success" hero style="margin: 20px; text-align: center;" (click)="AddCri(ref)" >Enregistrer</button>
@@ -670,7 +704,7 @@
         <nb-stepper orientation="horizontal">
           <nb-step [label]="labelOne">
             <ng-template #labelOne>Génèralités</ng-template>
-            <h4 style="text-align: center;color: rgb(23, 9, 176);">Mettre à jours les Caractéristiques d'une liste D'Habilitation'</h4>
+            <h4 style="text-align: center;color: rgb(23, 9, 176);">Mettre à jours les Caractéristiques d'une liste D'Habilitation</h4>
            
     
             <div class="row">

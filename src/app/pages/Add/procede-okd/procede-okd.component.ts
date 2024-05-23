@@ -54,7 +54,7 @@ export class ProcedeOKDComponent implements OnInit {
     },
     pager: {
       display: true,
-      perPage: 5, // Limiter le nombre de lignes par page à 5
+      perPage: 4, // Limiter le nombre de lignes par page à 5
     },
     columns: {
 
@@ -93,7 +93,7 @@ export class ProcedeOKDComponent implements OnInit {
     edit: true,
     delete: true,
     position: 'right',
-    page:5
+   
 
 
 
@@ -120,7 +120,7 @@ export class ProcedeOKDComponent implements OnInit {
   },
   pager: {
     display: true,
-    perPage: 5, // Limiter le nombre de lignes par page à 5
+    perPage: 4, // Limiter le nombre de lignes par page à 5
   },
  columns: {
 
@@ -210,7 +210,7 @@ export class ProcedeOKDComponent implements OnInit {
   },
   pager: {
     display: true,
-    perPage: 5, // Limiter le nombre de lignes par page à 5
+    perPage: 4, // Limiter le nombre de lignes par page à 5
   },
  
  columns: {
@@ -278,7 +278,7 @@ export class ProcedeOKDComponent implements OnInit {
   },
   pager: {
     display: true,
-    perPage: 5, // Limiter le nombre de lignes par page à 5
+    perPage: 4, // Limiter le nombre de lignes par page à 5
   },
  columns: {
 
@@ -342,7 +342,7 @@ export class ProcedeOKDComponent implements OnInit {
   },
   pager: {
     display: true,
-    perPage: 5, // Limiter le nombre de lignes par page à 5
+    perPage: 4, // Limiter le nombre de lignes par page à 5
   },
  columns: {
 
@@ -603,10 +603,15 @@ checkInput() {
 
 SaveCC(): void {
   console.log(this.carte);
-  if (!this.carte.nom||!this.carte.ref||!this.carte.nb_valeur||!this.carte.max||!this.carte.min) {
+  if (!this.carte.nom||!this.carte.ref||!this.carte.nb_valeur) {
     // Afficher un toast d'erreur
     this.toastrService.danger('Veuillez remplir tous les champs', 'Erreur');
     return;
+  }
+  if(!this.carte.max){
+    this.carte.max="9999"
+  }else if(!this.carte.min){
+    this.carte.min="-9999"
   }
   const min = parseInt(this.carte.min.toString());
   const max = parseInt(this.carte.max.toString());
@@ -617,6 +622,7 @@ SaveCC(): void {
   }
   if(this.carte.fonction){
     const fonctionRegExp = /^(\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\)|V\d+|\d+)([+\-*\/](\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\)|V\d+|\d+))*$/;
+   //const fonctionRegExp = /^(\(((V\d+|\d+)([+\-*\/]\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\)|V\d+|\d+))*\)|V\d+|\d+)([+\-*\/]\(((V\d+|\d+)([+\-*\/]\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\)|V\d+|\d+))*\))*$/;
 
 
     // Vérification si la fonction correspond au modèle spécifié
@@ -691,7 +697,7 @@ SaveCriteres() {
   // }
 
   for (let critere of this.criteres) {
-    if (!critere.nom || !critere.type || (critere.type === 'valeur' && (!critere.min || !critere.max))) {
+    if (!critere.nom|| !critere.mesureNC || !critere.type || (critere.type === 'valeur' && (!critere.min || !critere.max))) {
       this.toastrService.danger('Veuillez remplir tous les champs', 'Erreur');
       return;
     }
@@ -774,7 +780,7 @@ SaveHabilitation(): void {
   );
 }
 
-//Ajout Des Critéres :
+//Ajout Des formations :
 addFormation() {
   this.formations.push(new Formation());
 }
@@ -880,6 +886,7 @@ SaveFormation() {
       this.service.addFormation(formData).subscribe(
         (site1) => {
           console.log('Formation added successfully:', site1);
+          this.showSmartTable1 = false;
         },
         (error) => {
           console.error('Error adding formation:', error);
@@ -1290,7 +1297,12 @@ uploadFiles(event) {
              this.carte1.ref= this.carte1.ref
              this.carte1.nom= this.carte1.nom
              this.carte1.nb_valeur= this.carte1.nb_valeur
-             this.carte1.fonction= this.carte1.fonction
+
+             if( this.carte1.fonction){
+              this.carte1.fonction= this.carte1.fonction
+             }else{
+              this.carte1.fonction=null
+             }
              this.carte1.procede=this.procede
              this.service.updateCC(this.carte1.id,this.carte1).subscribe(
                () => {
@@ -1371,6 +1383,7 @@ uploadFiles(event) {
          this.critere1.nom= this.critere1.nom
          this.critere1.min= this.critere1.min
          this.critere1.max= this.critere1.max
+         this.critere1.mesureNC= this.critere1.mesureNC
          this.critere1.okd=this.okd1
          this.service.updateCritere(this.critere1.id,this.critere1).subscribe(
                () => {
@@ -1397,7 +1410,7 @@ add(dialog: TemplateRef<any>) {
   }
 
   AddCri(ref: NbDialogRef<any>): void {
-    if (!this.newCritere.type || !this.newCritere.nom||(this.newCritere.type === 'valeur' && (!this.newCritere.min || !this.newCritere.max))) {
+    if (!this.newCritere.type ||!this.newCritere.mesureNC || !this.newCritere.nom||(this.newCritere.type === 'valeur' && (!this.newCritere.min || !this.newCritere.max))) {
       // Afficher un toast d'erreur
       this.toastrService.danger('Veuillez remplir tous les champs', 'Erreur');
       return;

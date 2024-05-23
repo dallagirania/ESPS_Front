@@ -1,8 +1,6 @@
-<!-- <button nbButton status="info" ghost (click)="navigate()" > <i class="fas fa-eye"></i></button> -->
-<!-- <button nbButton status="info" ghost (click)="detail(ProcedeDetails)" > <i class="fas fa-eye"></i></button>-->
 
 <nb-icon icon="eye" status="info" ghost nbTooltip="Liste des critères
-" [options]="{ animation: { type: 'zoom' } }" (click)="detail(ProcedeDetails)"></nb-icon>
+" [options]="{ animation: { type: 'zoom' } }" (click)="detail(ProcedeDetails)"  style="margin-left:25px;font-size: 30px;" ></nb-icon>
 
 <ng-template #ProcedeDetails let-data let-ref="dialogRef">
   <nb-card class="col-md-12 col-lg-12 col-xxxl-12">

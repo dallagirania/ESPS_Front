@@ -1,0 +1,99 @@
+
+.custom-chart {
+    width: 800px; 
+    height: 400px; 
+  }
+
+  .custom-alert {
+    border: 2px solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.custom-alert-success {
+    border: 2px solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #3ee565;
+    border-color: #3ee565;
+    color: black;
+}
+
+.custom-alert-danger {
+    border: 2px solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f8d7da;
+    border-color: #e49da4;
+    color: #721c24;
+}
+/**************************** SPINNER **************************************/
+
+.image-card {
+    height: 180px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    position: relative;
+    flex-direction: column;
+
+    .progress {
+        height: 10px;
+        margin-top: 5px;
+        width: 100%;
+        position: absolute;
+        top: 168px;
+        background-color: rgba(0, 0, 0, 0.253);
+        z-index: 1000;
+    }
+
+    .bg {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        position: relative;
+
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 110%;
+            width: auto;
+        }
+
+        h5 {
+            z-index: 1000;
+            color: white;
+        }
+
+        .blur {
+            height: 100%;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.557);
+            z-index: 100;
+            position: absolute;
+            top: 0;
+            left: 0;
+            
+        }
+    }
+}
+
+.card {
+    box-shadow: -5px 5px 6px 0 rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    border-radius: 10px;
+    overflow: hidden;
+
+    &:hover {
+        scale: 1.02;
+    }
+}
+    

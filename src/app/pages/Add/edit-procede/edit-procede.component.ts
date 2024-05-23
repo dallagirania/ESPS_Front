@@ -157,6 +157,10 @@ export class EditProcedeComponent implements OnInit {
     confirmDelete: true,
 
   },
+  pager: {
+    display: true,
+    perPage: 4,
+  },
  
  columns: {
 
@@ -857,6 +861,7 @@ OnDeleteConfirmOKD(event) {
              this.critere1.nom= this.critere1.nom
              this.critere1.min= this.critere1.min
              this.critere1.max= this.critere1.max
+             this.critere1.mesureNC= this.critere1.mesureNC
              this.critere1.okd=this.okd1
              this.service.updateCritere(this.critere1.id,this.critere1).subscribe(
                () => {
@@ -884,7 +889,7 @@ add(dialog: TemplateRef<any>) {
   }
 
   AddCri(ref: NbDialogRef<any>): void {
-    if (!this.newCritere.type || !this.newCritere.nom) {
+    if (!this.newCritere.type ||!this.newCritere.mesureNC || !this.newCritere.nom||(this.newCritere.type === 'valeur' && (!this.newCritere.min || !this.newCritere.max))) {
       // Afficher un toast d'erreur
       this.toastrService.danger('Veuillez remplir tous les champs', 'Erreur');
       return;
@@ -1013,6 +1018,11 @@ OnDeleteConfirmCritere(event) {
              this.carte1.ref= this.carte1.ref
              this.carte1.nom= this.carte1.nom
              this.carte1.nb_valeur= this.carte1.nb_valeur
+             if(this.carte1.fonction){
+              this.carte1.fonction= this.carte1.fonction
+             }else{
+              this.carte1.fonction=null
+             }
              this.carte1.fonction= this.carte1.fonction
              this.carte1.procede=this.currentProcede
              this.service.updateCC(this.carte1.id,this.carte1).subscribe(
@@ -1350,10 +1360,15 @@ SaveNewFormation(ref: NbDialogRef<any>): void {
   
     SaveCC(ref: NbDialogRef<any>): void  {
       console.log(this.newCarte);
-      if (!this.newCarte.nom||!this.newCarte.ref||!this.newCarte.nb_valeur||!this.newCarte.max||!this.newCarte.min) {
+      if (!this.newCarte.nom||!this.newCarte.ref||!this.newCarte.nb_valeur) {
         // Afficher un toast d'erreur
         this.toastrService.danger('Veuillez remplir tous les champs', 'Erreur');
         return;
+      }
+      if(!this.newCarte.max){ 
+        this.newCarte.max="9999"
+      }else if(!this.newCarte.min){
+        this.newCarte.min="-9999"
       }
       const min = parseInt(this.newCarte.min.toString());
       const max = parseInt(this.newCarte.max.toString());

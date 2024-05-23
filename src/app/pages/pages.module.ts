@@ -9,6 +9,10 @@ import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { ParametragesModule } from './Parametrages/Parametrages.module';
 import { AddModule } from './Add/Add.module';
 import { VerifModule } from './Controle/Controle.module';
+import { DetailModule } from './ProcedeDetail/Details.module';
+import { NotifyModule } from './ListeNotifications/Notify.module';
+
+
 
 
 
@@ -22,11 +26,14 @@ import { VerifModule } from './Controle/Controle.module';
     MiscellaneousModule,
     ParametragesModule,
     AddModule,
-    VerifModule
+    VerifModule,
+    DetailModule,
+    NotifyModule
 
   ],
   declarations: [
     PagesComponent,
+  
     
   ],
 })

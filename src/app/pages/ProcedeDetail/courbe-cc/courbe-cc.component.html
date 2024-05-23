@@ -1,0 +1,8 @@
+<nb-card *ngIf="!carte1.fonction">
+    <chart type="line" [data]="chartData1" [options]="options" class="custom-chart"></chart>
+  </nb-card>
+
+  <nb-card *ngIf="carte1.fonction">
+    <chart type="line" [data]="chartDataRes" [options]="options" class="custom-chart"></chart>
+
+  </nb-card>

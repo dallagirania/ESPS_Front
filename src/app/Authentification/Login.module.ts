@@ -18,6 +18,7 @@ import {
   NbRouteTabsetModule,
   NbToast,
   NbToastrModule,
+  NbSpinnerModule,
 } from '@nebular/theme';
 
 import { ThemeModule } from '../@theme/theme.module';
@@ -52,6 +53,7 @@ import { FormsRoutingModule } from '../pages/forms/forms-routing.module';
     NbRouteTabsetModule,
     NgMultiSelectDropDownModule,
     NbToastrModule.forRoot(),
+    
 
 
   ],

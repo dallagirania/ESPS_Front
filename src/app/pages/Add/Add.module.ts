@@ -14,10 +14,11 @@ import {
   NbTabsetModule,
   NbRouteTabsetModule,
  
+ 
 } from '@nebular/theme';
 
 import { ThemeModule } from '../../@theme/theme.module';
-
+import { ChartModule } from 'angular2-chartjs';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormsRoutingModule } from '../forms/forms-routing.module';
 import { AddProcedeComponent } from './add-procede/add-procede.component';
@@ -36,6 +37,7 @@ import { HistoriqueProcedeComponent } from './historique-procede/historique-proc
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { DownloadFilesComponent } from './download-files/download-files.component';
 import { ImprimerHabilitationComponent } from './imprimer-habilitation/imprimer-habilitation.component';
+import { ShowDataComponent } from '../e-commerce/show-data/show-data.component';
 
 
 @NgModule({
@@ -60,7 +62,8 @@ import { ImprimerHabilitationComponent } from './imprimer-habilitation/imprimer-
     NbAccordionModule,
     NbTabsetModule,
     NbRouteTabsetModule,
-    NgMultiSelectDropDownModule
+    NgMultiSelectDropDownModule,
+    ChartModule
     
   
   ],
@@ -79,6 +82,7 @@ import { ImprimerHabilitationComponent } from './imprimer-habilitation/imprimer-
     HistoriqueProcedeComponent,
     DownloadFilesComponent,
     ImprimerHabilitationComponent,
+  
   ],
 })
 export class AddModule { }

@@ -10,6 +10,7 @@ import {
   NbListModule,
   NbAccordionModule,
   NbInputModule,
+  NbSpinnerModule,
 } from '@nebular/theme';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -60,6 +61,7 @@ import { EarningLiveUpdateChartComponent } from './earning-card/front-side/earni
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ShowDataComponent } from './show-data/show-data.component';
 
 @NgModule({
   imports: [
@@ -81,6 +83,7 @@ import { CommonModule } from '@angular/common';
     NbAccordionModule,
     Ng2SmartTableModule,
     NbInputModule,
+    NbSpinnerModule
   
   ],
   declarations: [
@@ -116,7 +119,7 @@ import { CommonModule } from '@angular/common';
     EarningCardBackComponent,
     EarningPieChartComponent,
     EarningLiveUpdateChartComponent,
-  
+    ShowDataComponent,
   ],
   providers: [
     CountryOrdersMapService,

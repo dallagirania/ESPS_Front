@@ -1,0 +1,663 @@
+<nb-card *ngIf="userConnecte=='MOD'">
+  <!-- <nb-card-header>Toggle Accordion By Button</nb-card-header> -->
+  <nb-card-body style="display: flex;align-items: center;justify-content: center; gap: 20px;">
+    <button nbButton status="success" hero (click)="toggleCC()"><i class="fas fa-plus"
+        style="font-size: 10px; color: rgb(255, 255, 255);margin-right: 5px;"></i>Lancer Remplissage</button>
+  </nb-card-body>
+</nb-card>
+<nb-card style="margin-bottom: 20px;" *ngIf="showFunctionInput">
+  <nb-card-header>
+    Voici la liste Des Procédés Spéciaux :
+  </nb-card-header>
+  <nb-card-body>
+    <div class="row" style="text-align: center;justify-content: center;">
+      <div class="col-md-4" *ngFor="let pro of listeProcedefinal">
+        <!-- <nb-card style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+          <nb-card-header class="d-flex align-items-center"
+            style="font-family: 'Times New Roman', Times, serif;color: #0f2a9e;">
+            <img src="{{imageUrl}}" alt="Image" style="height: 150px; width: 300px;" *ngIf="hasImageToDisplay(pro.id)"> 
+            <img src="assets/images/parametrage.jpg" alt="Image"
+              style="height: 80px; width: 80px; border-radius: 50%;object-fit: cover; margin-right:10px;"
+              (click)="detail(dialogDetail,pro.id)">
+            {{pro.nom}}
+          </nb-card-header>
+        </nb-card> -->
+        <div class="card" style="width:calc((100vw - 454px) / 3); margin-bottom: 40px;">
+          <div class="image-card">
+            <div class="bg">
+              <h5 class="card-title">{{pro.nom}}</h5>
+              <img src="assets/images/proc.jpeg" class="card-img-top" alt="...">
+              <div class="blur"></div>
+            </div>
+
+            <div class="progress rounded" style="height: 10px;margin-top: 5px;">
+              <div class="progress-bar" role="progressbar" [style.width]=" getProgressBarWidth(pro.date_fin)"
+                [style.backgroundColor]="getProgressBarColor(pro.date_fin)"
+                [attr.aria-valuenow]="getProgressBarWidth(pro.date_fin)" aria-valuemin="0" aria-valuemax="100">
+              </div>
+            </div>
+          </div>
+          
+          <div class="card-body text-center" >
+            <h5 class="card-title">{{pro.nom}}</h5> 
+            </div>
+            <a    (click)="detail(dialogDetail,pro.id)" class="btn btn-primary w-100 mt-3" style="color: white;">Remplir Mesure</a>
+          </div>
+        </div>
+      </div>
+
+  
+  </nb-card-body>
+</nb-card>
+<ng-template #dialogDetail let-data let-ref="dialogRef">
+  <nb-card class="col-md-12" style="width: 900px; overflow-y: auto;">
+    <nb-card-body>
+      <nb-tabset fullWidth>
+        <nb-tab tabTitle="Check-list 'OK DEMMARAGE'">
+          <h6 style="text-align: center;color: rgb(23, 9, 176);"> Les Liste des Check-List "OK DEMARRAGE"</h6>
+
+          <nb-card>
+            <nb-card-body>
+              <ng2-smart-table [settings]="SettingsOKD" [source]="sourceOKD"
+                (edit)="RemplirMesureOKD($event)"></ng2-smart-table>
+
+            </nb-card-body>
+          </nb-card>
+        </nb-tab>
+
+        <nb-tab tabTitle="Cartes De Controles">
+          <h4 style="text-align: center;color: rgb(23, 9, 176);"> Les Listes des cartes de Controle</h4>
+          <nb-card>
+            <nb-card-body>
+
+              <ng2-smart-table [settings]="SettingsCarte" [source]="sourceCarte"
+                (edit)="RemplirMesure($event)"></ng2-smart-table>
+            </nb-card-body>
+          </nb-card>
+
+        </nb-tab>
+
+
+
+      </nb-tabset>
+    </nb-card-body>
+  </nb-card>
+
+</ng-template>
+<ng-template #dialogEdit let-data let-ref="dialogRef">
+
+  <nb-card class="col-md-12" style="width: 950px;">
+    <div style="max-height: 600px; overflow-y: auto;">
+      <nb-card-body>
+
+        <h6 style="text-align: center; color: rgb(23, 9, 176);"> Ajouter Une Nouvelle Mesure</h6>
+        <div class="row" style="display: flex; justify-content:center; align-items: center">
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label class="label" style="color: black;"> Fréquence <span style="color: red;">*</span></label>
+              <input type="text" nbInput fullWidth shape="semi-round" status="info" required fullWidth id="motif_saisie"
+                placeholder="Sélectionnez La Fréquence du remplissage" [ngModel]="newMesure.motif_saisie"
+                (ngModelChange)="newMesure.motif_saisie= $event" #motif_saisie="ngModel" name="motif_saisie"
+                [ngClass]="{'alert alert-danger':motif_saisie.invalid && (motif_saisie.dirty || motif_saisie.touched)}">
+            </div>
+          </div>
+          <div class="col-sm-3" *ngIf="carte.fonction != null">
+            <div class="form-group">
+              <label class="label" style="color: black;"> Fonction <span style="color: red;">*</span></label>
+              <input type="text" nbInput fullWidth shape="semi-round" status="info" required fullWidth id="fonction"
+                [ngModel]="carte.fonction" name="fonction" readonly>
+            </div>
+          </div>
+
+          <div class="col-sm-3" *ngFor="let nb of inputValues; let i = index">
+            <div class="form-group">
+              <label class="label" style="color: black;"> Mesure {{i+1}} <span style="color: red;">*</span></label>
+              <input type="number" nbInput fullWidth shape="semi-round" status="info" [(ngModel)]="newMesure.val[i]"
+                name="val{{i}}" placeholder="Valeur de la mesure {{i + 1}}">
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="carte.fonction != null">
+          <button type="submit" nbButton status="info" hero style="margin: 20px;"
+            (click)="CalculeMesure(ref)">Calculer</button>
+          <div class="col-sm-8">
+            <div class="form-group">
+              <label class="label" style="color: black;">Résultat : <span style="color: red;">*</span></label>
+              <input type="text" nbInput fullWidth shape="semi-round" status="info" placeholder="Résultat Obtenu ..."
+                [(ngModel)]="newMesure.resultat" name="resultat" readonly>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="offset-sm-4 col-sm-8">
+            <button type="submit" nbButton status="danger" hero style="margin: 20px;"
+              (click)="ref.close()">Annuler</button>
+            <button type="submit" nbButton status="success" hero style="margin: 20px;"
+              (click)="SaveMesure(ref)" [disabled]="!ConformAjout || buttonload">
+              Enregistrer</button>
+          </div>
+        </div>
+        <div class="text-center" style="margin-top: 20px;"*ngIf="NonConformite && newMesure.etatactive == false">
+          <nb-alert class="custom-alert-danger">
+              En Cours D'envoie de l'e-mail au Service Qualité .....
+          </nb-alert>  
+        </div>
+     
+       <!-- loading -->
+
+       <ng-template [ngIf]="Activespinner">
+
+ 
+
+        <style>
+
+          @-webkit-keyframes spin {
+
+            0% {
+
+              transform: rotate(0)
+
+            }
+
+
+
+            100% {
+
+              transform: rotate(360deg)
+
+            }
+
+          }
+
+
+
+          @-moz-keyframes spin {
+
+            0% {
+
+              -moz-transform: rotate(0)
+
+            }
+
+
+
+            100% {
+
+              -moz-transform: rotate(360deg)
+
+            }
+
+          }
+
+
+
+          @keyframes spin {
+
+            0% {
+
+              transform: rotate(0)
+
+            }
+
+
+
+            100% {
+
+              transform: rotate(360deg)
+
+            }
+
+          }
+
+
+
+          .spinner {
+
+            position: fixed;
+
+            top: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            z-index: 1003;
+
+            overflow: hidden;
+
+            background-color: transparent;
+
+          }
+
+
+
+          .spinner div:first-child {
+
+            display: block;
+
+            position: relative;
+
+            left: 50%;
+
+            top: 50%;
+
+            width: 150px;
+
+            height: 150px;
+
+            margin: -75px 0 0 -75px;
+
+            border-radius: 50%;
+
+            box-shadow: 0 3px 3px 0 #3276b1 ;
+
+            transform: translate3d(0, 0, 0);
+
+            animation: spin 4s linear infinite
+
+          }
+
+
+
+          .spinner div:first-child:after,
+
+          .spinner div:first-child:before {
+
+            content: '';
+
+            position: absolute;
+
+            border-radius: 50%
+
+          }
+
+
+
+          .spinner div:first-child:before {
+
+            top: 5px;
+
+            left: 5px;
+
+            right: 5px;
+
+            bottom: 5px;
+
+            box-shadow: 0 3px 3px 0 #40a29c;
+
+            -webkit-animation: spin 3.5s linear infinite;
+
+            animation: spin 3.5s linear infinite
+
+          }
+
+
+
+          .spinner div:first-child:after {
+
+            top: 15px;
+
+            left: 15px;
+
+            right: 15px;
+
+            bottom: 15px;
+
+            box-shadow: 0 3px 3px 0 #83a5b6;
+
+            animation: spin 2s linear infinite
+
+          }
+
+
+
+        </style>
+
+        <div id="nb-global-spinner" class="spinner">
+
+          <div class="blob blob-0"></div>
+
+          <div class="blob blob-1"></div>
+
+          <div class="blob blob-2"></div>
+
+          <div class="blob blob-3"></div>
+
+          <div class="blob blob-4"></div>
+
+          <div class="blob blob-5"></div>
+
+
+
+        </div>
+
+
+
+      </ng-template>
+       
+      </nb-card-body>
+      <nb-card>
+        <nb-card-body>
+          <nb-card *ngIf="!carte1.fonction">
+            <chart type="line" [data]="chartData1" [options]="options" class="custom-chart"></chart>
+          </nb-card>
+
+          <nb-card *ngIf="carte1.fonction">
+            <chart type="line" [data]="chartDataRes" [options]="options" class="custom-chart"></chart>
+
+          </nb-card>
+        </nb-card-body>
+      </nb-card>
+      <div class="form-group row">
+        <div class="row" style="margin-left: 20px;">
+          <button nbButton status="info" outline (click)="PlusDetails()"><i class="fas fa-info"
+              style="margin-right: 5px;"></i>Plus De Détails</button>
+        </div>
+      </div>
+      <nb-card *ngIf="showDetails">
+        
+        <nb-card-header style=" flex-direction: row; display: flex">
+          <h6 style=" color: rgb(83, 2, 41);"> <u> Les Mesures Du {{carte.nom}} </u>  </h6>
+          <button nbButton status="danger" outline (click)="exportCCToExcel(carte.id)" style="margin-left: auto;"><i class="fas fa-file-export" style="margin-right: 5px;"></i>Exporter</button>
+        </nb-card-header>
+        <nb-card-body>
+          <ng2-smart-table  [settings]="SettingsMesure" [source]="sourceMesure"></ng2-smart-table>
+        </nb-card-body>
+
+      </nb-card>
+
+
+
+    </div>
+  </nb-card>
+</ng-template>
+
+<ng-template #dialogEditOKD let-data let-ref="dialogRef">
+  <div style="max-height: 600px; overflow-y: auto;">
+    <nb-card class="col-md-12" style="width: 950px;">
+      <nb-card-body>
+        <h4 style="text-align: center; color: rgb(23, 9, 176);">Ajouter Une Mesure "OK DEMARRAGE" </h4>
+        <div class="row" style="display: flex; justify-content:center; align-items: center">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="label" style="color: black;">Equipe : <span style="color: red;">*</span></label>
+              <nb-select class="type-select" fullWidth shape="semi-round" status="info"
+                placeholder="Selectionner une valeur" [(ngModel)]="newMesureOKD.equipe" name="newMesureOKD.equipe"
+                required placeholder="choisissez une equipe  ">
+                <nb-option value="M">M</nb-option>
+                <nb-option value="C">C</nb-option>
+                <nb-option value="S">S</nb-option>
+                <nb-option value="N">N</nb-option>
+              </nb-select>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="label" style="color: black;"> Evenement : <span style="color: red;">*</span></label>
+              <nb-select class="type-select" fullWidth shape="semi-round" status="info"
+                placeholder="Selectionner une valeur" [(ngModel)]="newMesureOKD.evenement" name="newMesureOKD.evenement"
+                required placeholder="choisissez un évenement  ">
+                <nb-option value="D">D</nb-option>
+                <nb-option value="CHM">CHM</nb-option>
+                <nb-option value="IM">IM</nb-option>
+                <nb-option value="CC">CC</nb-option>
+
+              </nb-select>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="row" style="display: flex; justify-content:center; align-items: center">
+          <div class="col-sm-3" *ngFor="let critere of listeCritere; let i = index ">
+            <div class="form-group" *ngIf="critere.type === 'ok/nok'">
+              <label class="label" style="color: black;"> {{ critere.nom }} <span style="color: red;">*</span></label>
+              <nb-select class="type-select" fullWidth shape="semi-round" status="info"
+                placeholder="Selectionner une valeur" [(ngModel)]="selectedValues[i]" name="val{{i}}"
+                (ngModelChange)="updateTempVal(i, critere.id)" required>
+                <nb-option value="ok">ok</nb-option>
+                <nb-option value="nok">nok</nb-option>
+              </nb-select>
+            </div>
+            <div class="form-group" *ngIf="critere.type === 'valeur'">
+              <label class="label" style="color: black;"> {{ critere.nom }} [{{ critere.min }} , {{ critere.max }}]
+                <span style="color: red;">*</span></label>
+              <input type="number" nbInput fullWidth shape="semi-round" status="info" placeholder="Entrer une valeur"
+                [(ngModel)]="enteredValues[i]" name="val{{i}}" (ngModelChange)="updateTempVal1(i, critere.id)">
+            </div>
+          </div>
+        </div>
+
+
+        <div class="form-group row">
+          <div class="offset-sm-4 col-sm-8">
+            <button type="submit" nbButton status="danger" hero style="margin: 20px;"
+              (click)="ref.close()">Annuler</button>
+            <button type="submit" nbButton status="success" hero style="margin: 20px;"
+              (click)="saveMesureOKD(ref)" [disabled]="!bouttonactive || buttonloadOKD">
+              Enregistrer</button>
+          </div>
+        </div>
+        <div class="text-center" style="margin-top: 20px;"*ngIf="NonConformite  && newMesureOKD.etatactive == false">
+          <nb-alert class="custom-alert-danger">
+               En Cours D'envoie de l'e-mail au Service Qualité .....
+          </nb-alert>  
+        </div>
+        <!-- loading -->
+
+        <ng-template [ngIf]="Activespinner">
+
+        
+
+          <style>
+
+            @-webkit-keyframes spin {
+
+              0% {
+
+                transform: rotate(0)
+
+              }
+
+
+
+              100% {
+
+                transform: rotate(360deg)
+
+              }
+
+            }
+
+
+
+            @-moz-keyframes spin {
+
+              0% {
+
+                -moz-transform: rotate(0)
+
+              }
+
+
+
+              100% {
+
+                -moz-transform: rotate(360deg)
+
+              }
+
+            }
+
+
+
+            @keyframes spin {
+
+              0% {
+
+                transform: rotate(0)
+
+              }
+
+
+
+              100% {
+
+                transform: rotate(360deg)
+
+              }
+
+            }
+
+
+
+            .spinner {
+
+              position: fixed;
+
+              top: 0;
+
+              left: 0;
+
+              width: 100%;
+
+              height: 100%;
+
+              z-index: 1003;
+
+              overflow: hidden;
+
+              background-color: transparent;
+
+            }
+
+
+
+            .spinner div:first-child {
+
+              display: block;
+
+              position: relative;
+
+              left: 50%;
+
+              top: 50%;
+
+              width: 150px;
+
+              height: 150px;
+
+              margin: -75px 0 0 -75px;
+
+              border-radius: 50%;
+
+              box-shadow: 0 3px 3px 0 #3276b1 ;
+
+              transform: translate3d(0, 0, 0);
+
+              animation: spin 4s linear infinite
+
+            }
+
+
+
+            .spinner div:first-child:after,
+
+            .spinner div:first-child:before {
+
+              content: '';
+
+              position: absolute;
+
+              border-radius: 50%
+
+            }
+
+
+
+            .spinner div:first-child:before {
+
+              top: 5px;
+
+              left: 5px;
+
+              right: 5px;
+
+              bottom: 5px;
+
+              box-shadow: 0 3px 3px 0 #40a29c;
+
+              -webkit-animation: spin 3.5s linear infinite;
+
+              animation: spin 3.5s linear infinite
+
+            }
+
+
+
+            .spinner div:first-child:after {
+
+              top: 15px;
+
+              left: 15px;
+
+              right: 15px;
+
+              bottom: 15px;
+
+              box-shadow: 0 3px 3px 0 #83a5b6;
+
+              animation: spin 2s linear infinite
+
+            }
+
+
+
+          </style>
+
+          <div id="nb-global-spinner" class="spinner">
+
+            <div class="blob blob-0"></div>
+
+            <div class="blob blob-1"></div>
+
+            <div class="blob blob-2"></div>
+
+            <div class="blob blob-3"></div>
+
+            <div class="blob blob-4"></div>
+
+            <div class="blob blob-5"></div>
+
+
+
+          </div>
+
+
+
+        </ng-template>
+        <div class="form-group row">
+          <div class="offset-sm-9 col-sm-12">
+            <button nbButton status="info" outline (click)="PlusDetailsIKD()"><i class="fas fa-info"
+                style="margin-right: 5px;"></i>Plus De Détails</button>
+          </div>
+        </div>
+        <nb-card *ngIf="showDetailsOKD">
+          
+          <nb-card-header style=" flex-direction: row; display: flex">
+            <h6 style=" color: rgb(83, 2, 41);"> <u> Les Mesures Du check-list  {{okd.nom}} </u>  </h6>
+            <button nbButton status="danger" outline (click)="exportOKDToExcel(okd.id)" style="margin-left: auto;"><i class="fas fa-file-export" style="margin-right: 5px;"></i>Exporter</button>
+          </nb-card-header>
+          <nb-card-body>
+            <ng2-smart-table [settings]="SettingsMesureOKD" [source]="sourceMesureOKD"></ng2-smart-table>
+  
+          </nb-card-body>
+  
+        </nb-card>
+      </nb-card-body>
+
+    </nb-card>
+  </div>
+</ng-template>

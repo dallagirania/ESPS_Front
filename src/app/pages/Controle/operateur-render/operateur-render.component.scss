@@ -1,0 +1,26 @@
+.custom-alert {
+    border: 2px solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.custom-alert-success {
+    border: 2px solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #3ee565;
+    border-color: #3ee565;
+    color: black;
+}
+
+.custom-alert-danger {
+    border: 2px solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f8d7da;
+    border-color: #e49da4;
+    color: #721c24;
+}

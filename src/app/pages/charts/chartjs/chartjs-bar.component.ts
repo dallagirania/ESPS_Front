@@ -1,5 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
 import { NbThemeService, NbColorHelper } from '@nebular/theme';
+import { Chart } from 'chart.js';
+import zoomPlugin from 'chartjs-plugin-zoom';
+Chart.register(zoomPlugin);
 
 @Component({
   selector: 'ngx-chartjs-bar',
@@ -63,6 +66,29 @@ export class ChartjsBarComponent implements OnDestroy {
             },
           ],
         },
+        plugins: {
+          zoom: {
+            zoom: {
+                wheel: {
+                    enabled: true,
+                    speed: 0.3,
+                },
+                pinch: {
+                    enabled: true,
+                },
+                drag: {
+                    enabled: false,
+                },
+                mode: 'x',
+            },
+            pan: {
+                enabled: true,
+                threshold: 10,
+                modifierKey: null,
+                mode: 'x',
+            },
+        },
+        }
       };
     });
   }

@@ -1,0 +1,1146 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+
+$primary-color : #362ec4;
+$secondary-color : #11efca;
+// #cd17d7 violet 
+
+.layout-container {
+    font-family: 'Barlow', sans-serif !important;
+}
+
+ngx-one-column-layout,
+.layout-container {
+    position: relative !important;
+}
+
+.nb-theme-default nb-layout .scrollable-container::-webkit-scrollbar {
+    width: 0.5rem !important;
+
+}
+
+.nb-theme-default nb-layout .scrollable-container::-moz-scrollbar-thumb {
+    background-color: $primary-color  !important;
+
+}
+
+.nb-theme-default nb-layout.with-scroll .scrollable-container {
+    overflow-y: hidden !important;
+}
+
+.content {
+    height: calc(100vh - 24px) !important;
+    background-color: #EFEFEF !important;
+    position: absolute !important;
+    top: 24px !important;
+    right: 0 !important;
+    width: calc(100vw - 215px) !important;
+    border-radius: 40px 0 0 !important;
+    margin-left: 0 !important;
+    overflow-y: scroll !important;
+    box-shadow: -7px -8px 22px 0px rgba(0, 0, 0, 0.14) !important;
+
+    &::-webkit-scrollbar {
+        width: 0.5em;
+    }
+
+}
+
+nb-layout-header {
+    width: calc(100vw - 285px) !important;
+    border-radius: 10px !important;
+    transform: translate(36px, 24px) !important;
+
+    nav {
+        box-shadow: none !important;
+    }
+}
+
+
+
+.columns {
+    height: fit-content !important;
+}
+
+nb-layout-column {
+    background-color: unset !important;
+    border-radius: 20px 0 0 !important;
+    transform: translateY(24px) !important;
+    padding-top: 16px !important;
+    height: calc(100vh - 140px) !important;
+}
+
+.layout {
+    background: linear-gradient(190deg,  #11efca 0%, #1A0EE4 111%);
+   // background-image: url('/assets/images/bg.svg');
+
+    background-size: cover;
+    background-position: center;
+    overflow-y: hidden;
+    height: 100vh !important;
+}
+
+nb-sidebar {
+    background-color: unset !important;
+}
+
+.menu-title {
+    color: rgb(255, 255, 255) !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+
+    >.active {
+        background-color: $secondary-color  !important;
+    }
+}
+
+.menu-item {
+    border-bottom: unset !important;
+    width: 220px !important;
+
+    a {
+        padding: 12px 24px  !important;
+        border-radius: 10px !important;
+    }
+    span{
+        padding-left: 5px;
+        color: rgb(11, 26, 82);
+    }
+    .active {
+        background-color: $secondary-color  !important;
+    }
+}
+.menu-item .ng-tns-c134-1 ng-star-inserted
+{
+    margin-left: 10px;
+    color:rgb(69, 76, 100)
+}
+
+.menu-items {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1px !important;
+   
+}
+
+.menu-icon {
+    color: white !important;
+    font-size: 22px !important;
+    margin-right: 12px !important;
+}
+
+nb-sidebar {
+    box-shadow: none !important;
+    width: 215px !important;
+    justify-content: center !important;
+    align-items: center !important;
+    top: 90px !important;
+
+    .main-container-fixed {
+        top: 20px !important;
+
+        .logo {
+            margin-bottom: 40px;
+        }
+    }
+}
+
+.main-container {
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+
+
+// CSS pour smart table
+
+.ng2-smart-titles {
+    display: none !important;
+}
+
+.nb-theme-default ng2-smart-table table tr th,
+.nb-theme-default ng2-smart-table table tr td {
+    border: unset !important;
+}
+
+.ng2-smart-filter input {
+    width: 100% !important;
+    padding: 10px 0 !important;
+    margin: 0 !important;
+}
+
+ng2-smart-table-filter {
+    width: 100% !important;
+}
+
+.nb-theme-default ng2-smart-table th.ng2-smart-th .ng2-smart-filter .ng-star-inserted input {
+    text-align: center !important;
+}
+
+.nb-theme-default ng2-smart-table th {
+    padding: 24px 12px !important;
+}
+
+.nb-theme-default ng2-smart-table .ng2-smart-filters th:first-child {
+    padding-left: 32px !important;
+    border-radius: 10px 0 0 10px !important;
+}
+
+.nb-theme-default ng2-smart-table .ng2-smart-filters th:last-child {
+    padding-right: 32px !important;
+    border-radius: 0 10px 10px 0 !important;
+}
+
+.ng2-smart-filters {
+    border-radius: 10px !important;
+}
+
+
+//botton action
+.ng2-smart-action {
+    background-color: unset !important;
+    color: $primary-color  !important;
+}
+
+.nb-theme-default ng2-smart-table th.ng2-smart-actions-title-add a {
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    background-color: #1A0EE4 !important;
+    i{
+    font-size: 30px !important;
+    font-weight: 700 !important;
+    color:#EFEFEF
+    }
+}
+
+//
+
+.nb-theme-default ng2-smart-table table tr td {
+    text-align: center !important;
+}
+
+.ng2-smart-actions ng2-st-tbody-create-cancel a,
+.ng2-smart-actions ng2-st-tbody-edit-delete a {
+    margin-right: 0 !important;
+}
+
+/* les lignes de smart table :  */
+
+.nb-theme-default ng2-smart-table table tr td:first-child {
+    padding-left: 32px !important;
+}
+
+.nb-theme-default ng2-smart-table table tr td:last-child {
+    padding-right: 32px !important;
+}
+
+.nb-theme-default ng2-smart-table table tr th ng2-smart-table-filter input-filter input {
+    border: 1px solid $primary-color  !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+}
+
+.ng2-smart-row {
+    border-radius: 10px !important;
+    background-color: white !important;
+    align-items: center !important;
+    width: fit-content !important;
+}
+
+.ng2-smart-row td:first-child {
+    border-radius: 10px 0 0 10px !important;
+}
+
+.ng2-smart-row td:last-child {
+    border-radius: 0 10px 10px 0 !important;
+}
+
+ng2-smart-table table {
+    overflow: unset !important;
+    max-width: none !important;
+    /*     width: fit-content !important; */
+
+    thead {
+        width: 100% !important;
+
+        tr {
+
+            th {
+                width: 20% !important;
+                min-width: 200px !important;
+            }
+        }
+
+    }
+
+    tbody {
+        width: 100% !important;
+
+
+        tr {
+            width: 100% !important;
+            border-top: 4px solid #EFEFEF !important;
+            border-bottom: 4px solid #EFEFEF !important;
+
+            &:not(:last-child) {
+                margin: 4px 0 !important;
+            }
+
+            td {
+                width: 20% !important;
+                min-width: 200px !important;
+                word-break: break-all !important;
+            }
+        }
+    }
+}
+
+ngx-tableaudeboard {
+    nb-card {
+        border-radius: 10px !important;
+    }
+
+    nb-card-body {
+        ngx-chartjs-bar-horizontal canvas {
+            height: 400px !important;
+        }
+
+        ngx-chartjs-pie canvas {
+            height: 400px !important;
+        }
+    }
+}
+
+ngx-historiques .ng2-smart-row:hover {
+    cursor: pointer !important;
+}
+
+
+// Style pour les popups 
+
+.nb-theme-default nb-card {
+    border-radius: 20px !important;
+}
+
+nb-stepper {
+
+    .header {
+        align-items: center !important;
+        justify-content: center !important;
+
+
+        .step,
+        .connector {
+            margin: 0 !important;
+
+            .label {
+                display: none !important;
+            }
+
+            .label-index {
+                margin: 0 !important;
+            }
+        }
+    }
+
+    .step-content {
+        padding: 0 !important;
+
+    }
+}
+
+nb-window {
+    min-width: 500px !important;
+    max-height: calc(100vh- 60px) !important;
+
+    nb-card-header {
+        padding: 24px 40px !important;
+        margin: 0 !important;
+        border-bottom: unset !important;
+        flex-direction: column !important;
+
+        .buttons {
+            align-self: flex-end !important;
+
+            button:first-child,
+            button:nth-child(2) {
+                display: none !important;
+            }
+
+        }
+
+        .title {
+            margin: 0 !important;
+            order: 2 !important;
+            font-size: 20px !important;
+            font-weight: 600 !important;
+        }
+    }
+
+    nb-card-body {
+        padding: 10px 50px 30px 50px !important;
+
+        input.form-control {
+            font-weight: 300 !important;
+            font-size: 16px !important;
+            height: 50px !important;
+        }
+
+        ng2-smart-table {
+            .form-control {
+                height: 30px !important;
+            }
+        }
+    }
+
+    .table nb-radio label span {
+        transform: translate(-50%, -50%) !important;
+        left: 50% !important;
+    }
+
+    .app-general,
+    .suggestion {
+        textarea {
+            height: 60px !important;
+        }
+
+        label {
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            color: #222b45 !important;
+
+        }
+    }
+
+    .evaluation-collaborateur {
+        input {
+            text-align: center;
+        }
+    }
+}
+
+nb-select {
+
+
+    .select-button {
+        height: 50px !important;
+    }
+}
+
+ngx-historiques-collaborateurs-modal nb-user {
+    .user-name {
+        font-size: 28px !important;
+        font-weight: 500 !important;
+        margin-bottom: 10px !important;
+    }
+
+    .user-title {
+        font-size: 15px !important;
+    }
+}
+
+.effectif-bar {
+    background-color: white;
+    border-radius: 10px;
+    padding: 16px 32px;
+}
+
+nb-layout-footer {
+    display: none !important;
+}
+
+.collaborateurs-table,
+.sessions-table {
+    border-radius: 20px !important;
+}
+
+.scrollable {
+    overflow: scroll !important;
+    height: 100% !important;
+    padding-bottom: 20px !important;
+    padding-top: 0 !important;
+
+    &::-webkit-scrollbar {
+        width: 0 !important;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $primary-color;
+    }
+}
+
+
+
+nb-layout-column {
+    width: calc(100vw - 211px) !important;
+    position: fixed;
+    top: 129px !important;
+    height: calc(100vh - 132px) !important;
+    padding-top: 0 !important;
+    padding-right: 28px !important;
+}
+
+nb-layout-header {
+    margin-left: unset !important;
+    margin-right: unset !important;
+}
+
+nb-layout-header.fixed {
+    position: fixed;
+    top: 32px !important;
+    left: 216px !important;
+    right: 0 !important;
+    z-index: 1040 !important;
+}
+
+ngx-liste-procede {
+    height: 100% !important;
+    overflow-y: scroll !important;
+
+    nb-card-body{
+        padding-inline: 0 !important;
+    }
+    nb-tab{
+        padding-inline: 0 !important;
+    }
+}
+ngx-liste-procede::-webkit-scrollbar {
+    width: 10px !important;
+    border-radius: 10px !important;
+}
+
+ngx-liste-procede::-webkit-scrollbar-thumb {
+    background: #190ee463; /* couleur de la thumb (la barre mobile) */
+    border-radius: 10px !important;
+}
+
+ngx-liste-procede::-webkit-scrollbar-thumb:hover {
+    background: $primary-color; /* couleur de la thumb au survol */
+}
+
+ngx-liste-procede::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.173); /* couleur de la thumb au survol */
+    border-radius: 10px !important;
+}
+
+.content {
+    position: relative !important;
+    top: -50px !important;
+}
+
+ngx-liste-procede{
+    padding: 10px !important;
+    background-color: white;
+    border-radius: 20px !important;
+    border: unset !important;
+
+    nb-card {
+        border: unset !important;
+    }
+}
+
+ngx-detail {
+    height: 100% !important;
+    overflow-y: scroll !important;
+
+    nb-card-body{
+        padding-inline: 0 !important;
+    }
+    nb-tab{
+        padding-inline: 0 !important;
+    }
+}
+ngx-detail::-webkit-scrollbar {
+    width: 10px !important;
+    border-radius: 10px !important;
+}
+
+ngx-detail::-webkit-scrollbar-thumb {
+    background: #190ee463; /* couleur de la thumb (la barre mobile) */
+    border-radius: 10px !important;
+}
+
+ngx-detail::-webkit-scrollbar-thumb:hover {
+    background: $primary-color; /* couleur de la thumb au survol */
+}
+
+ngx-detail::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.173); /* couleur de la thumb au survol */
+    border-radius: 10px !important;
+}
+
+.content {
+    position: relative !important;
+    top: -50px !important;
+}
+
+ngx-detail{
+    padding: 10px !important;
+    background-color: white;
+    border-radius: 20px !important;
+    border: unset !important;
+
+    nb-card {
+        border: unset !important;
+    }
+}
+
+
+
+ngx-verif {
+    height: 100% !important;
+    overflow-y: scroll !important;
+
+    nb-card-body{
+        padding-inline: 0 !important;
+    }
+    nb-tab{
+        padding-inline: 0 !important;
+    }
+}
+ngx-verif::-webkit-scrollbar {
+    width: 10px !important;
+    border-radius: 10px !important;
+}
+
+ngx-verif::-webkit-scrollbar-thumb {
+    background: #190ee463; /* couleur de la thumb (la barre mobile) */
+    border-radius: 10px !important;
+}
+
+ngx-verift::-webkit-scrollbar-thumb:hover {
+    background: $primary-color; /* couleur de la thumb au survol */
+}
+
+ngx-verif::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.173); /* couleur de la thumb au survol */
+    border-radius: 10px !important;
+}
+
+.content {
+    position: relative !important;
+    top: -50px !important;
+}
+
+ngx-verif{
+    padding: 10px !important;
+    background-color: white;
+    border-radius: 20px !important;
+    border: unset !important;
+
+    nb-card {
+        border: unset !important;
+    }
+}
+
+
+
+
+
+ngx-add-procede {
+    height: 100% !important;
+    overflow-y: scroll !important;
+}
+ngx-add-procede::-webkit-scrollbar {
+    width: 10px !important;
+    border-radius: 10px !important;
+}
+
+ngx-add-procede::-webkit-scrollbar-thumb {
+    background: #190ee463; /* couleur de la thumb (la barre mobile) */
+    border-radius: 10px !important;
+}
+
+ngx-add-procede::-webkit-scrollbar-thumb:hover {
+    background: $primary-color; /* couleur de la thumb au survol */
+}
+
+ngx-add-procede::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.173); /* couleur de la thumb au survol */
+    border-radius: 10px !important;
+}
+
+.content {
+    position: relative !important;
+    top: -50px !important;
+}
+
+ngx-add-procede {
+    padding: 10px !important;
+    background-color: white;
+    border-radius: 20px !important;
+    border: unset !important;
+
+    nb-card {
+        border: unset !important;
+    }
+}
+
+
+
+
+ngx-edit-procede {
+    height: 100% !important;
+    overflow-y: scroll !important;
+}
+ngx-edit-procede::-webkit-scrollbar {
+    width: 10px !important;
+    border-radius: 10px !important;
+}
+ngx-edit-procede::-webkit-scrollbar-thumb {
+    background: #190ee463; /* couleur de la thumb (la barre mobile) */
+    border-radius: 10px !important;
+}
+
+ngx-edit-procede::-webkit-scrollbar-thumb:hover {
+    background: $primary-color; /* couleur de la thumb au survol */
+}
+ngx-edit-procede::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.173); /* couleur de la thumb au survol */
+    border-radius: 10px !important;
+}
+
+.content {
+    position: relative !important;
+    top: -50px !important;
+}
+ngx-edit-proceder {
+    padding: 10px !important;
+    background-color: white;
+    border-radius: 20px !important;
+    border: unset !important;
+
+    nb-card {
+        border: unset !important;
+    }
+}
+
+
+
+
+
+ngx-liste-habilitation {
+    height: 100% !important;
+    overflow-y: scroll !important;
+}
+ngx-liste-habilitation::-webkit-scrollbar {
+    width: 10px !important;
+    border-radius: 10px !important;
+}
+ngx-liste-habilitation::-webkit-scrollbar-thumb {
+    background: #190ee463; /* couleur de la thumb (la barre mobile) */
+    border-radius: 10px !important;
+}
+
+ngx-liste-habilitation::-webkit-scrollbar-thumb:hover {
+    background: $primary-color; /* couleur de la thumb au survol */
+}
+ngx-liste-habilitation::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.173); /* couleur de la thumb au survol */
+    border-radius: 10px !important;
+}
+
+.content {
+    position: relative !important;
+    top: -50px !important;
+}
+ngx-liste-habilitation {
+    padding: 10px !important;
+    background-color: white;
+    border-radius: 20px !important;
+    border: unset !important;
+
+    nb-card {
+        border: unset !important;
+    }
+}
+
+
+
+ngx-pont{
+    height: 100% !important;
+    overflow-y: scroll !important;
+}
+ngx-pont::-webkit-scrollbar {
+    width: 10px !important;
+    border-radius: 10px !important;
+}
+ngx-pont::-webkit-scrollbar-thumb {
+    background: #190ee463; /* couleur de la thumb (la barre mobile) */
+    border-radius: 10px !important;
+}
+
+ngx-pont::-webkit-scrollbar-thumb:hover {
+    background: $primary-color; /* couleur de la thumb au survol */
+}
+ngx-pont::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.173); /* couleur de la thumb au survol */
+    border-radius: 10px !important;
+}
+
+.content {
+    position: relative !important;
+    top: -50px !important;
+}
+ngx-pont {
+    padding: 10px !important;
+    background-color: white;
+    border-radius: 20px !important;
+    border: unset !important;
+
+    nb-card {
+        border: unset !important;
+    }
+}
+
+
+ngx-procede{
+    height: 100% !important;
+    overflow-y: scroll !important;
+}
+ngx-procede::-webkit-scrollbar {
+    width: 10px !important;
+    border-radius: 10px !important;
+}
+ngx-procede::-webkit-scrollbar-thumb {
+    background: #190ee463; /* couleur de la thumb (la barre mobile) */
+    border-radius: 10px !important;
+}
+
+ngx-procede::-webkit-scrollbar-thumb:hover {
+    background: $primary-color; /* couleur de la thumb au survol */
+}
+ngx-procede::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.173); /* couleur de la thumb au survol */
+    border-radius: 10px !important;
+}
+
+.content {
+    position: relative !important;
+    top: -50px !important;
+}
+ngx-procede {
+    padding: 10px !important;
+    background-color: white;
+    border-radius: 20px !important;
+    border: unset !important;
+
+    nb-card {
+        border: unset !important;
+    }
+}
+
+
+ngx-procede-okd{
+    height: 100% !important;
+    overflow-y: scroll !important;
+}
+ngx-procede-okd::-webkit-scrollbar {
+    width: 10px !important;
+    border-radius: 10px !important;
+}
+ngx-procede-okd::-webkit-scrollbar-thumb {
+    background: #190ee463; /* couleur de la thumb (la barre mobile) */
+    border-radius: 10px !important;
+}
+
+ngx-procede-okd::-webkit-scrollbar-thumb:hover {
+    background: $primary-color; /* couleur de la thumb au survol */
+}
+ngx-procede-okd::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.173); /* couleur de la thumb au survol */
+    border-radius: 10px !important;
+}
+
+.content {
+    position: relative !important;
+    top: -50px !important;
+}
+ngx-procede-okd {
+    padding: 10px !important;
+    background-color: white;
+    border-radius: 20px !important;
+    border: unset !important;
+
+    nb-card {
+        border: unset !important;
+    }
+}
+
+
+
+ngx-parametage-ruo{
+    height: 100% !important;
+    overflow-y: scroll !important;
+}
+ngx-parametage-ruo::-webkit-scrollbar {
+    width: 10px !important;
+    border-radius: 10px !important;
+}
+ngx-parametage-ruo::-webkit-scrollbar-thumb {
+    background: #190ee463; /* couleur de la thumb (la barre mobile) */
+    border-radius: 10px !important;
+}
+
+ngx-parametage-ruo::-webkit-scrollbar-thumb:hover {
+    background: $primary-color; /* couleur de la thumb au survol */
+}
+ngx-parametage-ruo::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.173); /* couleur de la thumb au survol */
+    border-radius: 10px !important;
+}
+
+.content {
+    position: relative !important;
+    top: -50px !important;
+}
+ngx-parametage-ruo {
+    padding: 10px !important;
+    background-color: white;
+    border-radius: 20px !important;
+    border: unset !important;
+
+    nb-card {
+        border: unset !important;
+    }
+}
+
+
+ngx-parametage-site{
+    height: 100% !important;
+    overflow-y: scroll !important;
+}
+ngx-parametage-site::-webkit-scrollbar {
+    width: 10px !important;
+    border-radius: 10px !important;
+}
+ngx-parametage-site::-webkit-scrollbar-thumb {
+    background: #190ee463; /* couleur de la thumb (la barre mobile) */
+    border-radius: 10px !important;
+}
+
+ngx-parametage-site::-webkit-scrollbar-thumb:hover {
+    background: $primary-color; /* couleur de la thumb au survol */
+}
+ngx-parametage-site::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.173); /* couleur de la thumb au survol */
+    border-radius: 10px !important;
+}
+
+.content {
+    position: relative !important;
+    top: -50px !important;
+}
+ngx-parametage-site {
+    padding: 10px !important;
+    background-color: white;
+    border-radius: 20px !important;
+    border: unset !important;
+
+    nb-card {
+        border: unset !important;
+    }
+}
+
+
+ngx-procede-detail{
+    height: 100% !important;
+    overflow-y: scroll !important;
+}
+ngx-procede-detail::-webkit-scrollbar {
+    width: 10px !important;
+    border-radius: 10px !important;
+}
+ngx-procede-detail::-webkit-scrollbar-thumb {
+    background: #190ee463; /* couleur de la thumb (la barre mobile) */
+    border-radius: 10px !important;
+}
+
+ngx-procede-detail::-webkit-scrollbar-thumb:hover {
+    background: $primary-color; /* couleur de la thumb au survol */
+}
+ngx-procede-detail::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.173); /* couleur de la thumb au survol */
+    border-radius: 10px !important;
+}
+
+.content {
+    position: relative !important;
+    top: -50px !important;
+}
+ngx-procede-detail {
+    padding: 10px !important;
+    background-color: white;
+    border-radius: 20px !important;
+    border: unset !important;
+
+    nb-card {
+        border: unset !important;
+    }
+}
+
+
+
+ngx-ecommerce{
+    height: 100% !important;
+    overflow-y: scroll !important;
+}
+ngx-ecommerce::-webkit-scrollbar {
+    width: 10px !important;
+    border-radius: 10px !important;
+}
+ngx-ecommerce::-webkit-scrollbar-thumb {
+    background: #190ee463; /* couleur de la thumb (la barre mobile) */
+    border-radius: 10px !important;
+}
+
+ngx-ecommerce::-webkit-scrollbar-thumb:hover {
+    background: $primary-color; /* couleur de la thumb au survol */
+}
+ngx-ecommerce::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.173); /* couleur de la thumb au survol */
+    border-radius: 10px !important;
+}
+
+.content {
+    position: relative !important;
+    top: -50px !important;
+}
+ngx-ecommerce {
+    padding: 10px !important;
+   // background-color: white;
+    border-radius: 20px !important;
+    border: unset !important;
+
+    nb-card {
+        border: unset !important;
+    }
+}
+
+nb-context-menu nb-menu  {
+    .menu-title, .menu-icon {
+        color: #8f9bb3 !important;
+    }
+}
+
+.nb-theme-default nb-sidebar .main-container {
+    width: unset !important;
+}
+
+nb-tabset {
+    ul{
+        text-align: center;
+        justify-content: center;  
+    }
+}
+
+
+
+
+.notifications-container {
+
+    position: absolute !important;
+  
+    top: 70px !important;
+  
+    right: 10px !important;
+  
+    height: 400px !important;
+  
+  }
+  
+   
+  /* Container pour les notifications */
+  .notifications-container {
+    position: absolute !important;
+    top: 50px !important;
+    right: 20px !important;
+    width: 300px !important;
+    z-index: 1000 !important;
+   // background-color: #fff !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+  }
+  
+  /* Card pour les notifications */
+  .nb-card.own-scroll {
+    max-height: 400px !important; /* Hauteur maximale de la carte */
+    overflow-y: auto !important;  /* Défilement vertical */
+    border: none !important;
+    box-shadow: none !important;
+  }
+  
+  /* Header des notifications */
+  .nb-card-header {
+    background-color: #004AAD !important;
+    color: white !important;
+    padding: 10px 20px !important;
+    font-size: 18px !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+    text-align: center !important;
+  }
+  
+  /* Liste des notifications */
+  .nb-list {
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+  }
+  
+  /* Éléments de la liste */
+  .nb-list-item {
+    padding: 15px !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    transition: background-color 0.3s !important;
+  }
+  
+  .nb-list-item:hover {
+    background-color: #f9f9f9 !important;
+  }
+  
+  /* Item de notification */
+  .notification-item {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  /* Sujet de la notification */
+  .notification-item h6 {
+    margin: 0 0 5px 0 !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    color: #333 !important;
+  }
+  
+  /* Texte de la notification */
+  .notification-text {
+    margin: 0 0 10px 0 !important;
+    font-size: 14px !important;
+    color: #666 !important;
+  }
+  
+  /* Date de la notification */
+  .notification-date {
+    align-self: flex-end !important;
+    font-size: 12px !important;
+    color: #999 !important;
+  }
+  
+  /* Message quand il n'y a pas de notifications */
+  .no-data-message {
+    text-align: center !important;
+    padding: 20px !important;
+    font-size: 14px !important;
+    color: #999 !important;
+  }
+  
+  
+  body, .layout-container  {
+    font-family:'Barlow', sans-serif !important;
+}

@@ -7,6 +7,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbDialogService, NbToastrService } from '@nebular/theme';
 import { DownloadFilesComponent } from '../download-files/download-files.component';
+import { Procede } from '../../../Model/Procede.model';
 
 @Component({
   selector: 'ngx-historique-procede',
@@ -21,7 +22,7 @@ export class HistoriqueProcedeComponent implements OnInit, ViewCell {
     mode: "external",
   
     actions: {
-      add:true,
+      add:false,
       edit: false,
       delete: false,
       position: 'right',
@@ -29,11 +30,11 @@ export class HistoriqueProcedeComponent implements OnInit, ViewCell {
   
   
     },
-    add: {
-      addButtonContent: '<i class="nb-plus"></i>',
-      createButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-    },  
+    // add: {
+    //   addButtonContent: '<i class="nb-plus"></i>',
+    //   createButtonContent: '<i class="nb-checkmark"></i>',
+    //   cancelButtonContent: '<i class="nb-close"></i>',
+    // },  
    columns: {
   
     date_init: {
@@ -66,6 +67,7 @@ export class HistoriqueProcedeComponent implements OnInit, ViewCell {
    id:any
 
    Historique:ModProcede[]=[]
+   ProcedeActuelle= new Procede()
    sourceHistorique: LocalDataSource = new LocalDataSource();
   constructor(
     private service: CrudService,
@@ -78,13 +80,18 @@ export class HistoriqueProcedeComponent implements OnInit, ViewCell {
 
   ngOnInit(): void {
    this.renderValue = this.value;
-   console.log("====> " + this.value );
-    
-   this.service.getModProcedeByProcedeId(this.value).subscribe(liste => {
-    console.log("test");
-    this.Historique=liste.reverse();
-    this.sourceHistorique = new LocalDataSource(this.Historique) 
-    console.log("l'historique de cette PS :",this.Historique);
+  // console.log("====> " + this.value );
+   this.service.getProcedeById(this.value).subscribe(liste => {
+   // console.log("test");
+    this.ProcedeActuelle=liste;
+   // console.log(this.ProcedeActuelle);
+    this.service.getModProcedeByProcedeId(this.value).subscribe(liste => {
+    //  console.log("test");
+      this.Historique=liste.reverse();
+      this.Historique.push(this.ProcedeActuelle);
+      this.sourceHistorique = new LocalDataSource(this.Historique) 
+     // console.log("l'historique de cette PS :",this.Historique);
+    });
   });
     
   }

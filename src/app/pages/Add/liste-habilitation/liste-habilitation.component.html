@@ -1,6 +1,6 @@
 
-<div class="col-12" style="padding-bottom: 10px;text-align: center;justify-content: center;">
-  <h2 style="font-family: 'Times New Roman', Times, serif;color: #0f2a9e;">Parametrages des Listes D'habilitation </h2>
+<div class="col-12" style="text-align: center;justify-content: center;">
+  <h2 style="font-family: 'Times New Roman', Times, serif;color: #0f2a9e;font-size:24px;margin:0px">Parametrages des Listes D'habilitation </h2>
   <!-- <img src="../assets/images/avion1.png" alt="Image par défaut" style="width: 900px;"> -->
 </div>
 <nb-card>
@@ -8,14 +8,14 @@
      La Liste Des Procédés 
     </nb-card-header> -->
   
-    <nb-card-body>
+    <nb-card-body style="padding: 0px;">
       <ng2-smart-table [settings]="settings" [source]="source" (edit)="createHabilitation($event)" (delete)="OnDeleteConfirm($event)">
       </ng2-smart-table>
     </nb-card-body>
   </nb-card>
   <ng-template #dialogEdit let-data let-ref="dialogRef">
 
-    <nb-card class="col-12 " style="width: 800px;">
+    <nb-card class="col-12 " style="width: 900px;">
 
       <nb-card-header>Modifier Les Caractéristiques d'une Liste D'Habilitation </nb-card-header>
 
@@ -55,9 +55,11 @@
           <nb-step [label]="labelTwo">
             <ng-template #labelTwo>Les Habilitations</ng-template>
               <h4 style="text-align: center;color: rgb(23, 9, 176);">Gestion Des Habilitations</h4>
-              <nb-card-body >
-                <ng2-smart-table [settings]="settingFormation" [source]="sourceFormation"(delete)="OnDeleteConfirmFormation($event)" (create)="add(addformation)" (edit)="editFormation($event)" ></ng2-smart-table>
-                    
+              <nb-card-body>
+                <div  style="width:800px; overflow-x: auto;">
+                  <ng2-smart-table [settings]="settingFormation" [source]="sourceFormation"(delete)="OnDeleteConfirmFormation($event)" (create)="add(addformation)" (edit)="editFormation($event)" ></ng2-smart-table>
+                </div>
+                  
               </nb-card-body>
             
             <div class="text-center">

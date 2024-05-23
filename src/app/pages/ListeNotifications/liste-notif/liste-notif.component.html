@@ -1,0 +1,109 @@
+<nb-card class="row">
+    <nb-card-body style="max-height: 500px">
+      <nb-tabset fullWidth>
+        <nb-tab tabTitle="Notifications Non Vues">
+          <h6 style="text-align: center;color: rgb(23, 9, 176);"> La Liste des Notifications Non Vues  <span style="color:red">{{nbnotif}}</span></h6>
+          <nb-card>
+            <nb-card-body style="overflow-y: auto;max-height: 400px;margin-bottom: 10px;">
+                <div  *ngIf=" (unseenNotifications.length > 0) ;else noData"  >
+                    <div *ngFor="let notification of unseenNotifications">
+                  <div class="notif error" *ngIf="notification.subject=='Probleme de Blockage'" >
+                      <div class="container-1">
+                          <i class="fas fa-times-circle"></i>
+                      </div>
+                      <div class="container-2">
+                          <p>{{notification.subject}}</p>
+                          <p class="msg">{{notification.message}}</p>
+                          <p>{{ notification.createdAt }}</p>
+                      </div>
+                      <button class="delete" (click)="markAsSeen(notification)"><i class="fa-solid fa-eye"></i></button>
+                  </div>
+                  <div class="notif warning" *ngIf="notification.subject=='Probleme de non Conformité'" >
+                    <div class="container-1">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="container-2">
+                        <p>{{notification.subject}}</p>
+                        <p class="msg">{{notification.message}}</p>
+                        <p>{{ notification.createdAt }}</p>
+                    </div>
+                    <button class="delete"(click)="markAsSeen(notification)"><i class="fa-solid fa-eye"></i></button>
+                </div>
+                  <div class="notif success" *ngIf="notification.subject=='Validation de Non Conformite CC '|| notification.subject=='Validation de Non Conformite OKD'" >
+                    <div class="container-1">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="container-2">
+                        <p>{{notification.subject}}</p>
+                        <p class="msg">{{notification.message}}</p>
+                        <p>{{ notification.createdAt }}</p>
+                    </div>
+                    <button class="delete" (click)="markAsSeen(notification)"><i class="fa-solid fa-eye"></i></button>
+                </div>
+                </div>
+                
+                  </div>
+                  <ng-template #noData>
+                      Aucune Nouvelle notification disponible. 
+                  </ng-template>
+            </nb-card-body>
+          </nb-card>
+        
+        </nb-tab>
+
+        <nb-tab tabTitle="Notifications Vues">
+          <h6 style="text-align: center;color: rgb(23, 9, 176);"> La Liste des Notifications Vues</h6>
+          <nb-card>
+            <nb-card-body  style="overflow-y: auto;max-height: 400px;margin-bottom: 10px;">
+                <div  *ngIf=" (seenNotifications.length > 0) ;else noData" >
+                   
+                        <div *ngFor="let notification of seenNotifications">
+                            <div class="notif info" *ngIf="notification.subject=='Probleme de Blockage'" >
+                                <div class="container-1">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                                <div class="container-2">
+                                    <p>{{notification.subject}}</p>
+                                    <p class="msg">{{notification.message}}</p>
+                                    <p>{{ notification.createdAt }}</p>
+                                </div>
+                             
+                            </div>
+                            <div class="notif info" *ngIf="notification.subject=='Probleme de non Conformité'" >
+                              <div class="container-1">
+                                  <i class="fas fa-times-circle"></i>
+                              </div>
+                              <div class="container-2">
+                                  <p>{{notification.subject}}</p>
+                                  <p class="msg">{{notification.message}}</p>
+                                  <p>{{ notification.createdAt }}</p>
+                              </div>
+                            
+                          </div>
+                            <div class="notif info" *ngIf="notification.subject=='Validation de Non Conformite CC '|| notification.subject=='Validation de Non Conformite OKD'" >
+                              <div class="container-1">
+                                  <i class="fas fa-check"></i>
+                              </div>
+                              <div class="container-2">
+                                  <p>{{notification.subject}}</p>
+                                  <p class="msg">{{notification.message}}</p>
+                                  <p>{{ notification.createdAt }}</p>
+                              </div>
+                             
+                          </div>
+                          </div>
+                   
+                 
+                </div>
+                <ng-template #noData>
+                    Aucune Nouvelle notification disponible. 
+                </ng-template>
+              
+            </nb-card-body>
+          </nb-card>
+
+        </nb-tab>
+      </nb-tabset>
+    </nb-card-body>
+  </nb-card>
+

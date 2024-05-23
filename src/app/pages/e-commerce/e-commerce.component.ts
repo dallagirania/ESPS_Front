@@ -1,7 +1,7 @@
-import { Component, ElementRef, Input, OnInit, QueryList, Renderer2, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, QueryList, Renderer2, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { CrudService } from '../../Service/crud.service';
 import { Router } from '@angular/router';
-import { NbDialogRef, NbDialogService, NbThemeService, NbToastrService } from '@nebular/theme';
+import { NbColorHelper, NbDialogRef, NbDialogService, NbThemeService, NbToastrService } from '@nebular/theme';
 import { Habilitation } from '../../Model/Habilitation.model';
 import { Procede } from '../../Model/Procede.model';
 import { Utilisateur } from '../../Model/Utilisateur.model';
@@ -22,7 +22,7 @@ import { log } from 'console';
   selector: 'ngx-ecommerce',
   templateUrl: './e-commerce.component.html',
 })
-export class ECommerceComponent  implements OnInit {
+export class ECommerceComponent  implements OnInit  {
  //Declaration SettingsCarte
  SettingsCarte = {
   noDataMessage: 'Liste des cartes de Controle est vide',
@@ -154,6 +154,54 @@ export class ECommerceComponent  implements OnInit {
     },
   }
 }
+
+
+SettingsMesureOKD = {
+
+  noDataMessage: 'Liste des Mesures "OK DEMARRAGE" est vide',
+
+  mode: "external",
+
+  actions: {
+    add:false,
+    edit: false,
+    delete: false,
+    position: 'right',
+
+
+
+  },
+ 
+  pager: {
+    display: true,
+    perPage: 3, // Limiter le nombre de lignes par page à 5
+  },
+ columns: {
+
+    equipe: {
+
+      title: 'Equipe',
+
+      type: 'string',
+
+    },
+
+    evenement: {
+
+      title: 'Evenement',
+
+      type: 'string',
+
+    },
+    date_add: {
+
+      title: 'Date Ajout',
+
+      type: 'string',
+
+    },
+  }
+}
   @ViewChildren('inputElement') inputElements: QueryList<ElementRef>;
   @ViewChild('PS', { static: true }) accordionPS;
   showFunctionInput: boolean = false;
@@ -174,6 +222,7 @@ export class ECommerceComponent  implements OnInit {
 
   sourceCarte: LocalDataSource = new LocalDataSource();
   sourceOKD :LocalDataSource = new LocalDataSource();
+  sourceMesureOKD :LocalDataSource = new LocalDataSource();
 
   carte :CarteControle=new CarteControle()
   carte1 :CarteControle=new CarteControle()
@@ -198,48 +247,23 @@ export class ECommerceComponent  implements OnInit {
   mydate=new Date()
   listeCritere:Critere[]=[]
   nbCritere:number=0
-
-  //declaration courbe  affichage : 
+  tempVal: Record<number, string> = {};
   
-  @Input() chartData: {
-    innerLine: number[];
-    outerLine: OutlineData[];
-  };
-  private alive = true;
-  option: any;
-  themeSubscription: any;
-  echartsIntance: any;
-
-  view: any[] = [900, 400]; // Ajustez la taille du graphique selon vos besoins
-  showXAxis = true;
-  showYAxis = true;
-  gradient = false;
-  showLegend = true;
-  showXAxisLabel = true;
-  xAxisLabel = 'Date';
-  showYAxisLabel = true;
-  yAxisLabel = 'Value';
-  colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  };
-
-
-
   chartData1: any[] = [];
-
+  chartDataRes: any[] = [];
 // Reference lines for y=10 and y=20
-referenceLines: any[] = [
-  { name: 'Y=10', value: 10 },
-  { name: 'Y=20', value: 20 }
-];
- 
 
+data: any;
+options: any;
+colors: any;
+chartjs: any;
   constructor( private service:CrudService,
     private route:Router,
     private dialogservice: NbDialogService,
     private toastrService: NbToastrService,
     private theme: NbThemeService,
     private layoutService: LayoutService){ 
+
     }
   ngOnInit(): void {
     console.log(this.mydate)
@@ -283,15 +307,108 @@ referenceLines: any[] = [
  
   }
 
+  // fetchData1(id: number): void {
+  //   // Récupérer et remplacer la série y=20 par la série de valeurs fixes
+  //   this.service.getFixedValuesByCarteId(id).subscribe(fixedData => {
+  //     const fixedSeries = fixedData.map(item => ({
+  //       name: `${new Date(item.date).toLocaleString()} - Value ${this.min}`, 
+  //       value: this.min // Utilisez la valeur min comme valeur fixe
+  //     }));
+  
+  //     console.log('Données finales pour le graphique avec la courbe fixe :', this.chartData1); // Affiche les données finales avec la courbe fixe
+  
+  //     this.service.getMesureCCData(id).subscribe(data => {
+  //       console.log('Données brutes :', data); // Affiche les données brutes récupérées
+  
+  //       if (!data) {
+  //         console.log('Aucune donnée brute disponible.');
+  //         return; // Arrêtez l'exécution de la fonction si les données sont nulles
+  //       }
+  
+  //       // Créer la série principale
+  //       const series1 = data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()).map(measure => ({
+  //         name: `${new Date(measure.date).toLocaleString()} - Value ${measure.value}`, // Convertir la date en string lisible
+  //         value: measure.value
+  //       }));
+  
+  //       // Créer la série pour y=20
+  //       const seriesY20 = this.createEmptyArray(series1.length)
+  //         .map((_, index) => ({
+  //           name: `${new Date(data[index].date).toLocaleString()} - Value 20`,
+  //           value: 20
+  //         }));
+  
+  //       // Ajouter la série principale et la série y=20 à chartData1
+  //       this.chartData1 = [{
+  //         name: 'Série de valeurs',
+  //         series: series1
+  //       },
+  //       {
+  //         name: 'min',
+  //         series: fixedSeries
+  //       },
+  //       // {
+  //       //   name: 'max y=20',
+  //       //   series: seriesY20
+  //       // }
+  //     ];
+  
+  //       console.log('Données finales pour le graphique :', this.chartData1); 
+  //     });
+  
+  //   });
+  // }
 
+  fetchDataResultat(id: number): void {
+    this.service.getResultatData(id).subscribe(data => {
+      console.log('Données brutes :', data); // Affiche les données brutes récupérées
+
+      if (!data) {
+        console.log('Aucune donnée brute disponible.');
+        return; // Arrêtez l'exécution de la fonction si les données sont nulles
+      }
+
+      // Créer la série principale
+      const series1 = data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()).map(measure => ({
+        name: `${new Date(measure.date).toLocaleString()} - Value ${measure.value}`, // Convertir la date en string lisible
+        value: measure.value
+      }));
+
+     
+      // Ajouter la série principale et la série y=20 à chartData1
+      this.chartDataRes = [{
+        name: 'Série de valeurs',
+        series: series1
+      },
+      
+    ];
+
+      console.log('Données finales pour le graphique  chartDataRes :', this.chartDataRes); 
+    });
+  }
   
   fetchData1(id: number): void {
-    this.service.getCCById(id).subscribe(carte=>{
-      this.carte1=carte
-      this.min=parseInt(this.carte1.min.toString())
-      this.max=parseInt(this.carte1.max.toString())
-      console.log("mon/max ==>",this.min, this.max)
-    })
+    this.service.getCCById(id).subscribe(carte => {
+      this.carte1 = carte;
+      this.min = parseFloat(this.carte1.min.toString()); // Utilisez parseFloat pour convertir en float
+      this.max = parseFloat(this.carte1.max.toString()); // Utilisez parseFloat pour convertir en float
+      console.log("min/max ==>", this.min, this.max);
+    });
+      // Récupérer et remplacer la série y=20 par la série de valeurs fixes
+      this.service.getFixedValuesByCarteId(id).subscribe(fixedData => {
+        const fixedSeries = fixedData.map(item => ({
+          name: `${new Date(item.date).toLocaleString()} - Value ${this.min}`, 
+          value: this.min // Utilisez la valeur min comme valeur fixe
+        }));
+    
+        // this.chartData1[1] = {
+        //   name: 'Série fixe (min)',
+        //   series: fixedSeries
+        // };
+    
+        console.log('Données finales pour le graphique avec la courbe fixe :', this.chartData1); // Affiche les données finales avec la courbe fixe
+    
+  
     this.service.getMesureCCData(id).subscribe(data => {
       console.log('Données brutes :', data); // Affiche les données brutes récupérées
   
@@ -301,44 +418,85 @@ referenceLines: any[] = [
         value: measure.value
       }));
   
-      // Créer la série pour y=10
-      const seriesY10 = this.createEmptyArray(series1.length)
+      // Créer la série pour y=20
+      const seriesY20 = this.createEmptyArray(series1.length)
         .map((_, index) => ({
-          name: `${new Date(data[index].date).toLocaleString()} - Value 10`,
-          value:10
+          name: `${new Date(data[index].date).toLocaleString()} - Value 20`,
+          value: 20
         }));
-    // Créer la série pour y=20
-    const seriesY20 = this.createEmptyArray(series1.length)
-    .map((_, index) => ({
-      name: `${new Date(data[index].date).toLocaleString()} - Value 10`,
-      value:20
-    }));
-      // Ajouter la série y=10 à la série principale
+  
+      // Ajouter la série principale et la série y=20 à chartData1
       this.chartData1 = [{
         name: 'Série de valeurs',
         series: series1
       },
       {
-        name: 'y=10',
-        series: seriesY10
-      },
-      {
-        name: 'y=20',
-        series: seriesY20
-      }];
+        name: 'min',
+        series: fixedSeries
+      },{
+       name: 'max y=20',
+       series: seriesY20
+             }];
   
-      console.log('Données finales pour le graphique :', this.chartData1); // Affiche les données finales pour le graphique
+      console.log('Données finales pour le graphique :', this.chartData1); 
     });
+  
+  });
   }
+  
+  
+  
+  // fetchData1(id: number): void {
+  //   this.service.getCCById(id).subscribe(carte=>{
+  //     this.carte1=carte
+  //     this.min=parseInt(this.carte1.min.toString())
+  //     this.max=parseInt(this.carte1.max.toString())
+  //     console.log("mon/max ==>",this.min, this.max)
+  //   })
+  //   this.service.getMesureCCData(id).subscribe(data => {
+  //     console.log('Données brutes :', data); // Affiche les données brutes récupérées
+  
+  //     // Créer la série principale
+  //     const series1 = data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()).map(measure => ({
+  //       name: `${new Date(measure.date).toLocaleString()} - Value ${measure.value}`, // Convertir la date en string lisible
+  //       value: measure.value
+  //     }));
+  
+  //     // Créer la série pour y=10
+  //     const seriesY10 = this.createEmptyArray(series1.length)
+  //       .map((_, index) => ({
+  //         name: `${new Date(data[index].date).toLocaleString()} - Value 10`,
+  //         value:10
+  //       }));
+  //   // Créer la série pour y=20
+  //   const seriesY20 = this.createEmptyArray(series1.length)
+  //   .map((_, index) => ({
+  //     name: `${new Date(data[index].date).toLocaleString()} - Value 10`,
+  //     value:20
+  //   }));
+  //     // Ajouter la série y=10 à la série principale
+  //     this.chartData1 = [{
+  //       name: 'Série de valeurs',
+  //       series: series1
+  //     },
+  //     {
+  //       name: 'y=10',
+  //       series: seriesY10
+  //     },
+  //     {
+  //       name: 'y=20',
+  //       series: seriesY20
+  //     }];
+  
+  //     console.log('Données finales pour le graphique :', this.chartData1); // Affiche les données finales pour le graphique
+  //   });
+  // }
 
   
   
   
   
-  // Fonction utilitaire pour créer un tableau vide
-  createEmptyArray1(length: number): any[] {
-    return Array(length).fill(0);
-  }
+
   
   
   fetchData( id: number): void {
@@ -528,11 +686,21 @@ hasImageToDisplay(id:number): boolean {
   
     this.numberOfInputs = parseInt(this.carte.nb_valeur.toString(), 10); // nombre de champs de saisie
     this.inputValues = new Array(this.numberOfInputs)
-    this.fetchData1(this.carte.id);
+   // this.fetchData1(this.carte.id);
+
+    if(this.carte.fonction) {
+      console.log("possede fonction : ",this.carte.fonction)
+      this.fetchDataResultat(this.carte.id);
+    
+  } else {
+      console.log("Ne possede pas de  fonction : ",this.carte.fonction)
+      this.fetchData1(this.carte.id);
+  }
+
     this.dialogRef = this.dialogservice.open(this.dialogEdit, { context: { carte: this.carte } });  
   }
 
-
+ 
   CalculeMesure(ref: NbDialogRef<any>): void {
     const expression = this.carte.fonction;
     console.log(expression)
@@ -558,43 +726,37 @@ hasImageToDisplay(id:number): boolean {
   }
 
 SaveMesure(ref: NbDialogRef<any>): void {
+  
+
 if(this.carte.fonction){
   if (!this.newMesure.resultat || !this.newMesure.motif_saisie) {
-    // Afficher un toast d'erreur
     this.toastrService.danger('Veuillez remplir tous les champs!!', 'Erreur');
     return;
   }
 }else{
   const filteredValues = this.newMesure.val.filter(value => value !== null && value !== undefined);
 
-  // Vérification des valeurs saisies
   if (filteredValues.length === 0 || filteredValues.length < this.carte.nb_valeur) {
         this.toastrService.danger('Veuillez SVP remplir tous les mesures avec des valeurs valides!!', 'Erreur');
         return;
   }else if ( !this.newMesure.motif_saisie) {
-    // Afficher un toast d'erreur
     this.toastrService.danger('Veuillez remplir tous les champs!!', 'Erreur');
     return;
   }
 }
-  
+  this.newMesure.carte = this.carte;
   this.newMesure.operateur = this.currentuser.id;
   const currentDate = new Date();
   const localDate = new Date(currentDate.getTime() + (currentDate.getTimezoneOffset() * 60000) + (60 * 60000)); // Ajoute une heure en millisecondes
   const formattedDate = `${localDate.getFullYear()}-${String(localDate.getMonth() + 1).padStart(2, '0')}-${String(localDate.getDate()).padStart(2, '0')} ${String(localDate.getHours()).padStart(2, '0')}:${String(localDate.getMinutes()).padStart(2, '0')}`;
   this.newMesure.date =formattedDate
-  // this.newMesure.val=this.inputValues
 
   console.log("les valeurs sont : ",this.newMesure.val)
-
-  // Ajouter la mesure d'abord
   this.service.addMesureCC(this.newMesure).subscribe(
     (mesureSaved) => {
-    //  ref.close();
       console.log('Mesure added successfully:', mesureSaved);
       this.resetValues();
-      this.fetchData1(this.carte.id)
-    
+   
     },
       
     
@@ -611,8 +773,8 @@ if(this.carte.fonction){
 }
 
 resetValues(): void {
-  this.newMesure = new MesureCC(); // Réinitialiser newMesure à un nouvel objet
-  this.inputValues = new Array(this.numberOfInputs); // Réinitialiser inputValues à un tableau vide
+  this.newMesure = new MesureCC();
+  this.inputValues = new Array(this.numberOfInputs);
 }
 
   /*********************** Ajout De Mesure Ok Demmarage  ********************/
@@ -626,29 +788,66 @@ resetValues(): void {
     console.log("cette okd",this.okd.id,"possede nbcritere : ", this.nbCritere ,"qui sont => : ",this.listeCritere)
     this.newMesureOKD = new MesureOKD();
     this.newMesureOKD.okd = this.okd;
+    this.LoadMesureByOKD(this.okd.id);
     this.dialogRef1 = this.dialogservice.open(this.dialogEditOKD, { context: { okd: this.okd } });  
   }
 
+
+
+  selectedValues: (string | null)[] = new Array(this.listeCritere.length).fill(null);
+  enteredValues: (number | null)[] = new Array(this.listeCritere.length).fill(null);
+
+  
+updateTempVal(index: number, critereId: number): void {
+  const selectedValue = this.selectedValues[index];
+  if (selectedValue !== null) {
+    this.tempVal[critereId.toString()] = selectedValue;
+  }
+}
+
+updateTempVal1(index: number, critereId: number): void {
+  const enteredValue = this.enteredValues[index];
+  if (enteredValue !== null) {
+   const numericValue = enteredValue.toString();
+   this.tempVal[critereId.toString()] = numericValue;
+  }
+}
+
+  
   saveMesureOKD(): void {
-      
     this.newMesureOKD.operateur = this.currentuser.id;
-    this.newMesureOKD.date_add = this.mydate.toISOString().slice(0, 19).replace('T', ' ');
+    const currentDate = new Date();
+    const localDate = new Date(currentDate.getTime() + (currentDate.getTimezoneOffset() * 60000) + (60 * 60000)); // Ajoute une heure en millisecondes
+    const formattedDate = `${localDate.getFullYear()}-${String(localDate.getMonth() + 1).padStart(2, '0')}-${String(localDate.getDate()).padStart(2, '0')} ${String(localDate.getHours()).padStart(2, '0')}:${String(localDate.getMinutes()).padStart(2, '0')}`;
+    this.newMesureOKD.date_add =formattedDate
+  
+    // Assigner tempVal à newMesureOKD.val
+    this.newMesureOKD.val = this.tempVal;
+  
     console.log('Valeurs du formulaire : ', this.newMesureOKD.val);
     console.log('La mesure du okd : ', this.newMesureOKD);
-
+  
     this.service.addMesureOKD(this.newMesureOKD).subscribe(response => {
-      console.log("Mesure finale  :  ",this.newMesureOKD)
+      console.log("Mesure finale  :  ", this.newMesureOKD);
       this.toastrService.success('Ajout est effectué avec succé ', 'Success');
-      this.LoadMesureByOKD(this.okd.id)
+      this.LoadMesureByOKD(this.okd.id);
     });
-
-    //this.dialogRef1.close(); // Fermez la boîte de dialogue après avoir traité les données
+  
+    // Réinitialiser les valeurs
+    // this.selectedValues = new Array(this.listeCritere.length).fill(null);
+    // this.enteredValues = new Array(this.listeCritere.length).fill(null);
+    // this.tempVal = {};
   }
+  
+
+  
   LoadMesureByOKD(id:number){
     this.service.getMesureOKDByOKDId(id).subscribe(mesure=>{
     this.listemesureOKD=mesure.reverse();
     console.log(this.listemesureOKD)
+    this.sourceMesureOKD = new LocalDataSource(this.listemesureOKD) 
     })
     }
-  
+    
+   
 }

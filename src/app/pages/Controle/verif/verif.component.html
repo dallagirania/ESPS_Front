@@ -1,27 +1,68 @@
 <nb-card class="col-md-12"  >
     <nb-card-body>
       <nb-tabset fullWidth> 
-        <nb-tab tabTitle="Cartes De Controles">
-          <h4 style="text-align: center;color: rgb(23, 9, 176);"> Les Listes des cartes de Controle</h4>
-          <nb-card>
-             <nb-card-body>
-              <ng2-smart-table [settings]="SettingsMesure" [source]="sourceMesure" > </ng2-smart-table>
-            </nb-card-body> 
-          </nb-card>
-         
-        </nb-tab>
-     
-      <nb-tab tabTitle="Check-list 'OK DEMMARAGE'">
-          <h4 style="text-align: center;color: rgb(23, 9, 176);"> Les Liste des Check-List "OK DEMMARAGE"</h4>
+        <nb-tab tabTitle="Check-list 'OK DEMMARAGE'">
+          <h4 style="text-align: center;color: rgb(23, 9, 176);font-size:20px;margin:0px"> Les Liste des Check-List "OK DEMMARAGE"</h4>
      
           <nb-card>
-            <nb-card-body>
-              <!-- <ng2-smart-table [settings]="SettingsOKD" [source]="sourceOKD" (edit)="RemplirMesureOKD($event)"  ></ng2-smart-table> -->
+            <nb-card-body style="padding:0px">
+              <ng2-smart-table style="zoom: 0.8;" [settings]="SettingsOKD" [source]="sourceMesureOKD" (edit)="Validerokd($event)"  ></ng2-smart-table>
             
            </nb-card-body> 
          </nb-card>       
       </nb-tab>
       
+        <nb-tab tabTitle="Cartes De Controles">
+          <h4 style="text-align: center;color: rgb(23, 9, 176);font-size:20px;;margin:0px"> Les Listes des cartes de Controle</h4>
+          <nb-card>
+             <nb-card-body style="padding:0px">
+              <ng2-smart-table style="zoom: 0.8;" [settings]="SettingsMesure" [source]="sourceMesure" (edit)="Valider($event)" > </ng2-smart-table>
+            </nb-card-body> 
+          </nb-card>
+         
+        </nb-tab>
+     
+    
+      
     </nb-tabset>
     </nb-card-body>
   </nb-card>
+
+
+  <ng-template #dialogValideCarte let-data let-ref="dialogRef">
+
+    <nb-card class="col-12 " style="width: 700px;">
+
+      <nb-card-header style="text-align: center;color: rgb(23, 9, 176);"> Validation Carte De Controle </nb-card-header>
+          <nb-card-body>
+            <div class="row">
+              <div class="col-sm-8">
+                <div class="form-group">
+                  <label for="inputEmail" class="label" style="color: black;">Désignation  <span style="color: red;">*</span></label>
+                  <textarea type="textarea" rows="3" nbInput fullWidth shape="round" placeholder="Entrer la description du Procédé" status="info">
+                  </textarea>
+                
+                </div>
+              </div>
+              <div class="col-sm-4"> 
+                <label for="inputEmail" class="label" style="color: black;">Décision :   <span style="color: red;">*</span></label>
+                <div class="demo-items">
+                  <nb-radio-group [(value)]="radioGroupValue">
+                    <nb-radio status="success"
+                      [value]="'Autoriser'">
+                     Autoriser 
+                    </nb-radio>
+                    <nb-radio status="success"
+                      [value]="'Bloquer'">
+                     Bloquer
+                    </nb-radio>
+                  </nb-radio-group>
+                </div>
+              </div>
+              
+            </div>
+          </nb-card-body>
+      
+    </nb-card>
+
+  </ng-template>

@@ -1,6 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
 import { NbThemeService, NbColorHelper } from '@nebular/theme';
-
+import { Chart } from 'chart.js';
+import zoomPlugin from 'chartjs-plugin-zoom';
+Chart.register(zoomPlugin);
 @Component({
   selector: 'ngx-chartjs-line',
   template: `
@@ -71,6 +73,24 @@ export class ChartjsLineComponent implements OnDestroy {
             fontColor: chartjs.textColor,
           },
         },
+       
+        plugins: {
+          zoom: {
+            zoom: {
+              wheel: {
+                enabled: true,
+              },
+              pinch: {
+                enabled: true
+              },
+              mode: 'xy',
+            },
+            pan: {
+              enabled: true,
+              mode: 'xy',
+            },
+          }
+        }
       };
     });
   }

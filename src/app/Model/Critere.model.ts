@@ -8,6 +8,7 @@ export class Critere{
         public valeur?:String ,
         public min?:String ,
         public max?:String ,
+        public mesureNC?:String ,
         public etatactive?:Boolean,  
         public okd?:OKD, 
   

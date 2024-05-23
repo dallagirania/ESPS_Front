@@ -13,6 +13,7 @@ import {
   NbAccordionModule,
   NbTabsetModule,
   NbRouteTabsetModule,
+  NbAlertModule,
  
 } from '@nebular/theme';
 
@@ -27,6 +28,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 import { VerifComponent } from './verif/verif.component';
 import { OperateurRenderComponent } from './operateur-render/operateur-render.component';
+import { ConformiteStyleComponent } from './conformite-style/conformite-style.component';
 
 
 @NgModule({
@@ -51,14 +53,17 @@ import { OperateurRenderComponent } from './operateur-render/operateur-render.co
     NbAccordionModule,
     NbTabsetModule,
     NbRouteTabsetModule,
-    NgMultiSelectDropDownModule
+    NgMultiSelectDropDownModule,
+    NbAlertModule
     
   
   ],
   declarations: [
    
     VerifComponent,
-         OperateurRenderComponent
+    OperateurRenderComponent,
+    ConformiteStyleComponent,
+       
   ],
 })
 export class VerifModule { }

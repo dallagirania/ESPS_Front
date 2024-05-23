@@ -1,13 +1,13 @@
 
-<div class="col-12" style="padding-bottom: 10px;">
-  <h2 style="font-family: 'Times New Roman', Times, serif;color: #0f2a9e; text-align: center;justify-content: center;">Parametrages des Procédés Spéciaux </h2>
+<div class="col-12" >
+  <h2 style="font-family: 'Times New Roman', Times, serif;color: #0f2a9e; text-align: center;justify-content: center;font-size:24px;margin:0px">Parametrages des Procédés Spéciaux </h2>
 </div>
 <nb-card>
     <!-- <nb-card-header style="color: #1927bd;">
      La Liste Des Procédés 
     </nb-card-header> -->
   
-    <nb-card-body>
+    <nb-card-body style="padding: 0px;">
       <ng2-smart-table [settings]="settings" [source]="source" (create)="createProcede()" (delete)="OnDeleteConfirm($event)"(edit)="modifierProcede($event)">
       </ng2-smart-table>
     </nb-card-body>

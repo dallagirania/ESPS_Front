@@ -25,9 +25,6 @@ export class HistoriqueFormationComponent implements OnInit, ViewCell {
       edit: false,
       delete: false,
       position: 'right',
-  
-  
-  
     },  
    columns: {
   

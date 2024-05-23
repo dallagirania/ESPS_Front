@@ -313,11 +313,20 @@
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label for="inputEmail" class="label" style="color: black;">Mesure à Prendre En Cas De Non Conformité  <span style="color: red;">*</span></label>
+              <textarea type="textarea" rows="2" nbInput fullWidth shape="round" placeholder="Mesure à Prendre En Cas De Non Conformité " status="info"[(ngModel)]="critere1.mesureNC" name="mesureNC">
+              </textarea>
+            
+            </div>
+          </div>
+          
+        </div>
         <div class="text-center">
-
           <button type="submit" nbButton status="success" hero style="margin: 20px; text-align: center;" (click)="modifierCritere(ref)" >Enregistrer</button>
           <button nbButton  status="danger" hero style="margin: 20px; text-align: center;"(click)="ref.close()" >Annuler</button>
-
       </div>
       </nb-card-body>
     </nb-card>
@@ -361,6 +370,17 @@
               <input type="number" nbInput fullWidth placeholder="Entrer la valeur max de l'intervalle" shape="semi-round" status="info" [(ngModel)]="newCritere.max" name="max" required>
             </div>
           </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label for="inputEmail" class="label" style="color: black;">Mesure à Prendre En Cas De Non Conformité  <span style="color: red;">*</span></label>
+              <textarea type="textarea" rows="2" nbInput fullWidth shape="round" placeholder="Mesure à Prendre En Cas De Non Conformité " status="info"[(ngModel)]="newCritere.mesureNC" name="mesureNC">
+              </textarea>
+            
+            </div>
+          </div>
+          
         </div>
         <div class="text-center">
 

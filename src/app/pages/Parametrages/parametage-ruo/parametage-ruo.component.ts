@@ -82,7 +82,7 @@ export class ParametageRUOComponent implements OnInit {
         delete: true,
   
   
-        position: 'right',
+       // position: 'right',
   
    
   
@@ -398,7 +398,7 @@ modifier(event: any): void {
   
     }
     SaveCollab(ref: NbDialogRef<any>): void {
-      if (!this.user.username || !this.user.prenom  || !this.user.matricule ||!this.user.email ||!this.selectedUnite||!this.selectedRole) {
+      if (!this.user.username || !this.user.prenom  || !this.user.matricule ||!this.selectedUnite||!this.selectedRole) {
          this.toastrService.danger('Veuillez remplir tous les champs', 'Erreur');
          return;
        }

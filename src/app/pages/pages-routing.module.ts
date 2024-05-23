@@ -16,6 +16,10 @@ import { PontComponent } from './Add/pont/pont.component';
 import { ListeHabilitationComponent } from './Add/liste-habilitation/liste-habilitation.component';
 import { TestComponent } from './Add/test/test.component';
 import { VerifComponent } from './Controle/verif/verif.component';
+import { ShowDataComponent } from './e-commerce/show-data/show-data.component';
+import { ListeProcedeComponent } from './ProcedeDetail/liste-procede/liste-procede.component';
+import { DetailComponent } from './ProcedeDetail/detail/detail.component';
+import { ListeNotifComponent } from './ListeNotifications/liste-notif/liste-notif.component';
 
 const routes: Routes = [{
   path: '',
@@ -49,6 +53,14 @@ const routes: Routes = [{
       component: ProcedeComponent,
     },
     {
+      path: 'ListeProcede',
+      component: ListeProcedeComponent,
+    },
+    {
+      path: 'Detail/:id',
+      component: DetailComponent,
+    },
+    {
       path: 'ProcedeOKD',
       component: ProcedeOKDComponent,
     },
@@ -78,6 +90,14 @@ const routes: Routes = [{
       path: 'Verif',
       component: VerifComponent,
     },
+    {
+      path: 'notify',
+      component: ListeNotifComponent,
+    },
+/*     {
+      path: 'show',
+      component: ShowDataComponent,
+    }, */
     {
       path: 'layout',
       loadChildren: () => import('./layout/layout.module')

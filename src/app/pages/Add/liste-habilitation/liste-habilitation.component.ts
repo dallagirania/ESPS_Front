@@ -96,7 +96,7 @@ export class ListeHabilitationComponent implements OnInit {
       edit: true,
   
       delete: true,  
-      position: 'right',
+    //  position: 'right',
       disabled: {
         addButtonContent: '<i class="nb-plus"></i>',
         createButtonContent: '<i class="nb-checkmark"></i>',
@@ -133,28 +133,11 @@ export class ListeHabilitationComponent implements OnInit {
       perPage: 2, // Limiter le nombre de lignes par page à 5
     },
     columns: {
-
-      utilisateur: {
-        title: 'Collaborateur',
-  
-          type: 'string',
-          valuePrepareFunction: (utilisateur) => { return (utilisateur?.username); },
-          filterFunction: (utilisateur, val) => {
-            if (utilisateur != null) {
-              const activiteNomLowerCase = utilisateur.username.toLowerCase();
-              const valLowerCase = val.toLowerCase();
-              return activiteNomLowerCase.indexOf(valLowerCase) !== -1 || !val;
-            }
-            return false;
-          }
-      },
-      date_init: {
-        title: 'Date Formation',
-        type: 'string',
-      },
-      date_fin: {
-        title: 'Date Fin Formation',
-        type: 'string',
+      id: {
+        title: 'Historiques',
+        type: 'custom',
+        filter: false,
+        renderComponent: HistoriqueFormationComponent, 
       },
       etatactive: {
         title: 'Etat',
@@ -173,12 +156,31 @@ export class ListeHabilitationComponent implements OnInit {
         },
       },
       
-      id: {
-        title: 'Historiques',
-        type: 'custom',
-        filter: false,
-        renderComponent: HistoriqueFormationComponent, 
+      utilisateur: {
+        title: 'Collaborateur',
+  
+          type: 'string',
+          valuePrepareFunction: (utilisateur) => { return (utilisateur?.username); },
+          filterFunction: (utilisateur, val) => {
+            if (utilisateur != null) {
+              const activiteNomLowerCase = utilisateur.username.toLowerCase();
+              const valLowerCase = val.toLowerCase();
+              return activiteNomLowerCase.indexOf(valLowerCase) !== -1 || !val;
+            }
+            return false;
+          }
       },
+    
+    
+      date_init: {
+        title: 'Date Formation',
+        type: 'string',
+      },
+      date_fin: {
+        title: 'Date Fin Formation',
+        type: 'string',
+      },
+   
     
      
     },

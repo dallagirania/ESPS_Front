@@ -210,16 +210,16 @@ export class PontComponent implements OnInit, ViewCell {
 
   ngOnInit(): void {
     this.renderValue = this.value;
-   console.log("====> " + this.value );
+ ///  console.log("====> " + this.value );
   }
   detail(dialog: TemplateRef<any>) {
     this.dialogservice.open(dialog);
     this.service.getProcedeById(parseInt(this.value)).subscribe(procede => {
       this.currentProcede = procede;
-      console.log("le procede actuel est ",procede)
+      //console.log("le procede actuel est ",procede)
       for(let file of this.currentProcede.files){
         if(file.nom.endsWith('.png') || file.nom.endsWith('.jpg')){
-          console.log(file.nom)
+      //    console.log(file.nom)
           this.service.getImage(file.nom.toString())
           .subscribe(data => {
             // console.log(data)
@@ -231,19 +231,19 @@ export class PontComponent implements OnInit, ViewCell {
       }
       /*****************   Verification de qualification du PS ****************** */
       const dateFinProc = new Date(this.currentProcede.date_fin);
-      console.log(this.currentProcede.date_fin)
+   //   console.log(this.currentProcede.date_fin)
       const dateSysteme = new Date();
-      console.log(dateSysteme)
+   //   console.log(dateSysteme)
       const troisMoisApres = new Date();
       troisMoisApres.setMonth(dateSysteme.getMonth() + 3);
-      console.log(troisMoisApres)
+    //  console.log(troisMoisApres)
     
       if (dateFinProc >troisMoisApres) {
         this.etatQualif='Qualifié';
-        console.log(this.etatQualif)
+ //       console.log(this.etatQualif)
       } else {
         this.etatQualif= 'A Requalifier';
-        console.log(this.etatQualif)
+     //   console.log(this.etatQualif)
       }
     });
 
@@ -256,28 +256,28 @@ export class PontComponent implements OnInit, ViewCell {
    this.listeOKDAvecCriteres.forEach(okdAvecCrits => {
       this.service.getCritereByOkdId(okdAvecCrits.okd.id).subscribe(criteres => {
         okdAvecCrits.crits = criteres;
-        console.log(okdAvecCrits.crits)
+      //  console.log(okdAvecCrits.crits)
       });
     });
    this.source = new LocalDataSource(this.listeOKD);
-    console.log("la liste des okds actuel est ", okds);
+//    console.log("la liste des okds actuel est ", okds);
 });
 
 this.service.getCarteByProcedeId(parseInt(this.value)).subscribe(carte => {
 this.listeCarte = carte;
 this.sourceCarte = new LocalDataSource(this.listeCarte) 
-console.log("la liste des okds actuel est ",carte)
+//console.log("la liste des okds actuel est ",carte)
 });
 
 this.service.getHabilitationByProcedeId(parseInt(this.value)).subscribe(carte => {
 this.listeHabilitation = carte;
 this.sourceCritere = new LocalDataSource(this.listeHabilitation) 
-console.log("la liste des okds actuel est ",carte)
+//console.log("la liste des okds actuel est ",carte)
 for(let h of this.listeHabilitation ){
   this.service.getFormationByHabilitationId(h.id).subscribe(liste => {
-    console.log("test");
+  //  console.log("test");
     this.listeFormation=liste;
-    console.log(liste);
+    //console.log(liste);
   });
 }
 });
@@ -309,9 +309,7 @@ hasImageToDisplay(): boolean {
 isImageFile(fileName: string): boolean {
   return fileName.endsWith('.png') || fileName.endsWith('.jpg');
 }
-  // navigate(){
-  //   this.route.navigate(["/pages/DetailProcede/"+this.value])
-  // }
+
 
 
 

@@ -1,13 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
 import { CrudService } from '../../../Service/crud.service';
-import { NbToastrService } from '@nebular/theme';
+import { NbDialogRef, NbDialogService, NbToastrService } from '@nebular/theme';
 import { MesureCC } from '../../../Model/MesureCC.model';
 import { Utilisateur } from '../../../Model/Utilisateur.model';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CarteControle } from '../../../Model/CarteControle.model';
+import { MesureOKD } from '../../../Model/MesureOKD.model';
+import Swal from 'sweetalert2';
+import { OperateurRenderComponent } from '../operateur-render/operateur-render.component';
+import { ConformiteStyleComponent } from '../conformite-style/conformite-style.component';
 
 @Component({
   selector: 'ngx-verif',
@@ -23,14 +27,14 @@ export class VerifComponent implements OnInit {
      add:false,
      edit: true,
      delete: false,
-     position: 'right',
+   //  position: 'right',
  
    },
   
    edit: {
  
      editButtonContent: '<i class="nb-compose"></i>',
-     saveButtonContent: '<i class="nb-checkmark"></i>',
+     saveButtonContent: '<i class="nb-checkmark "></i>',
      cancelButtonContent: '<i class="nb-close"></i>',
  
      confirmSave: true,
@@ -45,30 +49,53 @@ export class VerifComponent implements OnInit {
       title: 'Date',
       type: 'string',
     },
+    etatactive: {
+      title: 'Conformité',
+      type: 'custom',
+      valuePrepareFunction: (cell, row) => row.etatactive, // Utilisez row.id au lieu de cell.id
+      renderComponent: ConformiteStyleComponent
+      // valuePrepareFunction: (cell, row) => {
+      //     console.log("Valeur de etatvalide :", row.etatactive);
+      //     if (row.etatactive === false) {
+      //         return "<p class='text-danger'style='background-color: #f8d7da; padding: 5px;'>Non Conforme</p>";
+      //     } else {
+      //         return "<p class='text-success'>Conforme</p>";
+      //     }
+      // },
+  },
+  
+    etatvalide: {
+      title: 'Validation',
+      type: 'html',
+      valuePrepareFunction: (cell, row) => {
+          console.log("Valeur de etatvalide :", row.etatvalide);
+          if (row.etatvalide === false) {
+            return '<i class="fas fa-times-circle fa-2x text-danger" ></i>';
+        } else {
+            return '<i class="fas fa-check fa-2x text-success"></i>';
+        }
+      },
+  },
+  carte: {
+    title: 'Carte Controlle',
+    valuePrepareFunction: (carte) => { return (carte?.nom); },
+        filterFunction: (carte, val) => {
+          if (carte != null) {
+            const activiteNomLowerCase = carte.nom.toLowerCase();
+            const valLowerCase = val.toLowerCase();
+            return activiteNomLowerCase.indexOf(valLowerCase) !== -1 || !val;
+          }
+          return false;
+        }
+  },
     motif_saisie: {
       title: 'Motif Saisie',
       type: 'string',
     },
-    operateur: {
-      title: 'Opérateur',
+    operateurMatricule: {
+
+      title: 'Matricule Opérateur',
       type: 'string',
-      // valuePrepareFunction: (cell, row) => {
-      //   console.log(row.operateur)
-      //   const operat =this.getOperateurById(row.operateur);
-      //   return operat
-      // },
-    },
-    carte: {
-      title: 'Carte Controlle',
-      valuePrepareFunction: (carte) => { return (carte?.nom); },
-          filterFunction: (carte, val) => {
-            if (carte != null) {
-              const activiteNomLowerCase = carte.nom.toLowerCase();
-              const valLowerCase = val.toLowerCase();
-              return activiteNomLowerCase.indexOf(valLowerCase) !== -1 || !val;
-            }
-            return false;
-          }
     },
     min: {
       title: 'Valeur Min',
@@ -85,9 +112,17 @@ export class VerifComponent implements OnInit {
       type: 'string',
       valuePrepareFunction: (cell, row) => {
         console.log(row.carte.id)
-       const operat =this.getMaxCarteById(row.carte.id);
+        const operat =this.getMaxCarteById(row.carte.id);
         return operat
       },
+      filterFunction: (carte, val) => {
+        if (carte != null) {
+          const activiteNomLowerCase = carte.max.toLowerCase();
+          const valLowerCase = val.toLowerCase();
+          return activiteNomLowerCase.indexOf(valLowerCase) !== -1 || !val;
+        }
+        return false;
+      }
     },
    
     val: {
@@ -102,36 +137,160 @@ export class VerifComponent implements OnInit {
       title: 'Commentaire',
       type: 'string',
     },
-    qualiticien: {
-      title: 'Qualiticien',
-     
+
+    qualiticienMatricule: {
+
+      title: 'Matricule Qualiticien',
+      type: 'string',
     },
+  
+
   },
  }
+ 
+ // Declaration SettingsMesureOKD : 
+ SettingsOKD = {
+
+  noDataMessage: 'Liste des Mesures "OK DEMARRAGE" est vide',
+
+  mode: "external",
+
+  actions: {
+    add:false,
+    edit: true,
+    delete: false,
+   // position: 'right',
+
+
+
+  },
+  edit: {
+ 
+    editButtonContent: '<i class="nb-compose"></i>',
+    saveButtonContent: '<i class="nb-checkmark"></i>',
+    cancelButtonContent: '<i class="nb-close"></i>',
+
+    confirmSave: true,
+  },
+ 
+  pager: {
+    display: true,
+    perPage: 5, // Limiter le nombre de lignes par page à 5
+  },
+ columns: {
+
+  id: {
+    title: 'Les Mesures',
+    type: 'custom',
+    filter: false,
+    renderComponent: OperateurRenderComponent
+  },
+
+  date_add: {
+
+    title: 'Date Ajout',
+    type: 'string',
+
+  },
+ 
+  etatactive: {
+    title: 'Conformité',
+    type: 'custom',
+    valuePrepareFunction: (cell, row) => row.etatactive, 
+    renderComponent: ConformiteStyleComponent
+   
+},
+
+  etatvalide: {
+    title: 'Validation',
+    type: 'html',
+    valuePrepareFunction: (cell, row) => {
+        console.log("Valeur de etatvalide :", row.etatvalide);
+        if (row.etatvalide === false) {
+          return '<i class="fas fa-times-circle fa-2x text-danger" ></i>';
+      } else {
+          return '<i class="fas fa-check fa-2x text-success"></i>';
+      }
+    },
+},
+
+    equipe: {
+
+      title: 'Equipe',
+
+      type: 'string',
+
+    },
+
+    evenement: {
+
+      title: 'Evenement',
+
+      type: 'string',
+
+    },
+    operateurMatricule: {
+
+      title: 'Matricule Opérateur',
+      type: 'string',
+    },
+  
+    commentaire: {
+      title: 'Commentaire',
+      type: 'string',
+    },
+
+
+    qualiticienMatricule: {
+
+      title: 'Matricule Qualiticien',
+      type: 'string',
+    },
+  
+
+  }
+}
+
+currentuser:any
+userConnecte:any
  listeMesure:MesureCC[]=[]
+ listemesureOKD:MesureOKD[]=[]
  utilisateur =new Utilisateur()
  carte= new CarteControle()
+ carte1= new CarteControle()
  sourceMesure: LocalDataSource = new LocalDataSource();
+ sourceMesureOKD :LocalDataSource = new LocalDataSource();
+ mesurecc=new MesureCC()
+ mesureokd=new MesureOKD()
+ dialogRef1:NbDialogRef<any>
+ dialogvalideCarte:TemplateRef<any>
+ @ViewChild('dialogValideCarte', { static: false }) dialogValideCarte: TemplateRef<any>;
   constructor(
     private service:CrudService,
     private route:Router,
-    private toastrService: NbToastrService
+    private toastrService: NbToastrService,
+    private dialogservice: NbDialogService,
   ) { }
 
   ngOnInit(): void {
-    this.service.getMesureCC().subscribe(mesure=>{
-      this.listeMesure=mesure.reverse()
-       console.log(mesure)
-       this.sourceMesure.load(mesure);
-     })
+    this.userConnecte=localStorage.getItem("user")
+    this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
+      this.currentuser=utilisateur
+      console.log("Info header  :",this.currentuser )    
+  })
+    this.LoadMesureCC()
+    
+    this.LoadMesureOKD()
+      
   }
-//   getOperateurById(id:number): string {
-//     this.service.getUserById(id).subscribe(user=>{
-//       this.utilisateur=user 
-//      })
-//      return  this.utilisateur?.username!.toString()+" "+this.utilisateur?.prenom!.toString();
+  getOperateurById(id:number): string {
+    this.service.getUserById(id).subscribe(user=>{
+      this.utilisateur=user 
+     })
+     console.log(this.utilisateur?.username!.toString()+" "+this.utilisateur?.prenom!.toString())
+     return  this.utilisateur?.username!.toString()+" "+this.utilisateur?.prenom!.toString();
 
-// }
+}
 getMinCarteById(id:number): string {
   this.service.getCCById(id).subscribe(carte=>{
     this.carte=carte 
@@ -145,4 +304,137 @@ getMaxCarteById(id:number): string {
    return  this.carte.max!.toString()  
 }
 
+/************************ Validation des Cartes de controle *********************************** */
+Valider(event: any): void {
+  // const carte1= event.data;
+  // this.carte1 = { ...carte1 };
+  // this.dialogRef1 = this.dialogservice.open(this.dialogValideCarte, { context: { carte1: this.carte1 } });
+
+  this.mesurecc= event.data;
+  console.log("mesureOKD à valider  avant confirmation : => ",this.mesurecc)
+  Swal.fire({
+
+    title: 'Attention !',
+
+    text: "Etes vous sûr de valider cette mesure  ?",
+
+    icon: 'warning',
+
+    showCancelButton: true,
+
+    confirmButtonColor: '#28a745',
+
+    cancelButtonColor: '#dc3545',
+
+    confirmButtonText: 'Oui, Valider!',
+    input: 'textarea',
+    inputPlaceholder: 'Ajouter un commentaire (optionnel)',
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+      // Récupération du commentaire
+      const commentaire = result.value;
+      this.mesurecc.etatvalide = true;
+      this.mesurecc.qualiticien=this.currentuser.id
+      this.mesurecc.commentaire=commentaire
+      const currentDate = new Date();
+      const localDate = new Date(currentDate.getTime() + (currentDate.getTimezoneOffset() * 60000) + (60 * 60000)); // Ajoute une heure en millisecondes
+      const formattedDate = `${localDate.getFullYear()}-${String(localDate.getMonth() + 1).padStart(2, '0')}-${String(localDate.getDate()).padStart(2, '0')} ${String(localDate.getHours()).padStart(2, '0')}:${String(localDate.getMinutes()).padStart(2, '0')}`;
+      this.mesurecc.date_valide =formattedDate
+      event.actif=false;
+    
+      this.service.updateMesureCC(this.mesurecc.id,this.mesurecc).subscribe(data => {
+       this.toastrService.success("Validation avec succés", "Succés", {duration: 5000, });
+      if(this.mesurecc.etatactive == false){
+       this.service.mailValidation(this.mesurecc).subscribe(mail=>{
+         console.log("mail validation est envoyé avec succés")
+       })
+      }
+        this.LoadMesureCC();
+         },
+          error => {
+          this.toastrService.danger("Merci de contacter le service IT", 'Erreur');
+        });
+
+    }
+
+  })
+
+}
+
+LoadMesureCC(){
+  this.service.getAllMesureCC().subscribe(mesure=>{
+    this.listeMesure=mesure.reverse()
+     console.log("la liste des mesure Carte Controle :=> ",mesure)
+     this.sourceMesure.load(mesure);
+   })
+}
+
+
+/********************************** VERIFICATION OKD ****************************************** */
+Validerokd(event: any): void {
+  // const carte1= event.data;
+  // this.carte1 = { ...carte1 };
+  // this.dialogRef1 = this.dialogservice.open(this.dialogValideCarte, { context: { carte1: this.carte1 } });
+
+  this.mesureokd= event.data;
+  console.log("mesureOKD à valider  avant confirmation : => ",this.mesureokd)
+  Swal.fire({
+
+    title: 'Attention !',
+
+    text: "Etes vous sûr de valider cette mesure  ?",
+
+    icon: 'warning',
+
+    showCancelButton: true,
+
+    confirmButtonColor: '#28a745',
+
+    cancelButtonColor: '#dc3545',
+
+    confirmButtonText: 'Oui, Valider!',
+    input: 'textarea',
+    inputPlaceholder: 'Ajouter un commentaire (optionnel)',
+
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+      // Récupération du commentaire
+      const commentaire = result.value;
+     
+      this.mesureokd.etatvalide = true;
+      this.mesureokd.qualiticien=this.currentuser.id
+      this.mesureokd.commentaire=commentaire
+      const currentDate = new Date();
+      const localDate = new Date(currentDate.getTime() + (currentDate.getTimezoneOffset() * 60000) + (60 * 60000)); // Ajoute une heure en millisecondes
+      const formattedDate = `${localDate.getFullYear()}-${String(localDate.getMonth() + 1).padStart(2, '0')}-${String(localDate.getDate()).padStart(2, '0')} ${String(localDate.getHours()).padStart(2, '0')}:${String(localDate.getMinutes()).padStart(2, '0')}`;
+      this.mesureokd.date_modif =formattedDate
+      event.actif=false;
+      this.service.updateMesureOKD( this.mesureokd.id,this.mesureokd).subscribe(data => {
+        this.toastrService.success("Validation avec succés", "Succés", {duration: 5000, });
+        if(this.mesureokd.etatactive == false){
+          this.service.mailValidationOKD(this.mesureokd).subscribe(mail=>{
+            console.log("mail validation est envoyé avec succés")
+          })
+         }
+        this.LoadMesureOKD();
+         },
+          error => {
+          this.toastrService.danger("Merci de contacter le service IT", 'Erreur');
+        });
+
+    }
+
+  })
+  
+}
+
+LoadMesureOKD(){
+  this.service.getMesureOKD().subscribe(mesure=>{
+    this.listemesureOKD=mesure.reverse();
+    console.log("liste okd : => :",this.listemesureOKD)
+    this.sourceMesureOKD = new LocalDataSource(this.listemesureOKD) 
+    })
+}
 }

@@ -71,6 +71,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link:'/pages/ListProcede'
    
   },
+   {
+    title: 'Liste Procédés Spéciaux',
+    icon: 'keypad-outline',
+    link:'/pages/ListeProcede'
+   
+  },
   {
     title: 'Liste d\'Habilitation',
     icon:'list-outline',
@@ -78,10 +84,17 @@ export const MENU_ITEMS: NbMenuItem[] = [
    
   },
   {
-    title: 'Controlle ',
+    title: 'Controle ',
     //icon: 'keypad-outline',
     icon:'bulb-outline',
     link: '/pages/Verif',
+   
+  },
+  {
+    title: 'Notifications ',
+    //icon: 'keypad-outline',
+    icon:'bulb-outline',
+    link: '/pages/notify',
    
   },
   // {
@@ -106,7 +119,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   //     },
   //   ],
   // },
-  // {
+  //{
   //   title: 'UI Features',
   //   icon: 'keypad-outline',
   //   link: '/pages/ui-features',

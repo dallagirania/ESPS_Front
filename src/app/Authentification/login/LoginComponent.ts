@@ -65,7 +65,6 @@ export class LoginComponent implements OnInit {
     this.router.navigate(["/pages/dashboard"])
    },
    err => {
-    alert("eeee")
      console.log(err);
      console.log("Utilisateur introuvable")
      //this.toastrService.danger('Veuillez remplir tous les champs!!', 'Erreur');

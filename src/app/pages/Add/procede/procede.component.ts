@@ -74,15 +74,17 @@ export class ProcedeComponent implements OnInit {
         title: 'Etat',
         type: 'html',
         valuePrepareFunction: (cell, row) => {
-          console.log(row.date_fin)
+         // console.log(row.date_fin)
           const etat =this.getEtat(row.date_fin);
           if(etat=="Qualifié"){
-            console.log(this.getEtat(row.date_fin))
+         //   console.log(this.getEtat(row.date_fin))
              return "<p class='text-success'>Qualifié</p>"
-           }
-          else{
-            console.log(this.getEtat(row.date_fin))
-            return "<p class='text-danger'>A Requalifié</p>"
+           }else if(etat=="Non Qualifié")
+            {
+              return "<p class='text-danger'>Non Qualifié</p>"
+            }else{
+          //  console.log(this.getEtat(row.date_fin))
+            return "<p class='text-warning'>A Requalifié</p>"
           }
        },
        
@@ -120,7 +122,7 @@ export class ProcedeComponent implements OnInit {
   ngOnInit(): void {
     this.service.getProcedeDernier().subscribe(procede=>{
       this.listeProcede=procede.reverse()
-       console.log(procede)
+     //  console.log(procede)
        this.source.load(procede);
      })
   }     
@@ -137,11 +139,14 @@ export class ProcedeComponent implements OnInit {
       const dateSysteme = new Date();
       const troisMoisApres = new Date();
       troisMoisApres.setMonth(dateSysteme.getMonth() + 3);
-      console.log(troisMoisApres)
+  //    console.log(troisMoisApres)
   
       if (dateFinProc > troisMoisApres) {
         return 'Qualifié';
-      } else {
+      }else if(dateFinProc < dateSysteme){
+        return 'Non Qualifié';
+      }
+       else {
         return 'A Requalifié';
       }
     }
@@ -198,7 +203,7 @@ export class ProcedeComponent implements OnInit {
   //Modifier des Procede 
   modifierProcede(event){
     this.procede= event.data;
-    console.log(this.procede.id)
+   // console.log(this.procede.id)
     this.route.navigate(["/pages/EditProcede/"+this.procede.id])
     }
   }
