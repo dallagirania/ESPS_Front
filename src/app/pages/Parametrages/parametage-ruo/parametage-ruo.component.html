@@ -1,9 +1,9 @@
-<div class="col-12" style="padding-bottom: 10px;">
-  <h2 style="font-family: 'Times New Roman', Times, serif;color: #0f2a9e; text-align: center;justify-content: center;">Parametrages des Collaborateurs Pour Notre Unité </h2>
+<div class="col-12" >
+  <h2 style="font-family: 'Times New Roman', Times, serif;color: #0f2a9e; text-align: center;justify-content: center; margin:0px;font-size:24px">Parametrages des Collaborateurs Pour Notre Unité </h2>
 </div>
 
     <nb-card>     
-      <nb-card-body >
+      <nb-card-body style="padding: 0px;">
           <ng2-smart-table [settings]="settingsRUO" [source]="sourceRUO"(create)="createCollab(addCollab)" (delete)="OnDeleteConfirm($event)" (edit)="modifier($event)" >
           </ng2-smart-table>
         </nb-card-body>

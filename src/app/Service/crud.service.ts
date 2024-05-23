@@ -19,6 +19,7 @@ import { ModProcede } from '../Model/ModProcede.model';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { MesureCC } from '../Model/MesureCC.model';
 import { MesureOKD } from '../Model/MesureOKD.model';
+import { Notifications } from '../Model/Notification.model';
 
 const httpOption={
   headers:new HttpHeaders({'Content-Type':'application/Json'})
@@ -86,7 +87,7 @@ export class CrudService {
     }
     updateUnite(id:number,unite:Unite):Observable<Unite>{
       const Url=`${this.apiUrl+"/unite"}/${id}`
-      return this.http.put<Unite>(Url,unite,httpOption)
+      return this.http.put<Unite>(Url,unite,httpOption)                  
     }
     deleteUnite(id:number|undefined){
       const Url=`${this.apiUrl+"/unite"}/${id}`
@@ -157,7 +158,7 @@ export class CrudService {
       }
 
          /******************    User    ******************/
-         loginUser(user: Utilisateur) {
+        loginUser(user: Utilisateur) {
           return this.http.post<any>(this.loginUrl, user);
         }
         registerUser(user: Utilisateur) {
@@ -332,6 +333,10 @@ export class CrudService {
           getAllUserByHabilitationId(habId: number): Observable<Utilisateur[]> {
             return this.http.get<Utilisateur[]>(`${this.apiUrl}/habilitation/${habId}/allusers`);
           }
+
+          getAllUserByHabilitationIdandDate(habId: number): Observable<Utilisateur[]> {
+            return this.http.get<Utilisateur[]>(`${this.apiUrl}/habilitation/date/${habId}/users`);
+          }
           
           
           getFormationByDernierDate(habId: number): Observable<Formation[]> {
@@ -389,8 +394,8 @@ export class CrudService {
           }
       
            
-          getProcedeByDernierDate(Id: number): Observable<Procede[]> {
-            return this.http.get<Procede[]>(`${this.apiUrl}/procede/denier_date/${Id}`);
+          getProcedeByDernierDate(Id: number): Observable<Procede> {
+            return this.http.get<Procede>(`${this.apiUrl}/procede/denier_date/${Id}`);
           }
         
         
@@ -407,6 +412,9 @@ export class CrudService {
           getMesureCC():Observable<MesureCC[]>{
             return this.http.get<MesureCC[]>(this.apiUrl+"/mesureCC");
           }
+          getAllMesureCC():Observable<MesureCC[]>{
+            return this.http.get<MesureCC[]>(this.apiUrl+"/mesureCC/All");
+          }
           public getMesureCCById(id : number):Observable<any>{
             return this.http.get<any>(`${this.apiUrl}/mesureCC/${id}`);
           }
@@ -416,9 +424,18 @@ export class CrudService {
           }
 
           getMesureCCByCarteId(Id: number): Observable<MesureCC[]> {
-            return this.http.get<MesureCC[]>(`${this.apiUrl}/mesureCC/carte/${Id}`);
+            return this.http.get<MesureCC[]>(`${this.apiUrl}/mesureCC/user/${Id}`);
           }
-
+         mailblockC(mesureCC:MesureCC){
+            return this.http.post<any>(this.apiUrl+"/mesureCC/notifyBlockage", mesureCC);
+          }
+          mailValidation(mesureCC:MesureCC){
+            return this.http.post<any>(this.apiUrl+"/mesureCC/notifyValidation", mesureCC);
+          }
+          mailNonConformite(mesureCC:MesureCC){
+            return this.http.post<any>(this.apiUrl+"/mesureCC/notifyNC", mesureCC);
+          }
+         
              /*   getValByCarteControle(id: number): Observable<number[]> {
                 return this.http.get<number[]>(`${this.baseUrl}/valByCarteControle/${id}`);
          }*/
@@ -427,32 +444,66 @@ export class CrudService {
           const url = `${this.apiUrl}/mesureCC/valWithDateByCarteControle1/${id}`;
           return this.http.get<any[]>(url);
         }
-           /******************    MesureCC    ******************/
+        
+         getResultatData(id: number): Observable<any[]> {
+          const url = `${this.apiUrl}/mesureCC/ResultatWithDateByCarteControle1/${id}`;
+          return this.http.get<any[]>(url);
+         }
+        
+          getFixedValuesByCarteId(carteId: number): Observable<any[]> {
+            return this.http.get<any[]>(`${this.apiUrl}/mesureCC/fixed-values/${carteId}`);
+          }
+           /******************    MesureOKD    ******************/
        
-           addMesureOKD(mesureOKD:MesureOKD){
+          addMesureOKD(mesureOKD:MesureOKD){
             return this.http.post<any>(this.apiUrl+"/mesureOKD", mesureOKD);
           }
       
           getMesureOKD():Observable<MesureOKD[]>{
-            return this.http.get<MesureOKD[]>(this.apiUrl+"/mesureOKD");
+            return this.http.get<MesureOKD[]>(this.apiUrl+"/mesureOKD/All");
           }
           public getMesureOKDById(id : number):Observable<any>{
             return this.http.get<any>(`${this.apiUrl}/mesureOKD/${id}`);
+          }
+          public getMesureOKDDetailById(id : number):Observable<any>{
+            return this.http.get<any>(`${this.apiUrl}/mesureOKD/detail/${id}`);
           }
           updateMesureOKD(id: number, mesureOKD: MesureOKD): Observable<MesureOKD> {
             const url = `${this.apiUrl}/mesureOKD/${id}`;
             return this.http.put<MesureOKD>(url, mesureOKD, httpOption); 
           }
-
+          
           getMesureOKDByOKDId(Id: number): Observable<MesureOKD[]> {
             return this.http.get<MesureOKD[]>(`${this.apiUrl}/mesureOKD/okd/${Id}`);
           }
+          getMesureOKDByOKDExportId(Id: number): Observable<MesureOKD[]> {
+            return this.http.get<MesureOKD[]>(`${this.apiUrl}/mesureOKD/okdExport/${Id}`);
+          }
+          mailblockOKD(mesureCC:MesureOKD){
+            return this.http.post<any>(this.apiUrl+"/mesureOKD/notifyBlockage", mesureCC);
+          }
 
-             /*   getValByCarteControle(id: number): Observable<number[]> {
-                return this.http.get<number[]>(`${this.baseUrl}/valByCarteControle/${id}`);
-         }*/
+          mailValidationOKD(mesureCC:MesureOKD){
+            return this.http.post<any>(this.apiUrl+"/mesureOKD/notifyValidationOKD", mesureCC);
+          }
 
-     
+          mailNonConformiteOKD(mesureCC:MesureOKD){
+            return this.http.post<any>(this.apiUrl+"/mesureOKD/notifyNC", mesureCC);
+          }
 
-            
+
+          /*********************************** Gestion des Notifications ********************************************* */
+
+          getNotification():Observable<Notifications[]>{
+            return this.http.get<Notifications[]>(this.apiUrl+"/notification");
+          }
+         
+          getNotificationByMatricule(matricule: String):Observable<Notifications[]>{
+            return this.http.get<Notifications[]>(`${this.apiUrl}/notification/user/${matricule}`);
+          }
+
+          updateNotify(id: number, notify: Notifications): Observable<Notifications> {
+            const url = `${this.apiUrl}/notification/${id}`;
+            return this.http.put<Notifications>(url, notify, httpOption);
+          }
 }

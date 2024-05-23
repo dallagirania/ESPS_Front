@@ -7,6 +7,8 @@ import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import {
   NbCardModule,
   NbChatModule,
@@ -42,7 +44,9 @@ import { LoginModule } from './Authentification/Login.module';
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
     NbCardModule,
-    NgMultiSelectDropDownModule.forRoot()
+    NgMultiSelectDropDownModule.forRoot(),
+    NgxPaginationModule,
+    Ng2SearchPipeModule    
   ],
   bootstrap: [AppComponent],
   providers: [NbToastrService],
