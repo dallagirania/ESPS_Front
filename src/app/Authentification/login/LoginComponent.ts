@@ -97,4 +97,9 @@ export class LoginComponent implements OnInit {
       spinner.style.display = 'none';
     }
   }
+  navigateToHome(){
+    console.log("test")
+    this.router.navigate(["/pages/home"]);
+  }
+
 }

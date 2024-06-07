@@ -1,0 +1,115 @@
+<nb-card >
+<nb-card-body>
+  <div class="row d-flex justify-content-between px-5 py-4">
+    <p style="color: #004AAD;font-size: 20px;font-weight: bold;"> Nos Procédés Spéciaux</p>
+    <div class="search-bar d-flex">
+      <input type="text" class="search" style="font-size: 16px;" placeholder="Chercher ..." name="nom" [(ngModel)]="nom" (ngModelChange)="Search()" />
+      <button type="submit" class="search-Btn">
+        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.10227 0.0713005C1.983 0.760967 -1.22002 5.91264 0.44166 10.7773C1.13596 12.8 2.60323 14.471 4.55652 15.4476C6.38483 16.3595 8.59269 16.5354 10.5737 15.9151C11.4023 15.6559 12.6011 15.0218 13.2121 14.5126L13.3509 14.3969L16.1281 17.1695C19.1413 20.1735 18.9932 20.0531 19.4237 19.9698C19.6505 19.9281 19.9282 19.6504 19.9699 19.4236C20.0532 18.9932 20.1735 19.1413 17.1695 16.128L14.397 13.3509L14.5127 13.212C14.7858 12.8834 15.2394 12.152 15.4755 11.6614C17.0029 8.48153 16.3271 4.74159 13.7814 2.28379C11.9994 0.561935 9.52304 -0.257332 7.10227 0.0713005ZM9.38418 1.59412C11.0135 1.9135 12.4669 2.82534 13.4666 4.15376C14.0591 4.94062 14.4572 5.82469 14.6793 6.83836C14.8136 7.44471 14.8228 8.75925 14.7025 9.34708C14.3507 11.055 13.4713 12.4622 12.1336 13.4666C11.3467 14.059 10.4627 14.4571 9.44898 14.6793C8.80097 14.8228 7.48644 14.8228 6.83843 14.6793C4.78332 14.2303 3.0985 12.9389 2.20054 11.1337C1.75156 10.2312 1.54328 9.43503 1.49699 8.4445C1.36276 5.62566 3.01055 3.05677 5.6535 1.96904C6.10248 1.7839 6.8014 1.59412 7.28741 1.52932C7.74102 1.46452 8.92595 1.50155 9.38418 1.59412Z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <nb-card >
+    <div class="row">
+      <div class="col-6 d-flex" >
+        <i class="fa-solid fa-location-dot" style="margin-right: 3px;font-size: 25px;"></i>
+        <select class="select-Label"  placeholder="Sélectionnez un Site" id="site" [(ngModel)]="selectedSite"  (ngModelChange)="loadUnite()" #site="ngModel" name="site">
+          <option [ngValue]="null">Sélectionnez un Site</option>
+          <option *ngFor="let site of listeSite" [ngValue]="site.id">{{ site.nom }}</option>
+        </select>
+      </div>
+    
+      <div class="col-6  d-flex">
+       <i class="fa-solid fa-gears" style="margin-right: 3px;font-size: 25px;"></i>
+        <select class="select-Label" id="unite" [(ngModel)]="selectedUnite" (ngModelChange)="loadProcedes()" #unite="ngModel" name="unite">
+          <option [ngValue]="null">Sélectionnez Une Unité Opérationnel</option>
+          <option *ngFor="let unite of listeUnit" [ngValue]="unite.id">{{ unite.ref }} ~ {{ unite.nom }}</option>
+        </select>
+      </div>
+    </div>
+  </nb-card> 
+
+  <div class="dashboard-container"  *ngIf="!show">
+    <div class="feed-content container">
+      <div class="row" style="display: flex; align-items: center; justify-content: space-between;">
+        <div class="col-md-3 d-flex justify-content-center" *ngFor="let procede of liste | filter:nom | paginate: {itemsPerPage: 8, currentPage: page, totalItems: nbprocede}">
+          <div class="card" style="width: calc((100vw - 454px) / 3); margin-bottom: 40px;">
+            <div class="image-card">
+              <div class="bg">
+                <h5 class="card-title">{{ procede.nom }}</h5>
+                <img src="assets/images/proc.jpeg" class="card-img-top" alt="...">
+                <div class="blur"></div>
+              </div>
+              <div class="progress rounded" style="height: 10px; margin-top: 5px;">
+                <div class="progress-bar" role="progressbar" [style.width]="getProgressBarWidth(procede.date_fin)" [style.backgroundColor]="getProgressBarColor(procede.date_fin)" [attr.aria-valuenow]="getProgressBarWidth(procede.date_fin)" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+            <div class="card-body text-center">
+              <h5 class="card-title">{{ procede.nom }}</h5>
+              <div class="proc-detail d-flex flex-column" style="gap: 8px;">
+                <div class="ref d-flex align-items-center justify-content-center row">
+                  <i class="fa-solid fa-key col-3" style="font-size: 18px; text-align: right;"></i>
+                  <p class="card-text mb-0 pl-0 col-5" style="text-align: left; text-wrap: nowrap;">{{ procede.ref }}</p>
+                </div>
+                <div class="start-date d-flex align-items-center justify-content-center row">
+                  <i class="fa-regular fa-calendar-check col-3" style="font-size: 18px; text-align: right;"></i>
+                  <p class="card-text pl-0 col-5" style="text-align: left; text-wrap: nowrap;">{{ procede.date_init }}</p>
+                </div>
+                <div class="end-date d-flex align-items-center justify-content-center row">
+                  <i class="fa-regular fa-calendar-xmark col-3" style="font-size: 18px; text-align: right;"></i>
+                  <p class="card-text pl-0 col-5" style="text-align: left; text-wrap: nowrap;">{{ procede.date_fin }}</p>
+                </div>
+              </div>
+              <a [routerLink]="['/pages/Detail', procede.id]" class="btn btn-primary w-100 mt-3" style="color: white;">Plus détails</a>
+            </div>
+          </div>
+        </div>
+        <pagination-controls (pageChange)="page = $event" class="my_pagination" style="text-align: center;"></pagination-controls>
+      </div>
+    </div>
+  </div>
+  <div class="dashboard-container"  *ngIf="show">
+    <div class="feed-content container">
+      <div class="row" style="display: flex; align-items: center; justify-content: space-between;">
+        <div class="col-md-3 d-flex justify-content-center" *ngFor="let procede of listeProcedefinal | filter:nom | paginate: {itemsPerPage: 8, currentPage: page, totalItems: nbprocede}">
+          <div class="card" style="width: calc((100vw - 454px) / 3); margin-bottom: 40px;">
+            <div class="image-card">
+              <div class="bg">
+                <h5 class="card-title">{{ procede.nom }}</h5>
+                <img src="assets/images/proc.jpeg" class="card-img-top" alt="...">
+                <div class="blur"></div>
+              </div>
+              <div class="progress rounded" style="height: 10px; margin-top: 5px;">
+                <div class="progress-bar" role="progressbar" [style.width]="getProgressBarWidth(procede.date_fin)" [style.backgroundColor]="getProgressBarColor(procede.date_fin)" [attr.aria-valuenow]="getProgressBarWidth(procede.date_fin)" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+            <div class="card-body text-center">
+              <h5 class="card-title">{{ procede.nom }}</h5>
+              <div class="proc-detail d-flex flex-column" style="gap: 8px;">
+                <div class="ref d-flex align-items-center justify-content-center row">
+                  <i class="fa-solid fa-key col-3" style="font-size: 18px; text-align: right;"></i>
+                  <p class="card-text mb-0 pl-0 col-5" style="text-align: left; text-wrap: nowrap;">{{ procede.ref }}</p>
+                </div>
+                <div class="start-date d-flex align-items-center justify-content-center row">
+                  <i class="fa-regular fa-calendar-check col-3" style="font-size: 18px; text-align: right;"></i>
+                  <p class="card-text pl-0 col-5" style="text-align: left; text-wrap: nowrap;">{{ procede.date_init }}</p>
+                </div>
+                <div class="end-date d-flex align-items-center justify-content-center row">
+                  <i class="fa-regular fa-calendar-xmark col-3" style="font-size: 18px; text-align: right;"></i>
+                  <p class="card-text pl-0 col-5" style="text-align: left; text-wrap: nowrap;">{{ procede.date_fin }}</p>
+                </div>
+              </div>
+              <a [routerLink]="['/pages/Detail', procede.id]" class="btn btn-primary w-100 mt-3" style="color: white;">Plus détails</a>
+            </div>
+          </div>
+        </div>
+        <pagination-controls (pageChange)="page = $event" class="my_pagination" style="text-align: center;"></pagination-controls>
+      </div>
+    </div>
+  </div>
+</nb-card-body>
+ 
+</nb-card>
+

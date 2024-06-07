@@ -18,7 +18,8 @@ export class ListeProcedeComponent implements OnInit {
   page :number=1
   nbprocede:number
   procede:Procede=new Procede()
-
+  currentuser:any
+  currentuserUnite:number
   constructor(
     private service:CrudService,
     private route:Router,
@@ -28,20 +29,18 @@ export class ListeProcedeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.service.getProcedeDernier().subscribe(procede=>{
-      this.liste=procede.reverse()
-      this.nbprocede=this.liste.length  
-      this.liste2=this.liste
-    //   console.log(procede)
-     })
-  }     
-  LoadProcedes(){
-    this.service.getProcedeDernier().subscribe(procede=>{
-    this.liste=procede.reverse();
-    
+    this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
+      this.currentuser=utilisateur
+      this.currentuserUnite=this.currentuser.unite.id  
+      this.service.getProcedeDernierByUnite(this.currentuserUnite).subscribe(procede=>{
+        this.liste=procede.reverse()
+        this.nbprocede=this.liste.length  
+        this.liste2=this.liste
+      //   console.log(procede)
+      })
+      
     })
-    }
-
+  }     
     //verifier date 
     getEtat(dateFin: string): string {
       const dateFinProc = new Date(dateFin);

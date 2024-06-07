@@ -1,0 +1,48 @@
+<div class="card1">
+  <div class="title" style="justify-content: center;text-align: center;">
+    <h2>Performance Procédés Spéciaux </h2>
+  </div>
+
+<div class="dashboard-row">
+  <div class="card">
+    <div class="sub-card large-card">
+      <div class="icon nb-bar-chart"></div>
+      <div class="number">{{nbprocedeTotal}} Procédés spéciaux</div>
+    </div>
+    <div class="small-cards-container">
+      <div class="sub-card small-card" style="background-color:#91b510d5">
+        <div class="icon nb-checkmark-circle"></div>
+        <div class="text">
+          <div class="number">{{nbprocedeC}} PS</div>
+          <div class="label">{{PourcentageprocedeC}} %</div>
+        </div>
+      </div>
+      <div class="sub-card small-card" style="background-color: #f2bd5be9;">
+        <div class="icon nb-alert"></div>
+        <div class="text">
+          <div class="number">{{nbprocedeAR}} PS</div>
+          <div class="label">{{PourcentageprocedeAR}} %</div>
+        </div>
+      </div>
+      <div class="sub-card small-card" style="background-color: #fa5e43;">
+        <div class="icon nb-close-circled"></div>
+        <div class="text">
+          <div class="number">{{nbprocedeNC}} PS</div>
+          <div class="label">{{PourcentageprocedeNC}} %</div>
+        </div>
+      </div>
+    </div>
+    <div class="sub-card large-card" style="margin-top: 10px;">
+      <div class="graph">
+        <!-- Placeholder for graph -->
+        <chart type="pie" [data]="chartData" [options]="options"></chart>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="graph2">
+      <chart type="line" [data]="chartDataLine" [options]="options1" style="width: 100%;height: 100%;"></chart>
+    </div>
+  </div>
+</div>
+</div>

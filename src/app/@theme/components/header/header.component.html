@@ -13,13 +13,28 @@
 </div>
 
 
-
-<div class="header-container">
+<div class="header-container" *ngIf="connect==null">
   <div class="icons-container">
 
     <div class="separator"></div>
   
-    <div class="icon-container" (click)="showNotifications()">
+    <div class="icon-container" (click)="navigatetoLogin()" >
+  
+      <nb-icon icon="log-in-outline" ></nb-icon>
+    </div>
+  
+    <div class="separator"></div>
+  
+  </div>
+    <p>Visiteur</p>
+</div>
+
+<div *ngIf="connect!=null" class="header-container" (document:click)="onDocumentClick($event)">
+  <div class="icons-container">
+
+    <div class="separator"></div>
+  
+    <div class="icon-container"(click)="toggleNotifications($event)">
   
       <nb-icon icon="bell-outline" ></nb-icon>
   
@@ -42,55 +57,88 @@
   </nb-actions>
  
   <ng-container *ngIf="showNotificationList" >
- <div class="wrapper" >
+ <div class="wrapper" (click)="$event.stopPropagation()" >
     
       <div  *ngIf=" (unseenNotifications.length > 0) ;else noData" >
         <div *ngFor="let notification of unseenNotifications">
-        <div class="notif error" *ngIf="notification.subject=='Probleme de Blockage'" >
+          <div class="notif error" *ngIf="notification.subject=='Probleme de Blockage Carte Controle'">
+            <div class="container-1">
+                <i class="fas fa-times-circle"></i>
+            </div>
+            <div class="container-2" (click)="OpenDetailCC(DetailCarte,notification.idMesure)">
+                <p >{{notification.subject}} </p>
+                <p class="msg">{{notification.message}}</p>
+                <p>{{ notification.createdAt }}</p>
+            </div>
+            <button class="delete" (click)="markAsSeen(notification)"><i class="fa-solid fa-eye"></i></button>
+        </div>
+        <div class="notif error" *ngIf="notification.subject=='Probleme de Blockage OKD'">
           <div class="container-1">
               <i class="fas fa-times-circle"></i>
           </div>
-          <div class="container-2">
-              <p>{{notification.subject}}</p>
+          <div class="container-2" (click)="OpenDetailOKD(DetailOKD,notification.idMesure)">
+              <p >{{notification.subject}}</p>
               <p class="msg">{{notification.message}}</p>
               <p>{{ notification.createdAt }}</p>
           </div>
           <button class="delete" (click)="markAsSeen(notification)"><i class="fa-solid fa-eye"></i></button>
       </div>
-      <div class="notif warning" *ngIf="notification.subject=='Probleme de non Conformité'" >
+        <div class="notif warning" *ngIf="notification.subject=='Probleme de non Conformité OKD'"  >
+          <div class="container-1">
+              <i class="fas fa-times-circle"></i>
+          </div>
+          <div class="container-2" (click)="OpenDetailOKD(DetailOKD,notification.idMesure)">
+              <p>{{notification.subject}}</p>
+              <p class="msg">{{notification.message}}</p>
+              <p>{{ notification.createdAt }}</p>
+          </div>
+          <button class="delete"(click)="markAsSeen(notification)"><i class="fa-solid fa-eye"></i></button>
+       </div>
+       <div class="notif warning" *ngIf="notification.subject=='Alert Fin Habilitation'"  >
         <div class="container-1">
             <i class="fas fa-times-circle"></i>
         </div>
         <div class="container-2">
+            <p>{{notification.subject}}</p>
+            <p>{{ notification.createdAt }}</p>
+        </div>
+        <button class="delete"(click)="markAsSeen(notification)"><i class="fa-solid fa-eye"></i></button>
+     </div>
+       <div class="notif warning" *ngIf="notification.subject=='Probleme de non Conformité Carte Controle'"  >
+        <div class="container-1">
+            <i class="fas fa-times-circle"></i>
+        </div>
+        <div class="container-2" (click)="OpenDetailCC(DetailCarte,notification.idMesure)">
             <p>{{notification.subject}}</p>
             <p class="msg">{{notification.message}}</p>
             <p>{{ notification.createdAt }}</p>
         </div>
         <button class="delete"(click)="markAsSeen(notification)"><i class="fa-solid fa-eye"></i></button>
-    </div>
-      <div class="notif success" *ngIf="notification.subject=='Validation de Non Conformite CC '|| notification.subject=='Validation de Non Conformite OKD'" >
+     </div>
+        <div class="notif success" *ngIf="notification.subject=='Validation de Non Conformite Carte Controle '">
+          <div class="container-1">
+              <i class="fas fa-check"></i>
+          </div>
+          <div class="container-2" (click)="OpenDetailCC(DetailCarte,notification.idMesure)">
+              <p>{{notification.subject}}</p>
+              <p class="msg">{{notification.message}}</p>
+              <p>{{ notification.createdAt }}</p>
+          </div>
+          <button class="delete" (click)="markAsSeen(notification)"><i class="fa-solid fa-eye"></i></button>
+       </div>
+       <div class="notif success" *ngIf="notification.subject=='Validation de Non Conformite OKD'">
         <div class="container-1">
             <i class="fas fa-check"></i>
         </div>
-        <div class="container-2">
+        <div class="container-2" (click)="OpenDetailOKD(DetailOKD,notification.idMesure)">
             <p>{{notification.subject}}</p>
             <p class="msg">{{notification.message}}</p>
             <p>{{ notification.createdAt }}</p>
         </div>
         <button class="delete" (click)="markAsSeen(notification)"><i class="fa-solid fa-eye"></i></button>
+     </div>
     </div>
-    </div>
-      <!-- <div class="notif info"  *ngFor="let notification of seenNotifications">
-        <div class="container-1">
-            <i class="fas fa-times-circle"></i>
-        </div>
-        <div class="container-2">
-            <p>{{notification.subject}}</p>
-            <p class="msg">{{notification.message}}</p>
-            <p>{{ notification.createdAt }}</p>
-        </div>
-       
-    </div> -->
+    
       </div>
       <a  class="see-more-link" (click)='navigateToNotify()'>Voir plus de notifications</a>
    </div>
@@ -103,3 +151,74 @@
     <hr>
   </ng-template>
 </div>
+
+<ng-template #DetailOKD let-data let-ref="dialogRef" >
+  <nb-card class="col-12 " style="width: 800px;overflow-x: auto;">
+    <nb-card-header style="font-weight: bold; color: blue; border-bottom: 1px solid #362ec4 !important;flex-direction: row; display: flex">
+     DETAILS DE NON CONFORMITE Check-list "OK DEMARRAGE"
+    </nb-card-header>
+      <nb-card-body>
+        <table class="table">
+          <tr>
+            <td><strong>Date Ajout</strong></td>
+            <td>{{ mesure.date_add }}</td>
+         </tr>
+         <tr>
+          <td><strong>Equipe</strong></td>
+          <td>{{ mesure.equipe }}</td>
+        </tr>
+         <tr>
+          <td><strong>Evenement</strong></td>
+          <td>{{ mesure.evenement }}</td>
+        </tr>
+        <tr>
+          <td><strong>Les Critéres sont :</strong></td>
+          <td></td>
+      </tr>
+          <tr *ngFor="let item of mesureDetails">
+              <td><strong>{{ item.critere }}</strong></td>
+              <td [ngStyle]="{'color': item.valeur === 'nok' ? 'red' : (item.valeur === 'ok' ? 'green' : 'black')}">{{ item.valeur }}</td>
+          </tr>
+      </table>
+    </nb-card-body> 
+
+   </nb-card>
+
+</ng-template>
+
+<ng-template #DetailCarte let-data let-ref="dialogRef" >
+
+  <nb-card class="col-12 " style="width: 800px;overflow-x: auto;">
+    <nb-card-header style="font-weight: bold; color: blue; border-bottom: 1px solid #362ec4 !important;flex-direction: row; display: flex">
+      DETAILS DE NON CONFORMITE Carte Controle
+    
+    </nb-card-header>
+      <nb-card-body>
+        
+        <table class="table">
+          <tr>
+            <td><strong>Date Ajout</strong></td>
+            <td>{{ mesureC.date }}</td>
+         </tr>
+         <tr>
+          <td><strong>Motif Saisie</strong></td>
+          <td>{{ mesureC.motif_saisie }}</td>
+       </tr>
+        <tr>
+          <td><strong>Les Resultats Obtenus doivent etre entre : </strong></td>
+          <td>[ {{mesureC.min}} ,{{mesureC.max}} ] </td>
+        </tr>
+         <tr *ngIf="mesure.resultat!='null'">
+          <td><strong>Resultat</strong></td>
+          <td>{{mesureC.resultat}}</td>
+        </tr>
+         <tr>
+          <td><strong>Liste Des Valeurs</strong></td>
+          <td>{{ mesureC.val }}</td>
+        </tr>
+      </table>
+    </nb-card-body> 
+    
+   </nb-card>
+
+</ng-template>

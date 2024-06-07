@@ -11,6 +11,12 @@ import { Formation } from '../../../Model/Formation.model';
 import { CarteControle } from '../../../Model/CarteControle.model';
 import { Habilitation } from '../../../Model/Habilitation.model';
 import { saveAs } from 'file-saver';
+import { MesureCC } from '../../../Model/MesureCC.model';
+import * as XLSX from 'xlsx';
+import { MesureOKD } from '../../../Model/MesureOKD.model';;
+import { forkJoin, of,Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+
 
 @Component({
   selector: 'ngx-detail',
@@ -66,7 +72,7 @@ export class DetailComponent implements OnInit {
   };
 
 
-
+  listemesureOKD: MesureOKD[]=[]
   source: LocalDataSource = new LocalDataSource();
   sourceCarte: LocalDataSource = new LocalDataSource();
   sourceCritere: LocalDataSource = new LocalDataSource();
@@ -76,6 +82,7 @@ export class DetailComponent implements OnInit {
   critere= new Critere()
   carte=new CarteControle()
   listeOKD:OKD[]=[]
+  listeMesure:MesureCC[]=[]
   listeFormation:Formation[]=[]
   listeCarte:CarteControle[]=[]
   listeHabilitation:Habilitation[]=[]
@@ -150,11 +157,9 @@ export class DetailComponent implements OnInit {
    this.listeOKDAvecCriteres.forEach(okdAvecCrits => {
       this.service.getCritereByOkdId(okdAvecCrits.okd.id).subscribe(criteres => {
         okdAvecCrits.crits = criteres;
-   //     console.log(okdAvecCrits.crits)
+  
       });
     });
-  //  this.source = new LocalDataSource(this.listeOKD);
-  //  console.log("la liste des okds actuel est ", okds);
 });
 
 this.service.getCarteByProcedeId(id).subscribe(carte => {
@@ -168,7 +173,7 @@ this.listeHabilitation = carte;
 this.sourceCritere = new LocalDataSource(this.listeHabilitation) 
 
 for(let h of this.listeHabilitation ){
-  this.service.getFormationByHabilitationId(h.id).subscribe(liste => {
+  this.service.getFormationByDernierDate(h.id).subscribe(liste => {
     this.listeFormation=liste;
     this.source = new LocalDataSource(this.listeFormation);
   
@@ -296,10 +301,117 @@ getProgressBarColor(date_fin: string): string {
           this.carte=carte;
           this.dialogservice.open(dialog);
         })
-       
-    
-      
     } 
+    MesureOKD(dialog: TemplateRef<any>) {
+        this.dialogservice.open(dialog);
+  } 
        
+    /************************** Exporter données  CC ***********************************************/
+    transformDataCCForExport(data: MesureCC[]): any[] {
+      return data.map(mesure => {
+        const transformedData: any = {
+          'ID': mesure.id,
+          'Résultat': mesure.resultat,
+          'Commentaire': mesure.commentaire,
+          'Date': mesure.date,
+          'Motif Saisie': mesure.motif_saisie,
+          'Opérateur ID': mesure.operateur,
+          'Opérateur Nom': mesure.operateurNom,
+          'Qualiticien ID': mesure.qualiticien,
+          'Qualiticien Nom': mesure.qualiticienNom,
+          'État Conformité': mesure.etatactive,
+          'État Validation': mesure.etatvalide,
+          'Carte ID': mesure.carte?.id,
+          'Carte Nom': mesure.carte?.nom
+        };
+    
+        // Itérer sur chaque élément du tableau val et l'ajouter à transformedData
+        mesure.val.forEach((valeur, index) => {
+          transformedData[`Mesure  ${index + 1}`] = valeur;
+        });
+    
+        return transformedData;
+      });
+    }
+    
+    
+    
+    exportCCToExcel(id: number): void {
+      this.service.getMesureCCByCarteId(id).subscribe(mesure => {
+        this.listeMesure = mesure.reverse();
+        console.log("Mesure cc : ", mesure);
+    
+        const transformedData = this.transformDataCCForExport(this.listeMesure);
+        const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(transformedData);
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    
+        /* Sauvegarder le fichier */
+        XLSX.writeFile(wb, "MesureCC"+id+".xlsx");
+      });
+    }
+    
+
+
+    /****************************** Exporter Données OKD *************************************************************/
+    transformDataForExportOKD(data: MesureOKD[]): Observable<any[]> {
+      const observables = data.map(mesure =>
+        forkJoin(
+          Object.keys(mesure.val).map(key =>
+            this.service.getCritereById(parseInt(key)).pipe(
+              map(critere => ({ key, critere })),
+              catchError(error => of({ key, critere: null }))
+            )
+          )
+        ).pipe(
+          map(criteres => {
+            const valData = {};
+            criteres.forEach(({ key, critere }) => {
+              if (critere) {
+                valData[`${critere.nom}`] = mesure.val[key];
+              } else {
+                valData[`Critère inconnu`] = mesure.val[key];
+              }
+            });
+            return {
+              'ID': mesure.id,
+              'Commentaire': mesure.commentaire,
+              'Date Ajout': mesure.date_add,
+              'Date Modification': mesure.date_modif,
+              'Événement': mesure.evenement,
+              'Équipe': mesure.equipe,
+              'Nom Opérateur': mesure.operateurNom,
+              'Prenom Opérateur': mesure.operateurPrenom,
+              'Nom qualiticien': mesure.qualiticienNom,
+              'Prenom qualiticien': mesure.qualiticienPrenom,
+              'État Conformité': mesure.etatactive,
+              'État Validation': mesure.etatvalide,
+              'OKD ID': mesure.okd?.id,
+              'OKD REF': mesure.okd?.ref,
+              'OKD Nom': mesure.okd?.nom,
+              ...valData
+            };
+          })
+        )
+      );
+    
+      return forkJoin(observables);
+    }
+    
+    exportOKDToExcel(id: number): void {
+      this.service.getMesureOKDByOKDExportId(id).subscribe(async mesure => {
+        this.listemesureOKD = mesure.reverse();
+        console.log("okd possedeé ........ : ", mesure);
+    
+        const transformedData = await this.transformDataForExportOKD(this.listemesureOKD).toPromise();
+        const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(transformedData);
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    
+        /* Sauvegarder le fichier */
+        XLSX.writeFile(wb, "MesureOKD"+id+".xlsx");
+      });
+    }
+    
        
 }

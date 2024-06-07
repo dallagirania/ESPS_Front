@@ -39,23 +39,16 @@ export class PagesComponent implements OnInit {
 
         },
         {
-          title: 'FONCTIONNALITES',
-          group: true,
-        },
-        {
 
           title: 'Liste Procédés Spéciaux',
           icon: 'keypad-outline',
-          link:'/pages/ListeProcede',
+          link:'/pages/home',
           home: true,
 
         },
         {
-          title: 'Procédés Spéciaux',
-          //icon: 'keypad-outline',
-          icon:'layers-outline',
-          link:'/pages/ListProcede'
-         
+          title: 'FONCTIONNALITES',
+          group: true,
         },
         {
           title: 'Notifications ',
@@ -83,7 +76,7 @@ export class PagesComponent implements OnInit {
     {
       title: 'Liste Procédés Spéciaux',
       icon: 'keypad-outline',
-      link:'/pages/ListeProcede',
+      link:'/pages/home',
       home: true,
      
     },
@@ -135,7 +128,7 @@ export class PagesComponent implements OnInit {
       {
         title: 'Liste Procédés Spéciaux',
         icon: 'keypad-outline',
-        link:'/pages/ListeProcede',
+        link:'/pages/home',
         home: true,
        
       },
@@ -188,7 +181,7 @@ export class PagesComponent implements OnInit {
       {
         title: 'Liste Procédés Spéciaux',
         icon: 'keypad-outline',
-        link:'/pages/ListeProcede',
+        link:'/pages/home',
         home: true,
        
       },
@@ -232,7 +225,7 @@ export class PagesComponent implements OnInit {
       {
         title: 'Liste Procédés Spéciaux',
         icon: 'keypad-outline',
-        link:'/pages/ListeProcede',
+        link:'/pages/home',
         home: true,
        
       },
@@ -275,7 +268,7 @@ export class PagesComponent implements OnInit {
   {
     title: 'Liste Procédés Spéciaux',
     icon: 'keypad-outline',
-    link:'/pages/ListeProcede',
+    link:'/pages/home',
     home: true,
    
   },
@@ -296,6 +289,29 @@ export class PagesComponent implements OnInit {
     link: '/pages/notify',
    
   },
+  ];
+
+}
+
+//visiteur
+if (localStorage.getItem('mytoken') ==null) {
+
+  this.menu = [
+    {
+      title: 'Acceuil',
+      icon: 'home-outline',
+      link: '/pages/dashboard',
+      home: true,
+
+  },
+  {
+    title: 'Liste Procédés Spéciaux',
+    icon: 'keypad-outline',
+    link:'/pages/home',
+    home: true,
+   
+  },
+ 
   ];
 
 }

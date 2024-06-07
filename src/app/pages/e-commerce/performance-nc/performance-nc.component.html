@@ -1,0 +1,47 @@
+<div class="card1">
+  <div class="title" style="justify-content: center;text-align: center;">
+    <h2>Temps De Réactivités </h2>
+  </div>
+<div class="dashboard-row">
+  <div class="card">
+    <div class="sub-card large-card">
+      <div class="icon nb-bar-chart"></div>
+      <div class="number">{{TotalMesure}} Non Conformités</div>
+    </div>
+    <div class="small-cards-container">
+      <div class="sub-card small-card" style="background-color:#fa5e43">
+        <div class="icon nb-checkmark-circle"></div>
+        <div class="text">
+          <div class="number">{{mesureOKDCount}} OKD</div>
+          <div class="label">{{pourcentageOKD}} %</div>
+        </div>
+      </div>
+      <div class="sub-card small-card" style="background-color: rgb(249, 90, 32)">
+        <div class="icon nb-alert"></div>
+        <div class="text">
+          <div class="number">{{mesureCCCount}} CC</div>
+          <div class="label">{{pourcentageCC}} %</div>
+        </div>
+      </div>
+      <div class="sub-card small-card" style="background-color:#b0f794ba">
+        <div class="icon nb-sunny-circled"></div>
+        <div class="text">
+          <div class="number">Lead Time</div>
+          <div class="label">{{leadTime}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="sub-card large-card" style="margin-top: 10px;">
+      <div class="graph">
+        <chart type="pie" [data]="chartDataPie" [options]="options1"></chart>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="graph2">
+      <chart type="bar" [data]="chartDataBar" [options]="options" style="width: 100%;height: 100%;"></chart>
+    </div>
+  </div>
+</div>
+</div>
+

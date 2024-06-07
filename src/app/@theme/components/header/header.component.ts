@@ -1,16 +1,21 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService, NbToastrService } from '@nebular/theme';
+import { Component, HostListener, OnDestroy, OnInit, TemplateRef } from '@angular/core';
+import { NbDialogService, NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService, NbToastrService } from '@nebular/theme';
 
 import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Subject, forkJoin } from 'rxjs';
 import { CrudService } from '../../../Service/crud.service';
 import { Router } from '@angular/router';
 import { style } from '@angular/animations';
 import { WebSocketService } from '../../../Service/web-socket-service.service';
 import { Notifications } from '../../../Model/Notification.model';
 import { boolean } from 'mathjs';
+import { MesureCC } from '../../../Model/MesureCC.model';
+import { ConformiteStyleComponent } from '../../../pages/Controle/conformite-style/conformite-style.component';
+import { LocalDataSource } from 'ng2-smart-table';
+import { MesureOKD } from '../../../Model/MesureOKD.model';
+import { Critere } from '../../../Model/Critere.model';
 
 @Component({  
   selector: 'ngx-header',
@@ -53,15 +58,22 @@ export class HeaderComponent implements OnInit, OnDestroy {
   
   ];
   
-  
+ 
   currentuser:any
   currentuserUnite:any
   listenotif:Notifications[]=[]
   unseenNotifications:Notifications[]=[]
   seenNotifications:Notifications[]=[]
   nbnotif:number
+  mesureC=new MesureCC()
   showNotificationList:boolean=false
+  sourceMesureCC :LocalDataSource = new LocalDataSource();
   
+
+  mesure= new MesureOKD()
+  mesureDetails: { critere: string; valeur: string }[] = [];
+  critere= new Critere()
+  connect:any 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
               private themeService: NbThemeService,
@@ -70,7 +82,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private service: CrudService,
               private route:Router,
               private toastrService: NbToastrService,
-              private webSocketService: WebSocketService  
+              private webSocketService: WebSocketService  ,
+              private dialogservice: NbDialogService,
             ) {
          
 
@@ -80,14 +93,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     
     this.currentTheme = this.themeService.currentTheme;
-
+    
+    this.connect=localStorage.getItem('mytoken')
     this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
       this.currentuser=utilisateur
-      this.currentuserUnite=this.currentuser.unite.nom
-
-      console.log("Info header  :",this.currentuser ) 
-      console.log("Info currentuserUnite  :",this.currentuserUnite )   
-          
+      this.currentuserUnite=this.currentuser.unite.nom  
       //Affichage des notification  
       let stompClient = this.webSocketService.connect();
 
@@ -95,7 +105,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
         stompClient.subscribe('/topic/notification/' + this.currentuser.matricule, notifications => {
           let notify = JSON.parse(notifications.body);
-          console.log("la notif reçue est :",notify)
+         
           this.toastrService.warning("vous avez une non conformité ", 'Warning');
           this.LoadNotification()
         });
@@ -116,7 +126,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
             }
           }
           this.nbnotif= this.unseenNotifications.length
-            console.log("nbnotif :==>",this.nbnotif)
     
          
         }
@@ -180,12 +189,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.menuService.navigateHome();
     return false;
   }
+
   logOut(){
     localStorage.clear()
     this.route.navigate(["/login"])
-
   }
-  
+
+  navigatetoLogin(){
+      this.route.navigate(["/login"])
+  }
+
 navigateToProfile() {
   this.route.navigate(["/pages/test/"+this.currentuser.id]);
 }
@@ -193,15 +206,18 @@ navigateToNotify() {
   this.route.navigate(["/pages/notify/"]);
 }
 
-showNotifications(){
-  if( this.showNotificationList==true)
-    {
-      this.showNotificationList=false
-    }
-    else{
-      this.showNotificationList=true
-    }
-  
+// showNotifications(){
+//       this.showNotificationList=true
+// }
+
+toggleNotifications(event: MouseEvent) {
+  this.showNotificationList = !this.showNotificationList;
+  event.stopPropagation(); // Prevent triggering the document click
+}
+
+@HostListener('document:click', ['$event'])
+onDocumentClick(event: MouseEvent) {
+  this.showNotificationList = false;
 }
 
 LoadNotification(){
@@ -220,10 +236,9 @@ LoadNotification(){
             this.unseenNotifications.push(notif);
           }
         }
-        console.log("this.unseenNotifications",this.unseenNotifications)
+       
         this.nbnotif= this.unseenNotifications.length
-          console.log("nbnotif :==>",this.nbnotif)
-  
+         
        
       }
     )
@@ -237,7 +252,7 @@ markAsSeen(notification: Notifications) {
 
     this.service.updateNotify(notification.id, notification).subscribe(
       updatedNotif => {
-        console.log('Notification updated successfully:', updatedNotif);
+      
       //  this.updateNotificationLists(updatedNotif);
        // this.LoadNotification()
         this.service.getNotificationByMatricule(this.currentuser.matricule).subscribe(
@@ -253,9 +268,9 @@ markAsSeen(notification: Notifications) {
                 this.unseenNotifications.push(notif);
               }
             }
-            console.log("this.unseenNotifications",this.unseenNotifications)
+           
             this.nbnotif= this.unseenNotifications.length
-              console.log("nbnotif :==>",this.nbnotif)
+            
       
            
           }
@@ -280,4 +295,56 @@ updateNotificationLists(notification: Notifications) {
   // Actualiser le nombre de notifications non vues
   this.nbnotif = this.unseenNotifications.length;
 }
+
+
+OpenDetailCC(dialog: TemplateRef<any>,IdMesure:number) {
+
+    this.service.getMesureCCById(IdMesure).subscribe(mesure=>{
+    this.mesureC=mesure
+    this.dialogservice.open(dialog);
+  })
+}
+OpenDetailOKD(dialog: TemplateRef<any>,IdMesure:number) {
+  this.service.getMesureOKDDetailById(IdMesure).subscribe(mesure=>{
+    this.mesure=mesure
+    this.extractMesureDetails()
+    this.dialogservice.open(dialog);
+  })
+}
+
+extractMesureDetails() {
+  if (this.mesure && this.mesure.val) {
+    const critereObservables = [];
+    for (const [critereId, valeur] of Object.entries(this.mesure.val)) {
+      const critereObservable = this.findCritereName(parseInt(critereId)).pipe(
+        map(nomCritere => {
+          return { critere: nomCritere, valeur: valeur };
+        })
+      );
+      critereObservables.push(critereObservable);
+    }
+    forkJoin(critereObservables).subscribe((result: any) => {
+      this.mesureDetails = result;
+    });
+  }
+}
+
+findCritereName(critereId: number) {
+  return this.service.getCritere().pipe(
+    map(criteres => {
+      const critere = criteres.find(critere => critere.id === critereId);
+      if (critere) {
+        if (critere.type === 'valeur') {
+          return `${critere.nom} : entre[${critere.min} , ${critere.max}]`;
+        } else {
+          return `${critere.nom} (Ok/Nok) `;
+        }
+      } else {
+        return undefined;
+      }
+    })
+  );
+}
+
+
 }

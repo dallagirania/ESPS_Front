@@ -1,7 +1,7 @@
 <div class="contenaire">
     <div class="wrapper">
       <div class="title">
-          <img src="../../../assets/images/logo.png" width="45%">
+          <img src="../../../assets/images/logo2.svg" width="45%" style="margin:10px">
           <div >Se Connecter</div>
        </div>
           <form method="post" [formGroup]="loginFormateurForm" (ngsubmit)=" loginFormateur()">
@@ -29,9 +29,10 @@
                <input type="submit" value="Se Connecter" (click)=" loginFormateur()"
                   [disabled]="!loginFormateurForm.valid" class="button border fw margin-top-10" name="Se Connecter ">
             </div>
-
+          
          </form> 
-       
+        
+         <a  class="see-more-link" (click)='navigateToHome()'>Se Connecter en tant que Visiteur </a>
       </div>
       </div>
 

@@ -1,5 +1,5 @@
 <div class="row d-flex justify-content-between px-5 py-4">
-  <h5 >Nos Procédés Spéciaux </h5>
+  <p style="color: #004AAD;font-size: 20px;font-weight: bold;"> Nos Procédés Spéciaux</p>
 
   <div class=" search-bar d-flex">
     <input type="text" class="search" style="font-size: 16px;" placeholder="Chercher ..." name="nom" [(ngModel)]="nom"
@@ -21,33 +21,8 @@
 <div class="dashboard-container">
   <div class="feed-content container">
     <div class="row" style="display: flex;align-items: center;justify-content: space-between;">
-      <!--  | paginate:{itemsPerPage:8,currentPage:page,totalItems:nbVet} -->
       <div class="col-md-3 d-flex justify-content-center" *ngFor="let procede of liste |filter:nom| paginate:{itemsPerPage:8,currentPage:page,totalItems:nbprocede}">
-        <!-- <a [routerLink]="['/pages/Detail',procede.id]">
-          <div class="single-team-card">
-            <div class="member-img">
-
-            </div>
-            <div class="member-content" style="text-align: center;">
-              <h6>{{ procede.nom }}</h6>
-              <h6>{{ procede.ref }}</h6>
-              <span style=" background: linear-gradient(90deg, #F86CA7 0%, #FF7F18 100%); -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;">{{ procede.date_init }}</span><br />
-              <span style=" background: linear-gradient(90deg, #F86CA7 0%, #FF7F18 100%); -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;">{{ procede.date_fin }}</span><br />
-              <div class="progress rounded" style="height: 10px;margin-top: 5px;">
-
-                <div class="progress-bar" role="progressbar" [style.width]=" getProgressBarWidth(procede.date_fin)"
-                  [style.backgroundColor]="getProgressBarColor(procede.date_fin)"
-                  [attr.aria-valuenow]="getProgressBarWidth(procede.date_fin)" aria-valuemin="0" aria-valuemax="100">
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </a> -->
-
-
+       
         <div class="card" style="width:calc((100vw - 454px) / 3); margin-bottom: 40px;">
           <div class="image-card">
             <div class="bg">

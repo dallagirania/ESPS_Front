@@ -6,6 +6,7 @@ export class Notifications{
         public subject?:String ,
         public message?:String,
         public CreatedAt?:Date, 
+        public idMesure?:number,
         public unseenRecipients:Utilisateur[]=[] ,
         public seenRecipients:Utilisateur[]=[] 
     

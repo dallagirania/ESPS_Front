@@ -11,10 +11,8 @@ import { AddModule } from './Add/Add.module';
 import { VerifModule } from './Controle/Controle.module';
 import { DetailModule } from './ProcedeDetail/Details.module';
 import { NotifyModule } from './ListeNotifications/Notify.module';
-
-
-
-
+import { HomeComponent } from './Visiteur/home/home.component';
+import { HomeModule } from './Visiteur/Home.module';
 
 @NgModule({
   imports: [
@@ -28,7 +26,8 @@ import { NotifyModule } from './ListeNotifications/Notify.module';
     AddModule,
     VerifModule,
     DetailModule,
-    NotifyModule
+    NotifyModule,
+    HomeModule
 
   ],
   declarations: [

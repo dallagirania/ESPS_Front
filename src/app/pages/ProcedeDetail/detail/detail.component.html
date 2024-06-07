@@ -1,195 +1,220 @@
-  <div class="card mb-3 " >
-    <div class="row g-0">
-      <div class="col-md-5">
-        <div [ngClass]="{
+<div class="card m-2  p-4" >
+  <div class="row g-0">
+    <div class="col-5">
+      <div [ngClass]="{
           'image-card': true,
           'shadow-red': isRedState(currentProcede.date_fin),
           'shadow-green': isGreenState(currentProcede.date_fin),
           'shadow-yellow': isYellowState(currentProcede.date_fin)
         }">
-          <div class="bg"  *ngIf="(currentProcede.files && currentProcede.files.length === 0)">
+        <div class="bg" *ngIf="(currentProcede.files && currentProcede.files.length === 0)">
+          <h5 class="card-title">{{currentProcede.nom }}</h5>
+          <img src="assets/images/proc.jpeg" class="card-img-top" alt="...">
+          <div class="blur"></div>
+        </div>
+        <div class="bg" *ngIf="currentProcede && currentProcede.files && currentProcede.files.length > 0">
+          <img src="{{imageUrl}}" class="card-img-top" *ngIf="hasImageToDisplay()">
+          <div *ngIf="!hasImageToDisplay()">
             <h5 class="card-title">{{currentProcede.nom }}</h5>
             <img src="assets/images/proc.jpeg" class="card-img-top" alt="...">
             <div class="blur"></div>
           </div>
-          <div class="bg" *ngIf="currentProcede && currentProcede.files && currentProcede.files.length > 0">
-            <img src="{{imageUrl}}" class="card-img-top" *ngIf="hasImageToDisplay()"> 
-            <div  *ngIf="!hasImageToDisplay()">
-              <h5 class="card-title">{{currentProcede.nom }}</h5>
-              <img src="assets/images/proc.jpeg" class="card-img-top" alt="...">
-              <div class="blur"></div>
-            </div>
-          </div>
-       
-      </div>
-        
-      </div>
-      <div class="col-md-7">
-        <div class="card-body">
-          <div class="card-header" style="font-size: 20px;font-weight: bold; color: blue;">
-             Généralité
-          </div>
-
-          <div class="card-element" >
-              <div class="text-ref">
-                <label><strong>Nom :</strong></label> 
-                <p class="card-text">{{currentProcede.nom}} </p>
-              </div>  
-               <div class="text-ref">
-                    <label><strong>REF :</strong></label> 
-                    <p class="card-text">{{currentProcede.ref}} </p>
-                </div> 
-          </div>
-
-          <div class="card-element" >
-            <div class="text-ref">
-              <label><strong>Date Qualification  :</strong></label> 
-              <p class="card-text">{{currentProcede.date_init}} </p>
-            </div>  
-             <div class="text-ref">
-                  <label><strong>Date Fin Qualification :</strong></label> 
-                  <p class="card-text">{{currentProcede.date_fin}} </p>
-              </div> 
         </div>
 
-        <div class="card-element" >
-          <div class="text-ref">
-            <label><strong>Atelier :</strong></label> 
-            <p class="card-text"> test  </p>
-          </div>  
-           <div class="text-ref">
-                <label><strong>Statut :</strong></label> 
-                <p class="card-status" style=" background-color: rgba(0, 255, 21, 0.701);"  *ngIf="etatQualif=='Qualifié'">{{etatQualif}}</p>
-                <p class="card-status" style=" background-color: rgba(255, 55, 0, 0.701);"  *ngIf="etatQualif=='Non Qualifié'">{{etatQualif}}</p>
-                <p class="card-status" style=" background-color: rgba(255, 221, 0, 0.701);"  *ngIf="etatQualif=='A Requalifié'">{{etatQualif}}</p>
-                
-            </div> 
+      </div>
+
+    </div>
+    <div class="col-7">
+      <div class="card-body">
+        <div class="card-header" style="font-size: 20px;font-weight: bold; color: blue;">
+          Généralité
         </div>
 
-      <div class="card-element" >
-        <div class="text-ref">
-          <label><strong>Designation  :</strong></label> 
-          <p class="card-text"> {{currentProcede.designation}}  </p>
-        </div>  
-        
-     </div>
-        
-          <ng-container>
-            <button nbButton status="danger" outline (click)="download(currentProcede.id)" style="margin-left: auto;margin-left: auto;float: right; margin: 5px;"><i class="fa-solid fa-download" style="margin-right: 5px;"></i>Telecharger Documents</button>
-            <!-- <div *ngIf="file.nom.endsWith('.pdf') || file.nom.endsWith('.doc')" style="display: inline-block;">
-                <img src="../../assets/images/pdf.png" (click)="download(currentProcede.id)" style="width: 30px; margin-left: 10px;">
-            </div> -->
+        <div class="row">
+          <div class="text-ref col-6">
+            <label><strong>Nom :</strong></label>
+            <p class="card-text">{{currentProcede.nom}} </p>
+          </div>
+          <div class="text-ref col-6">
+            <label><strong>REF :</strong></label>
+            <p class="card-text">{{currentProcede.ref}} </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="text-ref col-6">
+            <label><strong>Date Qualification :</strong></label>
+            <p class="card-text">{{currentProcede.date_init}} </p>
+          </div>
+          <div class="text-ref col-6">
+            <label><strong>Date Fin Qualification :</strong></label>
+            <p class="card-text">{{currentProcede.date_fin}} </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="text-ref col-6">
+            <label><strong>Atelier :</strong></label>
+            <p class="card-text"> test </p>
+          </div>
+          <div class="text-ref col-6">
+            <label><strong>Statut :</strong></label>
+            <p class="card-status" style=" background-color: rgba(0, 255, 21, 0.701);" *ngIf="etatQualif=='Qualifié'">
+              {{etatQualif}}</p>
+            <p class="card-status" style=" background-color: rgba(255, 55, 0, 0.701);"
+              *ngIf="etatQualif=='Non Qualifié'">{{etatQualif}}</p>
+            <p class="card-status" style=" background-color: rgba(255, 221, 0, 0.701);"
+              *ngIf="etatQualif=='A Requalifié'">{{etatQualif}}</p>
+
+          </div>
+        </div>
+
+        <div class="row" >
+          <label><strong>Designation:</strong></label>
+        </div>
+        <div class="row">
+            <textarea class="card-text"  nbInput fullWidth shape="round"readonly> {{currentProcede.designation}} </textarea>
+        </div>
+
+        <ng-container>
+          <button nbButton status="info" hero (click)="download(currentProcede.id)"
+              style="margin-left: auto;margin-left: auto;float: right; margin: 5px;"><i class="fa-solid fa-download"
+              style="margin-right: 5px;"></i>Telecharger Documents</button>
         </ng-container>
-         
-        </div>
+
       </div>
     </div>
   </div>
+</div>
 
-  <div class="ligne">
-   
-    <div class="card" style="margin:5px;width: 800px; padding: 5px;">
-      <div class="row g-0">
-        <div class="card-body">
-          <div class="card-header" style="font-size: 20px;font-weight: bold; color: blue;text-align: center;margin-bottom: 7px;">
-            Les Listes des cartes de Controle
-         </div>
-         <div  *ngFor="let carte of listeCarte">
-              <caption style="background-color: rgba(207, 240, 236, 0.727);padding: 10px;font-size: 10px;color:black">
-                <div class="caption">
-                  <p style="float: right;">{{carte.ref}}</p>  
-                  <p style="float: left;">{{carte.nom}}</p> 
-                </div>
-              </caption>
-              <ngx-courbe-cc [id]="carte.id"></ngx-courbe-cc>
-              <button nbButton status="success" outline style="margin-left: auto;margin-left: auto;float: right; margin: 5px;" (click)="Mesure(MesuresCC,carte.id)"><i class="fa-solid fa-circle-info" style="margin-right: 5px;"></i>Details</button>  
-        </div>
+<div class="card m-2 p-4">
+  <div class="row g-0">
+    <div class="card-body">
+      <div class="card-header"
+        style="font-size: 20px;font-weight: bold; color: blue;text-align: center;margin-bottom: 7px;">
+        Les Listes des cartes de Controle
       </div>
-     
+      <div class="d-flex flex-column" *ngFor="let carte of listeCarte">
+        <caption style="background-color: #b7f1f851;padding: 10px;font-size: 10px;color:black">
+          <div style="display: flex;justify-content:space-around;">
+            <p>{{carte.nom}}</p>
+            <p>{{carte.ref}}</p>
+            <button nbButton status="warning" outline
+              style="margin-left: auto;margin-left: auto;float: right; margin: 5px;"
+              (click)="Mesure(MesuresCC,carte.id)"><i class="fa-solid fa-circle-info"
+                style="margin-right: 5px;"></i>Details</button>
+          </div>
+        </caption>
+        <ngx-courbe-cc [id]="carte.id"></ngx-courbe-cc>
       </div>
     </div>
 
-    <div class="card"  style="margin:5px;width: 600px;">
-      <div class="row g-0">
-        <div class="card-body">
-          <div class="card-header" style="font-size: 20px;font-weight: bold; color: blue;text-align: center;margin-bottom: 7px;">
-            La Liste des Habilitation
-         </div>
-  
-       <nb-card *ngFor="let habilitation of listeHabilitation">
-         <caption style="background-color: rgba(207, 240, 236, 0.727);padding: 10px;color:black">
-          <div>
-            <p style="float: right;">{{habilitation.ref}}</p>  
-            <p style="float: left;">{{habilitation.titre}}</p> 
-          </div></caption>
-        
-            <ng2-smart-table style="zoom: 0.7;" [settings]="settingFormation" [source]="source"></ng2-smart-table>
-       </nb-card>
-    
-  
-        </div>
-     
-      </div>
-    </div>
   </div>
+</div>
+<div class="card m-2 p-4">
+  <div class="row g-0">
+    <div class="card-body" style="max-height: 600px;overflow-y: auto;">
+      <div class="card-header"
+        style="font-size: 20px;font-weight: bold; color: blue;text-align: center;margin-bottom: 7px;">
+        La Liste des Habilitation
+      </div>
 
-  <div class="card"  style="margin-bottom:5px;overflow-x: auto;" >
-    <div class="row g-0">
-      <div class="card-body" >
-        <div class="card-header" style="font-size: 20px;font-weight: bold; color: blue;text-align: center;margin-bottom: 7px;">
-          Les Liste des Check-List "OK DEMMARAGE"
-       </div>
-    <nb-card *ngFor="let okdAvecCrits of listeOKDAvecCriteres">
-        <caption style="background-color: rgba(207, 240, 236, 0.727);padding: 10px;color:black">
-            <div>
-              <p style="float: right;">{{okdAvecCrits.okd.ref}}</p>  
-              <p style="float: left;">{{okdAvecCrits.okd.nom}}</p> 
-            </div>
-          </caption>
+      <nb-card *ngFor="let habilitation of listeHabilitation">
+        <caption style="background-color: #b7f1f851;;padding: 10px;color:black">
+          <div style="display: flex;justify-content: space-around;">
+            <p>{{habilitation.titre}}</p>
+            <p>{{habilitation.ref}}</p>
+          </div>
+        </caption>
+
+        <ng2-smart-table [settings]="settingFormation" [source]="source"></ng2-smart-table>
+      </nb-card>
+
+
+    </div>
+
+  </div>
+</div>
+
+<div class="card m-2 p-4" style="overflow-x: auto;">
+  <div class="row g-0">
+    <div class="card-body">
+      <div class="card-header"
+        style="font-size: 20px;font-weight: bold; color: blue;text-align: center;margin-bottom: 7px;">
+        Les Liste des Check-List "OK DEMMARAGE"
+      </div>
+      <nb-card *ngFor="let okdAvecCrits of listeOKDAvecCriteres">
+        <caption style="background-color: #b7f1f851;;padding: 10px;color:black">
+          <div style="display: flex;justify-content: space-around;">
+            <p>{{okdAvecCrits.okd.nom}}</p>
+            <p>{{okdAvecCrits.okd.ref}}</p>
+            <button nbButton status="danger" outline (click)="exportOKDToExcel(okdAvecCrits.okd.id)"><i
+                class="fas fa-file-export" style="margin-right: 5px;"></i>Exporter</button>
+            <button nbButton status="warning" outline (click)="MesureOKD(MesuresOKD)"><i class="fa-solid fa-circle-info"
+                style="margin-right: 5px;"></i>Détails</button>
+
+          </div>
+        </caption>
 
         <ngx-mesure-okd [id]="okdAvecCrits.okd.id"></ngx-mesure-okd>
-   
-     <!-- <table class="table table-hover" style="text-align: center;justify-content: center; ">
-       <thead style="background-color: #c7e2ff;">
-         <tr>
-           <th scope="col">Nom</th>
-           <th scope="col">Type</th>
-         </tr>
-       </thead>
-       <tbody>
-         <tr class="table-light" *ngFor="let critere of okdAvecCrits.crits">
-           <th scope="row">{{critere.nom}}</th>
-           <ng-container *ngIf="critere.type === 'valeur'">
-             {{ critere.type }} entre [ {{ critere.min }} , {{ critere.max }} ]
-           </ng-container>
-           <ng-container *ngIf="critere.type === 'ok/nok'">
-             {{ critere.type }}
-           </ng-container>
-         </tr>
-       </tbody>
-     </table> -->
-   </nb-card>
-    
- 
 
-      </div>
-   
+        <ng-template #MesuresOKD let-data let-ref="dialogRef">
+
+          <nb-card class="col-12 " style="width: 800px;overflow-x: auto;">
+            <nb-card-header
+              style="font-weight: bold; color: blue; border-bottom: 1px solid #362ec4 !important;flex-direction: row; display: flex">
+              Les Critères du Check-liste {{okdAvecCrits.okd.nom}}
+            </nb-card-header>
+            <nb-card-body>
+              <table class="table" style="text-align: center;justify-content: center; ">
+                <thead style="background-color: #c7e2ff;">
+                  <tr>
+                    <th scope="col">Nom Critère</th>
+                    <th scope="col">Type Critère</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-light" *ngFor="let critere of okdAvecCrits.crits">
+                    <th scope="row">{{critere.nom}}</th>
+                    <ng-container *ngIf="critere.type === 'valeur'">
+                      {{ critere.type }} entre [ {{ critere.min }} , {{ critere.max }} ]
+                    </ng-container>
+                    <ng-container *ngIf="critere.type === 'ok/nok'">
+                      {{ critere.type }}
+                    </ng-container>
+                  </tr>
+                </tbody>
+              </table>
+            </nb-card-body>
+
+          </nb-card>
+
+        </ng-template>
+
+      </nb-card>
+
+
+
     </div>
+
   </div>
+</div>
 
-  <ng-template #MesuresCC let-data let-ref="dialogRef" >
+<ng-template #MesuresCC let-data let-ref="dialogRef">
 
-    <nb-card class="col-12 " style="width: 800px;overflow-x: auto;">
-     <nb-card-header style="font-weight: bold; color: blue; border-bottom: 1px solid #362ec4 !important;">
-       Les Mesures du {{carte.nom}}
-     </nb-card-header>
-     <nb-card-body>
-         <ngx-mesure-cc [id]="carte.id"></ngx-mesure-cc>
-     </nb-card-body> 
+  <nb-card class="col-12 " style="width: 800px;overflow-x: auto;">
+    <nb-card-header
+      style="font-weight: bold; color: blue; border-bottom: 1px solid #362ec4 !important;flex-direction: row; display: flex">
+      Les Mesures du {{carte.nom}}
+      <button nbButton status="danger" outline (click)="exportCCToExcel(carte.id)" style="margin-left: auto;"><i
+          class="fas fa-file-export" style="margin-right: 5px;"></i>Exporter</button>
 
-    </nb-card>
+    </nb-card-header>
+    <nb-card-body>
+      <ngx-mesure-cc [id]="carte.id"></ngx-mesure-cc>
+    </nb-card-body>
 
-  </ng-template>
+  </nb-card>
+
+</ng-template>
 <br>
-
-  

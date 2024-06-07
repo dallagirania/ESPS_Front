@@ -1,40 +1,43 @@
- <ngx-show-data [id]="carte.id"></ngx-show-data>
+<ngx-show-data ></ngx-show-data>
 
-<div class="row">
-  <div class="col-xxl-5">
-    <div class="row">
-      <div class="col-md-6">
-        <ngx-profit-card></ngx-profit-card>
-      </div>
-      <div class="col-md-6">
-        <ngx-earning-card></ngx-earning-card>
-      </div>
+<div>
+  <!-- <div class="row">
+    <div class="col-6 d-flex" >
+      <i class="fa-solid fa-location-dot" style="margin-right: 3px;font-size: 25px;"></i>
+      <select class="select-Label"  placeholder="Sélectionnez un Site" id="site" [(ngModel)]="selectedSite"  (ngModelChange)="loadUnite()" #site="ngModel" name="site">
+        <option [ngValue]="null">Sélectionnez un Site</option>
+        <option *ngFor="let site of listeSite" [ngValue]="site.id">{{ site.nom }}</option>
+      </select>
     </div>
+  
+    <div class="col-6  d-flex">
+     <i class="fa-solid fa-gears" style="margin-right: 3px;font-size: 25px;"></i>
+      <select class="select-Label" id="unite" [(ngModel)]="selectedUnite" (ngModelChange)="loadProcedes()" #unite="ngModel" name="unite">
+        <option [ngValue]="null">Sélectionnez Une Unité Opérationnel</option>
+        <option *ngFor="let unite of listeUnit" [ngValue]="unite.id">{{ unite.ref }} ~ {{ unite.nom }}</option>
+      </select>
+    </div>
+  </div> -->
 
-    <ngx-traffic-reveal-card></ngx-traffic-reveal-card>
+
+  <!-- affichage data  -->
+  <div class="row">
+    <div class="col-12">
+      <ngx-performance-ps></ngx-performance-ps>
+    </div>
+    <div class="col-12">
+      <ngx-performance-nc></ngx-performance-nc>
+    </div>
+  
   </div>
-
-  <div class="col-xxl-7">
-    <ngx-ecommerce-charts></ngx-ecommerce-charts>
+  
+  
+  
+  
+  <div class="row">
+    <div class="col-12">
+      <ngx-performance-op></ngx-performance-op>
+    </div>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-xxl-9">
-    <ngx-country-orders></ngx-country-orders>
-  </div>
-
-  <div class="col-xxl-3">
-    <ngx-progress-section></ngx-progress-section>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-xxl-9">
-    <ngx-ecommerce-visitors-analytics></ngx-ecommerce-visitors-analytics>
-  </div>
-
-  <div class="col-xxl-3">
-    <ngx-user-activity></ngx-user-activity>
-  </div>
-</div>

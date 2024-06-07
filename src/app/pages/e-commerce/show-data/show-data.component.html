@@ -12,16 +12,7 @@
   <nb-card-body>
     <div class="row" style="text-align: center;justify-content: center;">
       <div class="col-md-4" *ngFor="let pro of listeProcedefinal">
-        <!-- <nb-card style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-          <nb-card-header class="d-flex align-items-center"
-            style="font-family: 'Times New Roman', Times, serif;color: #0f2a9e;">
-            <img src="{{imageUrl}}" alt="Image" style="height: 150px; width: 300px;" *ngIf="hasImageToDisplay(pro.id)"> 
-            <img src="assets/images/parametrage.jpg" alt="Image"
-              style="height: 80px; width: 80px; border-radius: 50%;object-fit: cover; margin-right:10px;"
-              (click)="detail(dialogDetail,pro.id)">
-            {{pro.nom}}
-          </nb-card-header>
-        </nb-card> -->
+        
         <div class="card" style="width:calc((100vw - 454px) / 3); margin-bottom: 40px;">
           <div class="image-card">
             <div class="bg">
@@ -41,7 +32,7 @@
           <div class="card-body text-center" >
             <h5 class="card-title">{{pro.nom}}</h5> 
             </div>
-            <a    (click)="detail(dialogDetail,pro.id)" class="btn btn-primary w-100 mt-3" style="color: white;">Remplir Mesure</a>
+            <button (click)="detail(dialogDetail, pro.id)" class="btn btn-primary w-100 mt-3" style="color: white;" [disabled]="!getEtat(pro.date_fin)"> Remplir Mesure</button>
           </div>
         </div>
       </div>

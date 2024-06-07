@@ -20,6 +20,7 @@ import { ShowDataComponent } from './e-commerce/show-data/show-data.component';
 import { ListeProcedeComponent } from './ProcedeDetail/liste-procede/liste-procede.component';
 import { DetailComponent } from './ProcedeDetail/detail/detail.component';
 import { ListeNotifComponent } from './ListeNotifications/liste-notif/liste-notif.component';
+import { HomeComponent } from './Visiteur/home/home.component';
 
 const routes: Routes = [{
   path: '',
@@ -93,6 +94,10 @@ const routes: Routes = [{
     {
       path: 'notify',
       component: ListeNotifComponent,
+    },
+    {
+      path: 'home',
+      component: HomeComponent,
     },
 /*     {
       path: 'show',

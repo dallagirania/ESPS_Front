@@ -11,6 +11,9 @@ import {
   NbAccordionModule,
   NbInputModule,
   NbSpinnerModule,
+  NbCalendarModule,
+  NbCalendarKitModule,
+  NbCalendarRangeModule,
 } from '@nebular/theme';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -62,6 +65,10 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ShowDataComponent } from './show-data/show-data.component';
+import { PerformancePSComponent } from './performance-ps/performance-ps.component';
+import { CalendrierComponent } from './calendrier/calendrier.component';
+import { PerformanceOpComponent } from './performance-op/performance-op.component';
+import { PerformanceNCComponent } from './performance-nc/performance-nc.component';
 
 @NgModule({
   imports: [
@@ -83,7 +90,10 @@ import { ShowDataComponent } from './show-data/show-data.component';
     NbAccordionModule,
     Ng2SmartTableModule,
     NbInputModule,
-    NbSpinnerModule
+    NbSpinnerModule,
+    NbCalendarModule,
+    NbCalendarKitModule,
+    NbCalendarRangeModule,
   
   ],
   declarations: [
@@ -120,6 +130,10 @@ import { ShowDataComponent } from './show-data/show-data.component';
     EarningPieChartComponent,
     EarningLiveUpdateChartComponent,
     ShowDataComponent,
+    PerformancePSComponent,
+    CalendrierComponent,
+    PerformanceOpComponent,
+    PerformanceNCComponent,
   ],
   providers: [
     CountryOrdersMapService,

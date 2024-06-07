@@ -1,0 +1,27 @@
+ <div class="card1">
+  <div class="title" style="justify-content: center;text-align: center;">
+    <h2>Performance Opérationnelle  </h2>
+  </div>
+  <div class="dashboard-row">
+    <div class="calendar-container">
+      <nb-calendar [(date)]="nextMonth" [boundingMonth]="true" showWeekNumber></nb-calendar>
+      <span class="subtitle">
+        Selected date: {{ nextMonth | date }}
+      </span>
+    </div>
+
+    <div class="calendar-container">
+      <nb-calendar [(date)]="secondNextMonth" [boundingMonth]="true" showWeekNumber></nb-calendar>
+      <span class="subtitle">
+        Selected date: {{ secondNextMonth | date}}
+      </span>
+    </div>
+
+    <div class="calendar-container">
+      <nb-calendar [(date)]="ThirdNextMonth" [boundingMonth]="true" showWeekNumber></nb-calendar>
+      <span class="subtitle">
+        Selected date: {{ ThirdNextMonth | date}}
+      </span>
+    </div>
+  </div>
+</div>

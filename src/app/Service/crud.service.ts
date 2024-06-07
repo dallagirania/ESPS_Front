@@ -20,6 +20,7 @@ import { JwtHelperService } from "@auth0/angular-jwt";
 import { MesureCC } from '../Model/MesureCC.model';
 import { MesureOKD } from '../Model/MesureOKD.model';
 import { Notifications } from '../Model/Notification.model';
+import { ProcedeFormationCount } from '../Model/ProcedeFormationCount.model';
 
 const httpOption={
   headers:new HttpHeaders({'Content-Type':'application/Json'})
@@ -80,6 +81,9 @@ export class CrudService {
 
     getUnite():Observable<Unite[]>{
       return this.http.get<Unite[]>(this.apiUrl+"/unite");
+    }
+    getUniteBySite(id:number):Observable<Unite[]>{
+      return this.http.get<Unite[]>(`${this.apiUrl}/unite/site/${id}`);
     }
     public getUniteById(id : number):Observable<any>{
       return this.http.get<any>(`${this.apiUrl}/unite/${id}`);
@@ -403,6 +407,10 @@ export class CrudService {
             return this.http.get<Procede[]>(this.apiUrl+"/procede/denier_date");
           }
 
+          getProcedeDernierByUnite(IdUnite: number):Observable<Procede[]>{
+            return this.http.get<Procede[]>(`${this.apiUrl}/procede/denier/${IdUnite}`);
+          }
+
            /******************    MesureCC    ******************/
        
            addMesureCC(mesureCC:MesureCC){
@@ -493,7 +501,7 @@ export class CrudService {
 
 
           /*********************************** Gestion des Notifications ********************************************* */
-
+        
           getNotification():Observable<Notifications[]>{
             return this.http.get<Notifications[]>(this.apiUrl+"/notification");
           }
@@ -506,4 +514,78 @@ export class CrudService {
             const url = `${this.apiUrl}/notification/${id}`;
             return this.http.put<Notifications>(url, notify, httpOption);
           }
-}
+          /********************************************* Courbe Etendu ***************************************************************/
+
+          getValEtendu(id: number):Observable<any[]>{
+            return this.http.get<any[]>(`${this.apiUrl}/mesureCC/differencesVal/${id}`);
+          }
+          getResEtendu(id: number):Observable<any[]>{
+            return this.http.get<any[]>(`${this.apiUrl}/mesureCC/differencesRes/${id}`);
+          }
+
+
+          /********************************************* Dashboard  Performance PS ************************************************************ */
+          countQualifiedProcedes(procedes: Procede[]): Observable<number> {
+            return this.http.post<number>(`${this.apiUrl}/procede/countQualified`, procedes);
+          }
+        
+          countNonQualifiedProcedes(procedes: Procede[]): Observable<number> {
+            return this.http.post<number>(`${this.apiUrl}/procede/countNonQualified`, procedes);
+          }
+        
+          countRequalificationNeededProcedes(procedes: Procede[]): Observable<number> {
+            return this.http.post<number>(`${this.apiUrl}/procede/countRequalificationNeeded`, procedes);
+          }
+
+          countQualificationProcedesMensuel(procedes: Procede[]): Observable<number[]> {
+            return this.http.post<number[]>(`${this.apiUrl}/procede/countqualificationNeededMensuelle`, procedes);
+          }
+
+          countHabilitationProcedesTotal(procedes: Procede[]): Observable<number> {
+            return this.http.post<number>(`${this.apiUrl}/habilitation/totalFormations`, procedes);
+          }
+
+          countHabilitationProcedesValide(procedes: Procede[]): Observable<number> {
+            return this.http.post<number>(`${this.apiUrl}/habilitation/ValideFormations`, procedes);
+          }
+          countHabilitationProcedesReValide(procedes: Procede[]): Observable<number> {
+            return this.http.post<number>(`${this.apiUrl}/habilitation/ReValideFormations`, procedes);
+          }
+
+          countHabilitationProcedesNonValide(procedes: Procede[]): Observable<number> {
+            return this.http.post<number>(`${this.apiUrl}/habilitation/NonValideFormations`, procedes);
+          }
+
+
+          getValideFormationCountForQualifiedProcedes(procedes: Procede[]): Observable<ProcedeFormationCount[]> {
+            return this.http.post<ProcedeFormationCount[]>(`${this.apiUrl}/habilitation/ValideformationCount`, procedes);
+          }
+          getReValideFormationCountForQualifiedProcedes(procedes: Procede[]): Observable<ProcedeFormationCount[]> {
+            return this.http.post<ProcedeFormationCount[]>(`${this.apiUrl}/habilitation/ReValideformationCount`, procedes);
+          }
+          getNonValideFormationCountForQualifiedProcedes(procedes: Procede[]): Observable<ProcedeFormationCount[]> {
+            return this.http.post<ProcedeFormationCount[]>(`${this.apiUrl}/habilitation/NonValideformationCount`, procedes);
+          }
+
+
+
+          countMesureOKDByUniteId(uniteId: number): Observable<number> {
+            return this.http.get<number>(`${this.apiUrl}/mesureOKD/countOKDByUnite/${uniteId}`);
+          }
+          countMesureCCByUniteId(uniteId: number): Observable<number> {
+            return this.http.get<number>(`${this.apiUrl}/mesureCC/countCCByUnite/${uniteId}`);
+          }
+         
+
+          countMesureTotalByProcedeAndMonth(procedes: Procede[]): Observable<any> {
+            return this.http.post<any[]>(`${this.apiUrl}/mesureCC/totalCountByMonthForProcedes`, procedes);
+          }
+
+          countMesureTotalByProcede(procedes: Procede[]): Observable<any> {
+            return this.http.post<any[]>(`${this.apiUrl}/mesureCC/total`, procedes);
+          }
+
+          LeadTime(uniteId: number): Observable<string> {
+            return this.http.get(`${this.apiUrl}/mesureCC/average-duration/unite/${uniteId}`, { responseType: 'text' });
+          }
+        }

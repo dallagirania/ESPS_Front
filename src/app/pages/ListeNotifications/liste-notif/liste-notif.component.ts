@@ -1,10 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Notifications } from '../../../Model/Notification.model';
-import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService, NbToastrService } from '@nebular/theme';
+import { NbDialogService, NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService, NbToastrService } from '@nebular/theme';
 import { LayoutService } from '../../../@core/utils';
 import { CrudService } from '../../../Service/crud.service';
 import { Router } from '@angular/router';
 import { WebSocketService } from '../../../Service/web-socket-service.service';
+import { MesureOKD } from '../../../Model/MesureOKD.model';
+import { Critere } from '../../../Model/Critere.model';
+import { Subject, forkJoin } from 'rxjs';
+import { MesureCC } from '../../../Model/MesureCC.model';
+import { map, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'ngx-liste-notif',
@@ -18,8 +23,14 @@ export class ListeNotifComponent implements OnInit {
   unseenNotifications:Notifications[]=[]
   seenNotifications:Notifications[]=[]
   nbnotif:number
+  seennotif:number
+  page :number=1
   showNotificationList:boolean=false
-  
+  mesureC=new MesureCC() 
+  mesure= new MesureOKD()
+  mesureDetails: { critere: string; valeur: string }[] = [];
+  critere= new Critere()
+
   constructor(
     private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
@@ -29,7 +40,8 @@ export class ListeNotifComponent implements OnInit {
     private service: CrudService,
     private route:Router,
     private toastrService: NbToastrService,
-    private webSocketService: WebSocketService  
+    private webSocketService: WebSocketService,
+    private dialogservice: NbDialogService  
             ) {
          
 
@@ -71,6 +83,7 @@ export class ListeNotifComponent implements OnInit {
           }
           this.nbnotif= this.unseenNotifications.length
             console.log("nbnotif :==>",this.nbnotif)
+          this.seennotif= this.seenNotifications.length 
     
          
         }
@@ -96,7 +109,7 @@ export class ListeNotifComponent implements OnInit {
           console.log("this.unseenNotifications",this.unseenNotifications)
           this.nbnotif= this.unseenNotifications.length
             console.log("nbnotif :==>",this.nbnotif)
-    
+            this.seennotif= this.seenNotifications.length 
          
         }
       )
@@ -129,7 +142,7 @@ export class ListeNotifComponent implements OnInit {
               console.log("this.unseenNotifications",this.unseenNotifications)
               this.nbnotif= this.unseenNotifications.length
                 console.log("nbnotif :==>",this.nbnotif)
-        
+                this.seennotif= this.seenNotifications.length 
              
             }
           )
@@ -140,5 +153,55 @@ export class ListeNotifComponent implements OnInit {
       );
     }
   }
+
+  OpenDetailCC(dialog: TemplateRef<any>,IdMesure:number) {
+
+    this.service.getMesureCCById(IdMesure).subscribe(mesure=>{
+    this.mesureC=mesure
+    this.dialogservice.open(dialog);
+  })
+}
+OpenDetailOKD(dialog: TemplateRef<any>,IdMesure:number) {
+  this.service.getMesureOKDDetailById(IdMesure).subscribe(mesure=>{
+    this.mesure=mesure
+    console.log("notre mesure à pour details : ", mesure )
+    this.extractMesureDetails()
+    this.dialogservice.open(dialog);
+  })
+}
+
+extractMesureDetails() {
+  if (this.mesure && this.mesure.val) {
+    const critereObservables = [];
+    for (const [critereId, valeur] of Object.entries(this.mesure.val)) {
+      const critereObservable = this.findCritereName(parseInt(critereId)).pipe(
+        map(nomCritere => {
+          return { critere: nomCritere, valeur: valeur };
+        })
+      );
+      critereObservables.push(critereObservable);
+    }
+    forkJoin(critereObservables).subscribe((result: any) => {
+      this.mesureDetails = result;
+    });
+  }
+}
+
+findCritereName(critereId: number) {
+  return this.service.getCritere().pipe(
+    map(criteres => {
+      const critere = criteres.find(critere => critere.id === critereId);
+      if (critere) {
+        if (critere.type === 'valeur') {
+          return `${critere.nom} : entre[${critere.min} , ${critere.max}]`;
+        } else {
+          return `${critere.nom} (Ok/Nok) `;
+        }
+      } else {
+        return undefined;
+      }
+    })
+  );
+}
 
 }

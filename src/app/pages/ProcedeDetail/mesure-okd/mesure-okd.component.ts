@@ -28,21 +28,17 @@ export class MesureOKDComponent implements OnInit {
       add:false,
       edit: false,
       delete: false,
-    //  position: 'right',
-  
-  
-  
     },
    
     pager: {
       display: true,
-      perPage: 3, // Limiter le nombre de lignes par page à 5
+      perPage: 3, 
     },
    columns: {
     id: {
       title: 'Les Mesures',
       type: 'custom',
-      filter:false,
+     // filter:false,
       renderComponent: OperateurRenderComponent
     },
      date_add: {
@@ -117,13 +113,11 @@ export class MesureOKDComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log("id okd envoyer est : =>",this.id)
     this.LoadMesureByOKD(this.id)
   }
   LoadMesureByOKD(id:number){
     this.service.getMesureOKDByOKDId(id).subscribe(mesure=>{
     this.listemesureOKD=mesure.reverse();
-    console.log(this.listemesureOKD)
     this.sourceMesureOKD = new LocalDataSource(this.listemesureOKD) 
     })
     }

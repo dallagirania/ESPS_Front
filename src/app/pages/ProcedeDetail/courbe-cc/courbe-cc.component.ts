@@ -17,10 +17,13 @@ export class CourbeCCComponent implements OnInit {
   min:number
   max:number
   maximal:number
+  chartDataDiff:any
+  chartDataDiffRES:any
   chartDataRes:any
   chartData1:any
   data: any;
   options: any;
+  diffOptions: any;
   colors: any;
   chartjs: any;
 
@@ -36,16 +39,14 @@ export class CourbeCCComponent implements OnInit {
     private layoutService: LayoutService,) { }
 
   ngOnInit(): void {
-    console.log("id mesure Carte Controle : =>",this.id)
     this.service.getCCById(this.id).subscribe(carte => {
       this.carte1 = carte;
       if(this.carte1.fonction) {
-        //   console.log("possede fonction : ",this.carte.fonction)
            this.fetchDataResultat(this.carte1.id);
-         
+           this.getResEtendu(this.carte1.id)
        } else {
-         //  console.log("Ne possede pas de  fonction : ",this.carte.fonction)
            this.fetchData1(this.carte1.id);
+           this.EtenduVal(this.carte1.id)
        }
     
     })
@@ -440,5 +441,241 @@ export class CourbeCCComponent implements OnInit {
     });
   }
   
+  /************************************ Courbe Etendu ********************************************************************* */
+  
+
+
+EtenduVal(id: number): void {
+  this.service.getCCById(id).subscribe(carte => {
+    this.carte1 = carte;
+    this.min = parseFloat(this.carte1.min.toString());
+    this.max = parseFloat(this.carte1.max.toString());
+
+    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
+      this.colors = config.variables;
+      this.chartjs = config.variables.chartjs;
+
+      this.service.getValEtendu(id).subscribe(data => {
+        console.log("Les données du différence sont :=>", data);
+
+        // Directly use the data array as series1Data
+        const series1Data = data;
+        this.maximal = Math.max(...series1Data);
+        const yMinData = new Array(data.length).fill(this.min);
+        const yMaxData = new Array(data.length).fill(this.max);
+        const yFinData = new Array(data.length).fill(this.max + 20);
+        console.log("Series Data: ", series1Data); // Debugging line to check data
+
+        if (series1Data.length === 0) {
+          console.warn('No data found for series1Data');
+            // const yMinData = new Array(2).fill(this.min);
+            // const yMaxData = new Array(2).fill(this.max);
+            // this.chartDataDiff = {
+            //   labels: ['Label 1', 'Label 2'],
+            //   datasets: [
+            //     {
+            //       data: yMinData,
+            //       label: 'y=min',
+            //       backgroundColor: 'rgba(252, 181, 178 , 0.3)',
+            //       borderColor: 'rgba(176, 243, 120, 1)',
+            //     }, {
+            //       data: yMaxData,
+            //       label: 'y=max',
+            //       backgroundColor: 'rgba(135, 231, 53, 0.3)',
+            //       borderColor: 'rgba(176, 243, 120, 1)',
+            //     }],
+            // };
+          return;
+        }
+
+        this.chartDataDiff = {
+          labels: series1Data.map((_, index) => `mesure ${index + 1}`), // Labels for each data point
+          datasets: [{
+            data: series1Data,
+            label: 'Courbe de controle',
+            backgroundColor: 'rgba(115, 199, 7, 0.5)', 
+            borderColor: 'rgba(115, 199, 7, 0.5)',
+            borderWidth: 1,
+          },
+          //  {
+          //   data: yMinData,
+          //   label: 'y=min',
+          //   backgroundColor: 'rgba(252, 181, 178 , 0.3)',
+          //   borderColor: 'rgba(176, 243, 120, 1)',
+          // }, {
+          //   data: yMaxData,
+          //   label: 'y=max',
+          //   backgroundColor: 'rgba(135, 231, 53, 0.3)',
+          //   borderColor: 'rgba(176, 243, 120, 1)',
+          // }, {
+          //   data: yFinData,
+          //   label: 'Cadre',
+          //   backgroundColor: 'rgba(252, 181, 178, 0.3)',
+          // }
+        ],
+        };
+
+        this.diffOptions = {
+          type: 'line', // Explicitly specify the chart type
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            xAxes: [{
+              display: true, // Show the x axis labels
+              gridLines: {
+                display: false,
+              },
+            }],
+            yAxes: [{
+              gridLines: {
+                display: true,
+                color: this.chartjs.axisLineColor,
+              },
+              ticks: {
+                fontColor: this.chartjs.textColor,
+              },
+            }],
+          },
+          legend: {
+            display: true, // Show the legend
+          },
+          plugins: {
+            zoom: {
+              zoom: {
+                wheel: {
+                  enabled: true,
+                },
+                pinch: {
+                  enabled: true,
+                },
+                mode: 'xy',
+              },
+              pan: {
+                enabled: true,
+                mode: 'xy',
+              },
+            }
+          }
+        };
+      });
+    });
+  });
+}
+getResEtendu(id: number): void {
+  this.service.getCCById(id).subscribe(carte => {
+    this.carte1 = carte;
+    this.min = parseFloat(this.carte1.min.toString());
+    this.max = parseFloat(this.carte1.max.toString());
+
+    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
+      this.colors = config.variables;
+      this.chartjs = config.variables.chartjs;
+
+      this.service.getResEtendu(id).subscribe(data => {
+        console.log("Les données du différence sont :=>", data);
+
+        // Directly use the data array as series1Data
+        const series1Data = data;
+        this.maximal = Math.max(...series1Data);
+        const yMinData = new Array(data.length).fill(this.min);
+        const yMaxData = new Array(data.length).fill(this.max);
+        const yFinData = new Array(data.length).fill(this.max + 20);
+        console.log("Series Data: ", series1Data); // Debugging line to check data
+
+        if (series1Data.length === 0) {
+          console.warn('No data found for series1Data');
+            // const yMinData = new Array(2).fill(this.min);
+            // const yMaxData = new Array(2).fill(this.max);
+            // this.chartDataDiff = {
+            //   labels: ['Label 1', 'Label 2'],
+            //   datasets: [
+            //     {
+            //       data: yMinData,
+            //       label: 'y=min',
+            //       backgroundColor: 'rgba(252, 181, 178 , 0.3)',
+            //       borderColor: 'rgba(176, 243, 120, 1)',
+            //     }, {
+            //       data: yMaxData,
+            //       label: 'y=max',
+            //       backgroundColor: 'rgba(135, 231, 53, 0.3)',
+            //       borderColor: 'rgba(176, 243, 120, 1)',
+            //     }],
+            // };
+          return;
+        }
+
+        this.chartDataDiffRES = {
+          labels: series1Data.map((_, index) => `mesure ${index + 1}`), // Labels for each data point
+          datasets: [{
+            data: series1Data,
+            label: 'Courbe de controle',
+            backgroundColor: 'rgba(115, 199, 7, 0.5)', 
+            borderColor: 'rgba(115, 199, 7, 0.5)',
+            borderWidth: 1,
+          },
+          //  {
+          //   data: yMinData,
+          //   label: 'y=min',
+          //   backgroundColor: 'rgba(252, 181, 178 , 0.3)',
+          //   borderColor: 'rgba(176, 243, 120, 1)',
+          // }, {
+          //   data: yMaxData,
+          //   label: 'y=max',
+          //   backgroundColor: 'rgba(135, 231, 53, 0.3)',
+          //   borderColor: 'rgba(176, 243, 120, 1)',
+          // }, {
+          //   data: yFinData,
+          //   label: 'Cadre',
+          //   backgroundColor: 'rgba(252, 181, 178, 0.3)',
+          // }
+        ],
+        };
+
+        this.diffOptions = {
+          type: 'line', // Explicitly specify the chart type
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            xAxes: [{
+              display: true, // Show the x axis labels
+              gridLines: {
+                display: false,
+              },
+            }],
+            yAxes: [{
+              gridLines: {
+                display: true,
+                color: this.chartjs.axisLineColor,
+              },
+              ticks: {
+                fontColor: this.chartjs.textColor,
+              },
+            }],
+          },
+          legend: {
+            display: true, // Show the legend
+          },
+          plugins: {
+            zoom: {
+              zoom: {
+                wheel: {
+                  enabled: true,
+                },
+                pinch: {
+                  enabled: true,
+                },
+                mode: 'xy',
+              },
+              pan: {
+                enabled: true,
+                mode: 'xy',
+              },
+            }
+          }
+        };
+      });
+    });
+  });
+}
 
 }

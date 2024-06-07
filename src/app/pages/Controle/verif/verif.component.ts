@@ -50,22 +50,20 @@ export class VerifComponent implements OnInit {
       type: 'string',
     },
     etatactive: {
-      title: 'Conformité',
+      title: 'Conformité',     
       type: 'custom',
-      valuePrepareFunction: (cell, row) => row.etatactive, // Utilisez row.id au lieu de cell.id
+      valuePrepareFunction: (cell, row) => row.etatactive,
       renderComponent: ConformiteStyleComponent
-      // valuePrepareFunction: (cell, row) => {
-      //     console.log("Valeur de etatvalide :", row.etatactive);
-      //     if (row.etatactive === false) {
-      //         return "<p class='text-danger'style='background-color: #f8d7da; padding: 5px;'>Non Conforme</p>";
-      //     } else {
-      //         return "<p class='text-success'>Conforme</p>";
-      //     }
-      // },
   },
   
     etatvalide: {
       title: 'Validation',
+      filter:{
+        type: 'text',
+        config: {
+          placeholder: 'Validation(True/False)',
+        },
+      },
       type: 'html',
       valuePrepareFunction: (cell, row) => {
           console.log("Valeur de etatvalide :", row.etatvalide);
@@ -76,53 +74,25 @@ export class VerifComponent implements OnInit {
         }
       },
   },
-  carte: {
+  carteNom: {
     title: 'Carte Controlle',
-    valuePrepareFunction: (carte) => { return (carte?.nom); },
-        filterFunction: (carte, val) => {
-          if (carte != null) {
-            const activiteNomLowerCase = carte.nom.toLowerCase();
-            const valLowerCase = val.toLowerCase();
-            return activiteNomLowerCase.indexOf(valLowerCase) !== -1 || !val;
-          }
-          return false;
-        }
   },
     motif_saisie: {
       title: 'Motif Saisie',
       type: 'string',
     },
     operateurMatricule: {
-
       title: 'Matricule Opérateur',
       type: 'string',
     },
     min: {
       title: 'Valeur Min',
       type: 'string',
-      valuePrepareFunction: (cell, row) => {
-        console.log(row.carte.id)
-        const operat =this.getMinCarteById(row.carte.id);
-        console.log(operat)
-        return operat
-      },
+      
     },
     max: {
       title: 'Valeur Max',
       type: 'string',
-      valuePrepareFunction: (cell, row) => {
-        console.log(row.carte.id)
-        const operat =this.getMaxCarteById(row.carte.id);
-        return operat
-      },
-      filterFunction: (carte, val) => {
-        if (carte != null) {
-          const activiteNomLowerCase = carte.max.toLowerCase();
-          const valLowerCase = val.toLowerCase();
-          return activiteNomLowerCase.indexOf(valLowerCase) !== -1 || !val;
-        }
-        return false;
-      }
     },
    
     val: {
@@ -187,12 +157,14 @@ export class VerifComponent implements OnInit {
   },
 
   date_add: {
-
     title: 'Date Ajout',
     type: 'string',
 
   },
- 
+ okdNom:{
+      title: 'OK DEMARRAGE',
+      type: 'string',
+ },
   etatactive: {
     title: 'Conformité',
     type: 'custom',
@@ -283,33 +255,10 @@ userConnecte:any
     this.LoadMesureOKD()
       
   }
-  getOperateurById(id:number): string {
-    this.service.getUserById(id).subscribe(user=>{
-      this.utilisateur=user 
-     })
-     console.log(this.utilisateur?.username!.toString()+" "+this.utilisateur?.prenom!.toString())
-     return  this.utilisateur?.username!.toString()+" "+this.utilisateur?.prenom!.toString();
 
-}
-getMinCarteById(id:number): string {
-  this.service.getCCById(id).subscribe(carte=>{
-    this.carte=carte 
-   })
-   return  this.carte.min!.toString() 
-}
-getMaxCarteById(id:number): string {
-  this.service.getCCById(id).subscribe(carte=>{
-    this.carte=carte  
-   })
-   return  this.carte.max!.toString()  
-}
 
 /************************ Validation des Cartes de controle *********************************** */
 Valider(event: any): void {
-  // const carte1= event.data;
-  // this.carte1 = { ...carte1 };
-  // this.dialogRef1 = this.dialogservice.open(this.dialogValideCarte, { context: { carte1: this.carte1 } });
-
   this.mesurecc= event.data;
   console.log("mesureOKD à valider  avant confirmation : => ",this.mesurecc)
   Swal.fire({

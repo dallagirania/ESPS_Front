@@ -28,10 +28,8 @@ export class OperateurRenderComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-     console.log(this.value)
      this.service.getMesureOKDDetailById(parseInt(this.value)).subscribe(mesure=>{
        this.mesure=mesure
-       console.log("notre mesure à pour details : ", mesure )
        this.extractMesureDetails()
      })
    
@@ -63,7 +61,15 @@ findCritereName(critereId: number) {
   return this.service.getCritere().pipe(
     map(criteres => {
       const critere = criteres.find(critere => critere.id === critereId);
-      return critere ? critere.nom : undefined;
+      if (critere) {
+        if (critere.type === 'valeur') {
+          return `${critere.nom} : entre[${critere.min} , ${critere.max}]`;
+        } else {
+          return `${critere.nom} (Ok/Nok) `;
+        }
+      } else {
+        return undefined;
+      }
     })
   );
 }

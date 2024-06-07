@@ -1,48 +1,92 @@
 <nb-card class="row">
-    <nb-card-body style="max-height: 500px">
+    <nb-card-body >
       <nb-tabset fullWidth>
-        <nb-tab tabTitle="Notifications Non Vues">
-          <h6 style="text-align: center;color: rgb(23, 9, 176);"> La Liste des Notifications Non Vues  <span style="color:red">{{nbnotif}}</span></h6>
+        <nb-tab tabTitle="Notifications Non Vues"  >
+          <h6 style="text-align: center;color: rgb(23, 9, 176);"> La Liste des Notifications Non Vues  <span style="color:white;background-color: red;border-radius: 20px;padding: 2px;">{{nbnotif}}</span></h6>
           <nb-card>
-            <nb-card-body style="overflow-y: auto;max-height: 400px;margin-bottom: 10px;">
+            <nb-card-body style="overflow-y: auto;max-height:900px;margin-bottom: 10px;">
                 <div  *ngIf=" (unseenNotifications.length > 0) ;else noData"  >
-                    <div *ngFor="let notification of unseenNotifications">
-                  <div class="notif error" *ngIf="notification.subject=='Probleme de Blockage'" >
+                  <div *ngFor="let notification of unseenNotifications">
+                    <div class="notif error" *ngIf="notification.subject=='Probleme de Blockage Carte Controle'">
                       <div class="container-1">
                           <i class="fas fa-times-circle"></i>
                       </div>
-                      <div class="container-2">
-                          <p>{{notification.subject}}</p>
-                          <p class="msg">{{notification.message}}</p>
+                      <div class="container-2" (click)="OpenDetailCC(DetailCarte,notification.idMesure)">
+                          <p >{{notification.subject}} </p>
+                          <p [innerHTML]="notification.message" class="msg"></p>
                           <p>{{ notification.createdAt }}</p>
                       </div>
                       <button class="delete" (click)="markAsSeen(notification)"><i class="fa-solid fa-eye"></i></button>
                   </div>
-                  <div class="notif warning" *ngIf="notification.subject=='Probleme de non Conformité'" >
+                  <div class="notif error" *ngIf="notification.subject=='Probleme de Blockage OKD'">
                     <div class="container-1">
                         <i class="fas fa-times-circle"></i>
                     </div>
-                    <div class="container-2">
-                        <p>{{notification.subject}}</p>
-                        <p class="msg">{{notification.message}}</p>
-                        <p>{{ notification.createdAt }}</p>
-                    </div>
-                    <button class="delete"(click)="markAsSeen(notification)"><i class="fa-solid fa-eye"></i></button>
-                </div>
-                  <div class="notif success" *ngIf="notification.subject=='Validation de Non Conformite CC '|| notification.subject=='Validation de Non Conformite OKD'" >
-                    <div class="container-1">
-                        <i class="fas fa-check"></i>
-                    </div>
-                    <div class="container-2">
-                        <p>{{notification.subject}}</p>
-                        <p class="msg">{{notification.message}}</p>
+                    <div class="container-2" (click)="OpenDetailOKD(DetailOKD,notification.idMesure)">
+                        <p >{{notification.subject}}</p>
+                        <p [innerHTML]="notification.message" class="msg"></p>
                         <p>{{ notification.createdAt }}</p>
                     </div>
                     <button class="delete" (click)="markAsSeen(notification)"><i class="fa-solid fa-eye"></i></button>
                 </div>
-                </div>
-                
+                <div class="notif warning" *ngIf="notification.subject=='Alert Fin Habilitation'"  >
+                  <div class="container-1">
+                      <i class="fas fa-times-circle"></i>
                   </div>
+                  <div class="container-2">
+                      <p>{{notification.subject}}</p>
+                      <p [innerHTML]="notification.message" class="msg"></p>
+                      <p>{{ notification.createdAt }}</p>
+                  </div>
+                  <button class="delete"(click)="markAsSeen(notification)"><i class="fa-solid fa-eye"></i></button>
+               </div>
+                  <div class="notif warning" *ngIf="notification.subject=='Probleme de non Conformité OKD'"  >
+                    <div class="container-1">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="container-2" (click)="OpenDetailOKD(DetailOKD,notification.idMesure)">
+                        <p>{{notification.subject}}</p>
+                        <p [innerHTML]="notification.message" class="msg"></p>
+                        <p>{{ notification.createdAt }}</p>
+                    </div>
+                    <button class="delete"(click)="markAsSeen(notification)"><i class="fa-solid fa-eye"></i></button>
+                 </div>
+                 <div class="notif warning" *ngIf="notification.subject=='Probleme de non Conformité Carte Controle'"  >
+                  <div class="container-1">
+                      <i class="fas fa-times-circle"></i>
+                  </div>
+                  <div class="container-2" (click)="OpenDetailCC(DetailCarte,notification.idMesure)">
+                      <p>{{notification.subject}}</p>
+                      <p [innerHTML]="notification.message" class="msg"></p>
+                      <p>{{ notification.createdAt }}</p>
+                  </div>
+                  <button class="delete"(click)="markAsSeen(notification)"><i class="fa-solid fa-eye"></i></button>
+               </div>
+                  <div class="notif success" *ngIf="notification.subject=='Validation de Non Conformite Carte Controle '">
+                    <div class="container-1">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="container-2" (click)="OpenDetailCC(DetailCarte,notification.idMesure)">
+                        <p>{{notification.subject}}</p>
+                        <p [innerHTML]="notification.message" class="msg"></p>
+                        <p>{{ notification.createdAt }}</p>
+                    </div>
+                    <button class="delete" (click)="markAsSeen(notification)"><i class="fa-solid fa-eye"></i></button>
+                 </div>
+                 <div class="notif success" *ngIf="notification.subject=='Validation de Non Conformite OKD'">
+                  <div class="container-1">
+                      <i class="fas fa-check"></i>
+                  </div>
+                  <div class="container-2" (click)="OpenDetailOKD(DetailOKD,notification.idMesure)">
+                      <p>{{notification.subject}}</p>
+                      <p [innerHTML]="notification.message" class="msg"></p>
+                      <p>{{ notification.createdAt }}</p>
+                  </div>
+                  <button class="delete" (click)="markAsSeen(notification)"><i class="fa-solid fa-eye"></i></button>
+               </div>
+               
+                  </div>
+                </div>
                   <ng-template #noData>
                       Aucune Nouvelle notification disponible. 
                   </ng-template>
@@ -54,47 +98,86 @@
         <nb-tab tabTitle="Notifications Vues">
           <h6 style="text-align: center;color: rgb(23, 9, 176);"> La Liste des Notifications Vues</h6>
           <nb-card>
-            <nb-card-body  style="overflow-y: auto;max-height: 400px;margin-bottom: 10px;">
+            <nb-card-body  style="overflow-y: auto;max-height: 900px;margin-bottom: 10px;">
                 <div  *ngIf=" (seenNotifications.length > 0) ;else noData" >
                    
-                        <div *ngFor="let notification of seenNotifications">
-                            <div class="notif info" *ngIf="notification.subject=='Probleme de Blockage'" >
-                                <div class="container-1">
-                                    <i class="fas fa-times-circle"></i>
-                                </div>
-                                <div class="container-2">
-                                    <p>{{notification.subject}}</p>
-                                    <p class="msg">{{notification.message}}</p>
-                                    <p>{{ notification.createdAt }}</p>
-                                </div>
-                             
-                            </div>
-                            <div class="notif info" *ngIf="notification.subject=='Probleme de non Conformité'" >
-                              <div class="container-1">
-                                  <i class="fas fa-times-circle"></i>
-                              </div>
-                              <div class="container-2">
-                                  <p>{{notification.subject}}</p>
-                                  <p class="msg">{{notification.message}}</p>
-                                  <p>{{ notification.createdAt }}</p>
-                              </div>
-                            
-                          </div>
-                            <div class="notif info" *ngIf="notification.subject=='Validation de Non Conformite CC '|| notification.subject=='Validation de Non Conformite OKD'" >
-                              <div class="container-1">
-                                  <i class="fas fa-check"></i>
-                              </div>
-                              <div class="container-2">
-                                  <p>{{notification.subject}}</p>
-                                  <p class="msg">{{notification.message}}</p>
-                                  <p>{{ notification.createdAt }}</p>
-                              </div>
-                             
-                          </div>
-                          </div>
-                   
-                 
+                  <div *ngFor="let notification of seenNotifications">
+                    <div class="notif info" *ngIf="notification.subject=='Probleme de Blockage Carte Controle'">
+                      <div class="container-1">
+                          <i class="fas fa-times-circle"></i>
+                      </div>
+                      <div class="container-2" (click)="OpenDetailCC(DetailCarte,notification.idMesure)">
+                          <p >{{notification.subject}} </p>
+                          <p [innerHTML]="notification.message" class="msg"></p>
+                          <p>{{ notification.createdAt }}</p>
+                      </div>
+                  </div>
+                  <div class="notif info" *ngIf="notification.subject=='Probleme de Blockage OKD'">
+                    <div class="container-1">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="container-2" (click)="OpenDetailOKD(DetailOKD,notification.idMesure)">
+                        <p >{{notification.subject}}</p>
+                        <p [innerHTML]="notification.message" class="msg"></p>
+                        <p>{{ notification.createdAt }}</p>
+                    </div>
                 </div>
+                  <div class="notif info" *ngIf="notification.subject=='Probleme de non Conformité OKD'"  >
+                    <div class="container-1">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="container-2" (click)="OpenDetailOKD(DetailOKD,notification.idMesure)">
+                        <p>{{notification.subject}}</p>
+                        <p [innerHTML]="notification.message" class="msg"></p>
+                        <p>{{ notification.createdAt }}</p>
+                    </div>
+                 </div>
+                 <div class="notif info" *ngIf="notification.subject=='Alert Fin Habilitation'"  >
+                  <div class="container-1">
+                      <i class="fas fa-times-circle"></i>
+                  </div>
+                  <div class="container-2">
+                      <p>{{notification.subject}}</p>
+                      <p [innerHTML]="notification.message" class="msg"></p>
+                      <p>{{ notification.createdAt }}</p>
+                  </div>
+               </div>
+                 <div class="notif info" *ngIf="notification.subject=='Probleme de non Conformité Carte Controle'"  >
+                  <div class="container-1">
+                      <i class="fas fa-times-circle"></i>
+                  </div>
+                  <div class="container-2" (click)="OpenDetailCC(DetailCarte,notification.idMesure)">
+                      <p>{{notification.subject}}</p>
+                      <p [innerHTML]="notification.message" class="msg"></p>
+                      <p>{{ notification.createdAt }}</p>
+                  </div>
+                 
+               </div>
+                  <div class="notif info" *ngIf="notification.subject=='Validation de Non Conformite Carte Controle '">
+                    <div class="container-1">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="container-2" (click)="OpenDetailCC(DetailCarte,notification.idMesure)">
+                        <p>{{notification.subject}}</p>
+                        <p [innerHTML]="notification.message" class="msg"></p>
+                        <p>{{ notification.createdAt }}</p>
+                    </div>
+             
+                 </div>
+                 <div class="notif info" *ngIf="notification.subject=='Validation de Non Conformite OKD'">
+                  <div class="container-1">
+                      <i class="fas fa-check"></i>
+                  </div>
+                  <div class="container-2" (click)="OpenDetailOKD(DetailOKD,notification.idMesure)">
+                      <p>{{notification.subject}}</p>
+                      <p [innerHTML]="notification.message" class="msg"></p>
+                      <p>{{ notification.createdAt }}</p>
+                  </div>
+                 
+               </div>
+                         
+                 
+                </div></div>
                 <ng-template #noData>
                     Aucune Nouvelle notification disponible. 
                 </ng-template>
@@ -107,3 +190,81 @@
     </nb-card-body>
   </nb-card>
 
+  <ng-template #DetailOKD let-data let-ref="dialogRef" >
+    <nb-card class="col-12 " style="width: 800px;overflow-x: auto;">
+      <nb-card-header style="font-weight: bold; color: blue; border-bottom: 1px solid #362ec4 !important;flex-direction: row; display: flex">
+       DETAILS DE NON CONFORMITE Check-list "OK DEMARRAGE"
+      </nb-card-header>
+        <nb-card-body>
+          <table class="table">
+            <tr>
+              <td><strong>Date Ajout</strong></td>
+              <td>{{ mesure.date_add }}</td>
+           </tr>
+           <tr>
+            <td><strong>Matricule Opérateur</strong></td>
+            <td>{{ mesure.operateurMatricule }}</td>
+         </tr>
+           <tr>
+            <td><strong>Equipe</strong></td>
+            <td>{{ mesure.equipe }}</td>
+          </tr>
+           <tr>
+            <td><strong>Evenement</strong></td>
+            <td>{{ mesure.evenement }}</td>
+          </tr>
+          <tr>
+            <td><strong>Les Critéres sont :</strong></td>
+            <td></td>
+        </tr>
+            <tr *ngFor="let item of mesureDetails">
+                <td><strong>{{ item.critere }}</strong></td>
+                <td [ngStyle]="{'color': item.valeur === 'nok' ? 'red' : (item.valeur === 'ok' ? 'green' : 'black')}">{{ item.valeur }}</td>
+            </tr>
+        </table>
+      </nb-card-body> 
+  
+     </nb-card>
+  
+  </ng-template>
+  
+  <ng-template #DetailCarte let-data let-ref="dialogRef" >
+  
+    <nb-card class="col-12 " style="width: 800px;overflow-x: auto;">
+      <nb-card-header style="font-weight: bold; color: blue; border-bottom: 1px solid #362ec4 !important;flex-direction: row; display: flex">
+        DETAILS DE NON CONFORMITE Carte Controle
+      
+      </nb-card-header>
+        <nb-card-body>
+          
+          <table class="table">
+            <tr>
+              <td><strong>Date Ajout</strong></td>
+              <td>{{ mesureC.date }}</td>
+           </tr>
+           <tr>
+            <td><strong>Motif Saisie</strong></td>
+            <td>{{ mesureC.motif_saisie }}</td>
+         </tr>
+         <tr>
+          <td><strong>Matricule Opérateur</strong></td>
+          <td>{{ mesureC.operateurMatricule }}</td>
+       </tr>
+         <tr>
+          <td><strong>Les Resultats Obtenus doivent etre entre : </strong></td>
+          <td>[ {{mesureC.min}} ,{{mesureC.max}} ] </td>
+        </tr>
+           <tr *ngIf="mesure.resultat!='null'">
+            <td><strong>Resultat</strong></td>
+            <td>{{mesureC.resultat}}</td>
+          </tr>
+           <tr>
+            <td><strong>Liste Des Valeurs</strong></td>
+            <td>{{ mesureC.val }}</td>
+          </tr>
+        </table>
+      </nb-card-body> 
+      
+     </nb-card>
+  
+  </ng-template>

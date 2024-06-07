@@ -1,0 +1,146 @@
+
+.title {
+  padding: 10px;
+ // background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.title h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.dashboard-row {
+  //margin-top: 20px;
+  display: flex;
+  gap: 20px;
+}
+.card1 {
+  margin-top: 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex: 1;
+}
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex: 1;
+}
+
+.sub-card {
+  display: flex;
+  align-items: center;
+  background: #e3f9f5; /* Light color that complements the gradient */
+  padding: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.large-card {
+  flex: 1;
+  margin-bottom: 20px;
+  background: #a5d3eb; /* Light blue that fits with the gradient */
+}
+
+.small-card {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.small-cards-container {
+  display: flex;
+}
+
+
+
+.icon {
+  font-size: 3rem; /* Increase icon size */
+  margin-right: 10px;
+  padding: 0;
+  color: #00796b; /* Darker shade for contrast */
+}
+.number {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #00796b; /* Darker shade for contrast */
+}
+
+.label {
+  font-size: 1rem;
+  color: #00796b; /* Darker shade for contrast */
+}
+
+.graph {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background: #e8ebf7; /* Light color that complements the gradient */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.graph2 {
+  display: flex;
+  // justify-content: center;
+  // align-items: center;
+  height: 100%;
+  width: 100%; /* Fill the entire width of the container */
+  background: #e8ebf7; /* Light color that complements the gradient */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px; /* Add padding for better visualization */
+}
+
+
+
+/* Add this media query to override the layout for smaller screens */
+@media (max-width: 1366px) {
+  .small-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .sub-card.small-card {
+    flex: 0 0 calc(33.33% - 10px); /* Adjust the width calculation as needed */
+    max-width: calc(33.33% - 10px); /* Adjust the max-width calculation as needed */
+    margin-right: 10px; /* Adjust margin as needed */
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: left;
+    padding: 5px; /* Decrease padding for smaller screens */
+  }
+
+  .sub-card.small-card .icon {
+    font-size: 1.7rem; /* Decrease icon size for smaller screens */
+    margin-right: 5px; /* Ensure there's space between icon and text */
+    padding: 0; /* Remove padding */
+  }
+
+  .sub-card.small-card .text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .sub-card.small-card .text .number {
+    font-size: 1rem; /* Decrease number size */
+  }
+
+  .sub-card.small-card .text .label {
+    font-size: 0.8rem; /* Decrease label size */
+  }
+
+  .sub-card.small-card:last-child {
+    margin-right: 0; /* Remove right margin from the last card */
+  }
+}

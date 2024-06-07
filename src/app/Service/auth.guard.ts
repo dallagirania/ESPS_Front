@@ -27,29 +27,34 @@ export class AuthGuard implements CanActivate {
       // }
       // return isAuthenticated;
 
-      if (isAuthenticated) {
+      if (isAuthenticated && route.routeConfig.path != "home") {
 
         const role = localStorage.getItem("user");
   
         switch (route.routeConfig.path) {
   
           case "dashboard": return role == "MOD"  ? true : role == "RPS" ?  true : role == "RPUO" ? true : role == "Qualiticien" ? true: role == "AEF" ? true:role == "Methodiste" ? true:false;
-          case "ListeProcede": return role == "MOD"  ? true : role == "RPS" ?  true : role == "RPUO" ? true : role == "Qualiticien" ? true: role == "AEF" ? true:role == "Methodiste" ? true:false;
+          case "home": return role == "MOD"  ? true : role == "RPS" ?  true : role == "RPUO" ? true : role == "Qualiticien" ? true: role == "AEF" ? true:role == "Methodiste" ? true:false;
           case "notify": return role == "MOD"  ? true : role == "RPS" ?  true : role == "RPUO" ? true : role == "Qualiticien" ? true: role == "AEF" ? true:role == "Methodiste" ? true:false;
          
           case "ParametrageSite": return role == "RPS" ? true: false;
           case "ParametrageRUO": return role == "RPS" ? true:role == "RPUO" ? true: false;
 
-          case "ListProcede": return role == "RPUO" ? true:role == "Methodiste" ? true :role == "MOD"  ? true : false;
+          case "ListProcede": return role == "RPUO" ? true:role == "Methodiste" ? true: false;
           
           case "Verif": return role == "Qualiticien" ? true: false;
 
           case "ListeHabilitation": return role == "AEF" ? true: false;
+         
         }
   
         return true;
   
+      }else{
+        return true;  
       }
+
+
   
       // not logged in so redirect to login page with the return url
   

@@ -22,7 +22,6 @@ export class ConformiteStyleComponent  implements OnInit {
   ) { }
 
   ngOnInit(): void {
-     console.log(this.value)
 }
 
 }

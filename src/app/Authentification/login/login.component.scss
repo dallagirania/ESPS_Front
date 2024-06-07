@@ -6,17 +6,17 @@
   font-family: 'Poppins', sans-serif;
 }
 .contenaire{
-  height: 100vh;
-  width: 100%;
- background: #f2f2f2;
- display: flex;
- justify-content: center;
- align-items: center;
- margin: 0;
- background-image:url('../../../assets/images/loginBg.jpg'); 
- background-repeat: no-repeat; /* Ensure image doesn't repeat */
- background-size: cover;    /* Scale image to cover the entire container */
- background-position: center; 
+    height: 100vh;
+    width: 100%;
+    background: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    background-image:url('../../../assets/images/loginBg.jpg'); 
+    background-repeat: no-repeat;
+    background-size: cover;    
+    background-position: center; 
 }
 ::selection{
   background: #4158d0;
@@ -25,7 +25,7 @@
 .wrapper{
   margin: 50px;
   width: 380px;
-  background:  rgba(252, 252, 252, 0.429);
+  background: #e3eaff93 ;
   border-radius: 15px;
   box-shadow: 0px 20px 20px rgba(0,0,0,0.1);
 }
@@ -64,7 +64,7 @@
 }
 .wrapper form .field input:focus,
 form .field input:valid{
-  border-color: #4158d0;
+  border-color: #ffffff;
 }
 .wrapper form .field label{
   position: absolute;
@@ -81,9 +81,9 @@ form .field input:focus ~ label,
 form .field input:valid ~ label{
   top: 0%;
   font-size: 16px;
-  color: #4158d0;
-  background: #fff;
-  transform: translateY(-50%);
+  color: #00113f;
+  background: #04040400;
+  transform: translateY(-90%);
 }
 form .content{
   display: flex;
@@ -102,7 +102,7 @@ form .content .checkbox{
 form .content input{
   width: 15px;
   height: 15px;
-  background: red;
+  background: rgb(185, 6, 6);
 }
 form .content label{
   color: #262626;
@@ -134,4 +134,18 @@ form .field input[type="submit"]:disabled {
 
 form .field input[type="submit"]:active {
   transform: scale(0.95);
+}
+
+
+.see-more-link {
+  display: block;
+  margin:10px !important;
+  text-align: center !important;
+  color: darkblue !important;
+  text-decoration: underline !important;
+  cursor: pointer !important;
+}
+
+.see-more-link:hover {
+  color:  blue !important;
 }

@@ -72,7 +72,7 @@ nb-layout-column {
 }
 
 .layout {
-    background: linear-gradient(190deg,  #11efca 0%, #1A0EE4 111%);
+    background: linear-gradient(190deg,  #11efca 0%, #362ec4 111%);
    // background-image: url('/assets/images/bg.svg');
 
     background-size: cover;
@@ -581,7 +581,7 @@ ngx-detail::-webkit-scrollbar-track {
 
 ngx-detail{
     padding: 10px !important;
-    background-color: white;
+ //   background-color: white;
     border-radius: 20px !important;
     border: unset !important;
 
@@ -948,6 +948,43 @@ ngx-parametage-site {
 }
 
 
+ngx-liste-notif{
+    height: 100% !important;
+    overflow-y: scroll !important;
+}
+ngx-liste-notif::-webkit-scrollbar {
+    width: 10px !important;
+    border-radius: 10px !important;
+}
+ngx-liste-notif::-webkit-scrollbar-thumb {
+    background: #190ee463; /* couleur de la thumb (la barre mobile) */
+    border-radius: 10px !important;
+}
+
+ngx-liste-notif::-webkit-scrollbar-thumb:hover {
+    background: $primary-color; /* couleur de la thumb au survol */
+}
+ngx-liste-notif::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.173); /* couleur de la thumb au survol */
+    border-radius: 10px !important;
+}
+
+.content {
+    position: relative !important;
+    top: -50px !important;
+}
+ngx-liste-notif {
+    padding: 10px !important;
+    background-color: white;
+    border-radius: 20px !important;
+    border: unset !important;
+
+    nb-card {
+        border: unset !important;
+    }
+}
+
+
 ngx-procede-detail{
     height: 100% !important;
     overflow-y: scroll !important;
@@ -974,6 +1011,43 @@ ngx-procede-detail::-webkit-scrollbar-track {
     top: -50px !important;
 }
 ngx-procede-detail {
+    padding: 10px !important;
+    background-color: white;
+    border-radius: 20px !important;
+    border: unset !important;
+
+    nb-card {
+        border: unset !important;
+    }
+}
+
+
+ngx-home{
+    height: 100% !important;
+    overflow-y: scroll !important;
+}
+ngx-home::-webkit-scrollbar {
+    width: 10px !important;
+    border-radius: 10px !important;
+}
+ngx-home::-webkit-scrollbar-thumb {
+    background: #190ee463; /* couleur de la thumb (la barre mobile) */
+    border-radius: 10px !important;
+}
+
+ngx-home::-webkit-scrollbar-thumb:hover {
+    background: $primary-color; /* couleur de la thumb au survol */
+}
+ngx-home::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.173); /* couleur de la thumb au survol */
+    border-radius: 10px !important;
+}
+
+.content {
+    position: relative !important;
+    top: -50px !important;
+}
+ngx-home{
     padding: 10px !important;
     background-color: white;
     border-radius: 20px !important;

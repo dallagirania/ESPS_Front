@@ -17,7 +17,7 @@ import { LayoutService } from '../../../@core/utils';
 import * as math from 'mathjs';
 import * as XLSX from 'xlsx';
 import { forkJoin, of,Observable } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, filter, map } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { OperateurRenderComponent } from '../../Controle/operateur-render/operateur-render.component';
 import { Chart } from 'chart.js';
@@ -230,16 +230,6 @@ export class ShowDataComponent implements   OnInit,OnDestroy {
         }
       },
   },
-     operateurNom: {
-
-      title: 'Nom Opérateur',
-      type: 'string',
-    },
-    operateurPrenom: {
-
-      title: 'Prenom du Opérateur',
-      type: 'string',
-    },
      val: {
        title: 'Valeurs',
        type: 'array',
@@ -248,15 +238,25 @@ export class ShowDataComponent implements   OnInit,OnDestroy {
        title: 'Résultat',
        type: 'string',
      },
-  
-    qualiticienNom: {
-
-      title: 'Nom Qualiticien',
+     min: {
+      title: 'MIN ',
       type: 'string',
     },
-    qualiticienPrenom: {
+    max: {
+      title: 'Max',
+      type: 'string',
+    },
+     operateurMatricule: {
 
-      title: 'Prenom Qualiticien',
+      title: 'Matricule Opérateur',
+      type: 'string',
+    },
+  
+ 
+  
+    qualiticienMatricule: {
+
+      title: 'Matricule Qualiticien',
       type: 'string',
     },
    },
@@ -283,28 +283,23 @@ SettingsMesureOKD = {
     perPage: 3, // Limiter le nombre de lignes par page à 5
   },
  columns: {
+  id: {
+    title: 'Les Mesures',
+    type: 'custom',
+    filter:false,
+    renderComponent: OperateurRenderComponent
+  },
    date_add: {
     title: 'Date Ajout',
     type: 'string',
   },
-  id: {
-    title: 'Les Mesures',
-    type: 'custom',
-    renderComponent: OperateurRenderComponent
-  },
+ 
   etatactive: {
     title: 'Conformité',
     type: 'custom',
     valuePrepareFunction: (cell, row) => row.etatactive, // Utilisez row.id au lieu de cell.id
     renderComponent: ConformiteStyleComponent
-    // valuePrepareFunction: (cell, row) => {
-    //     console.log("Valeur de etatvalide :", row.etatactive);
-    //     if (row.etatactive === false) {
-    //         return "<p class='text-danger'style='background-color: #f8d7da; padding: 5px;'>Non Conforme</p>";
-    //     } else {
-    //         return "<p class='text-success'>Conforme</p>";
-    //     }
-    // },
+   
 },
 
   etatvalide: {
@@ -334,28 +329,20 @@ SettingsMesureOKD = {
       type: 'string',
 
     },
-    operateurNom: {
+    operateurMatricule: {
 
-      title: 'Nom Opérateur',
+      title: 'Matricule Opérateur',
       type: 'string',
     },
-    operateurPrenom: {
+  
+ 
+  
+    qualiticienMatricule: {
 
-      title: 'Prenom du Opérateur',
+      title: 'Matricule Qualiticien',
       type: 'string',
     },
  
-  
-    qualiticienNom: {
-
-      title: 'Nom Qualiticien',
-      type: 'string',
-    },
-    qualiticienPrenom: {
-
-      title: 'Prenom Qualiticien',
-      type: 'string',
-    },
    
   }
 }
@@ -891,14 +878,11 @@ fetchData1(id: number): void {
     this.showFunctionInput=!this.showFunctionInput;
   }
 
-  detail(dialog: TemplateRef<any>,id: number) {
-  //  console.log("id ps ====> ",id)
-   
+  detail(dialog: TemplateRef<any>,id: number) {   
     this.service.getCarteByProcedeId(id).subscribe(carte => {
       this.listeCarte = carte;
       this.sourceCarte = new LocalDataSource(this.listeCarte) 
-   //   console.log("la liste des carte de controle actuel est ",carte)
-    this.service.getOKDByProcedeId(id).subscribe(carte=>{
+      this.service.getOKDByProcedeId(id).subscribe(carte=>{
           this.listeOKD = carte;
        //   console.log("la liste des OKD actuel est",this.listeOKD);
           this.sourceOKD = new LocalDataSource(this.listeOKD); 
@@ -969,7 +953,6 @@ verifierConformite(id: number): void {
         this.toastrService.warning(`SVP Contacter le servoice Qualité , Vous etes en cas de Non Conformité `, 'Warning');
         this.ConformAjout=false
         this.service.mailblockC(this.lastItems).subscribe(mail=>{
-     //     console.log("mail envoyé avec succés !!!")
         })
       }else if(bothFalse && Valide){
         this.ConformAjout=true
@@ -980,9 +963,6 @@ verifierConformite(id: number): void {
 verifierConformiteSansMail(id: number): void {
   this.service.getMesureCCByCarteId(id).subscribe(mesure => {
     this.listeMesure = mesure.reverse();
- //   console.log("Mesure cc : ", mesure);
-    
-    // Vérifier si les deux dernières lignes ont un etatactive false
     if (this.listeMesure.length >= 2) {
       const lastTwoItems = this.listeMesure.slice(0, 2); // Les deux dernières lignes
       const bothFalse = lastTwoItems.every(item => item.etatactive === false);
@@ -1751,12 +1731,9 @@ getProgressBarWidth(date_fin: string): string {
 getProgressBarColor(date_fin: string): string {
 // Determine and return the color of the progress bar based on the qualification status
  const dateFinProc = new Date(date_fin);
-  //   console.log("date fin est : ",date_fin)
      const dateSysteme = new Date();
-   //  console.log(dateSysteme)
      const troisMoisApres = new Date();
      troisMoisApres.setMonth(dateSysteme.getMonth() + 3);
-  //   console.log(troisMoisApres)
      if (dateFinProc > troisMoisApres) {
        return 'green';
      }else if(dateFinProc < dateSysteme){
@@ -1768,4 +1745,17 @@ getProgressBarColor(date_fin: string): string {
 
 
    }
+
+
+   getEtat(dateFin: string): boolean {
+    const dateFinProc = new Date(dateFin);
+    const dateSysteme = new Date();
+    const troisMoisApres = new Date();
+    troisMoisApres.setMonth(dateSysteme.getMonth() + 3);
+    if (dateFinProc >= dateSysteme) {
+      return true;
+    }else{
+      return false;
+    }
+  }
 }

@@ -102,13 +102,12 @@ export class MesureCCComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log("id okd envoyer est : =>",this.id)
+   
     this.LoadMesureByCC(this.id)
   }
   LoadMesureByCC(id:number){
     this.service.getMesureCCByCarteId(id).subscribe(mesure=>{
     this.listemesureCC=mesure.reverse();
-    console.log(this.listemesureCC)
     this.sourceMesureCC = new LocalDataSource(this.listemesureCC) 
     })
     }
