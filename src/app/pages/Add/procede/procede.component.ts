@@ -110,6 +110,8 @@ export class ProcedeComponent implements OnInit {
   listeProcede:Procede[]=[]
   liste:Procede[]=[]
   procede:Procede=new Procede()
+  currentuser:any
+  currentuserUnite:number
 
   constructor(
     private service:CrudService,
@@ -120,17 +122,24 @@ export class ProcedeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.service.getProcedeDernier().subscribe(procede=>{
-      this.listeProcede=procede.reverse()
-     //  console.log(procede)
-       this.source.load(procede);
-     })
+    this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
+      this.currentuser=utilisateur
+      this.currentuserUnite=this.currentuser.unite.id  
+      this.service.getProcedeDernierByUnite(this.currentuserUnite).subscribe(procede=>{
+        this.listeProcede=procede.reverse()
+          this.source.load(procede);
+      })
+    })
   }     
   LoadProcedes(){
-    this.service.getProcedeDernier().subscribe(procede=>{
-    this.liste=procede.reverse();
-    this.listeProcede=procede;
-    this.source = new LocalDataSource(this.liste) 
+    this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
+      this.currentuser=utilisateur
+      this.currentuserUnite=this.currentuser.unite.id  
+      this.service.getProcedeDernierByUnite(this.currentuserUnite).subscribe(procede=>{
+        this.liste=procede.reverse();
+        this.listeProcede=procede;
+        this.source = new LocalDataSource(this.liste) 
+      })
     })
     }
     //verifier date 

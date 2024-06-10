@@ -1,34 +1,6 @@
 <nb-icon icon="list" status="info" ghost nbTooltip="Liste des critères
 " [options]="{ animation: { type: 'zoom' } }" style="margin-left:25px;font-size: 30px;" (click)="detail(detailMesures)"></nb-icon>
 
-
-<!-- <ng-template #detailMesures let-data let-ref="dialogRef">
-    <nb-card class="col-12" style="width: 500px;">
-        <nb-card-body>
-            <h4 style="text-align: center; color: rgb(23, 9, 176); margin-bottom: 20px;">La liste des Mesures Effectuées</h4>
-            <table class="table">
-                <tr *ngFor="let item of mesure.val | keyvalue">
-                    <td><strong>{{ item.key }}</strong></td>
-                    <td [ngStyle]="{'color': item.value === 'nok' ? 'red' : (item.value === 'ok' ? 'green' : 'black')}">{{ item.value }}</td>
-                </tr>
-            </table>
-
-            <div class="text-center" style="margin-top: 20px;">
-                <nb-alert class="custom-alert-success" *ngIf="mesure.etatactive">
-                    Vous êtes en conformité.
-                </nb-alert>
-                <nb-alert class="custom-alert-danger" *ngIf="!mesure.etatactive">
-                    Vous êtes en non-conformité. Veuillez vérifier vos mesures SVP !
-                </nb-alert>
-            </div>
-
-            <div class="text-center" style="margin-top: 30px;">
-                <button nbButton status="danger" hero (click)="ref.close()">Fermer</button>
-            </div>
-        </nb-card-body>
-    </nb-card>
-</ng-template> -->
-
 <ng-template #detailMesures let-data let-ref="dialogRef">
     <nb-card class="col-12" style="width: 500px;">
         <nb-card-body>
@@ -36,7 +8,8 @@
             <table class="table">
                 <tr *ngFor="let item of mesureDetails">
                     <td><strong>{{ item.critere }}</strong></td>
-                    <td [ngStyle]="{'color': item.valeur === 'nok' ? 'red' : (item.valeur === 'ok' ? 'green' : 'black')}">{{ item.valeur }}</td>
+                    <!-- <td [ngStyle]="{'color': item.valeur === 'nok' ? 'red' : (item.valeur === 'ok' ? 'green' : 'black')}">{{ item.valeur }}</td> -->
+                    <td [ngStyle]="{'color': item.color}">{{ item.valeur }}</td>
                 </tr>
             </table>
 

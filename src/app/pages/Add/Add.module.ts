@@ -37,7 +37,9 @@ import { HistoriqueProcedeComponent } from './historique-procede/historique-proc
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { DownloadFilesComponent } from './download-files/download-files.component';
 import { ImprimerHabilitationComponent } from './imprimer-habilitation/imprimer-habilitation.component';
-import { ShowDataComponent } from '../e-commerce/show-data/show-data.component';
+import { MesureCCComponent } from './mesure-cc/mesure-cc.component';
+import { MesureOKDComponent } from './mesure-okd/mesure-okd.component';
+import { CourbeCCComponent } from './courbe-cc/courbe-cc.component';
 
 
 @NgModule({
@@ -82,6 +84,10 @@ import { ShowDataComponent } from '../e-commerce/show-data/show-data.component';
     HistoriqueProcedeComponent,
     DownloadFilesComponent,
     ImprimerHabilitationComponent,
+    MesureCCComponent,
+    MesureOKDComponent,
+    CourbeCCComponent
+    
   
   ],
 })

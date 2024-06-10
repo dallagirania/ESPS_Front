@@ -34,14 +34,7 @@ export class ImprimerHabilitationComponent implements OnInit, ViewCell {
 
   ngOnInit(): void {
    this.renderValue = this.value;
-   console.log("====> " + this.value );
-    
- 
   }
-
-  // historique(dialog: TemplateRef<any>) {
-  //   this.dialogservice.open(dialog);
-  // }
    navigate(){
     this.router.navigate(["/pages/DetailProcede/"+this.value])
   }

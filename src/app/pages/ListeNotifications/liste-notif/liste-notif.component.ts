@@ -51,17 +51,12 @@ export class ListeNotifComponent implements OnInit {
     
     this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
       this.currentuser=utilisateur
-      console.log("Info header  :",this.currentuser ) 
-      console.log("Info matricule  :",this.currentuser.matricule )   
-          
-      //Affichage des notification  
       let stompClient = this.webSocketService.connect();
 
       stompClient.connect({}, frame => {
 
         stompClient.subscribe('/topic/notification/' + this.currentuser.matricule, notifications => {
           let notify = JSON.parse(notifications.body);
-          console.log("la notif reçue est :",notify)
           this.toastrService.warning("vous avez une non conformité ", 'Warning');
           this.LoadNotification()
         });
@@ -82,7 +77,6 @@ export class ListeNotifComponent implements OnInit {
             }
           }
           this.nbnotif= this.unseenNotifications.length
-            console.log("nbnotif :==>",this.nbnotif)
           this.seennotif= this.seenNotifications.length 
     
          
@@ -106,9 +100,7 @@ export class ListeNotifComponent implements OnInit {
               this.unseenNotifications.push(notif);
             }
           }
-          console.log("this.unseenNotifications",this.unseenNotifications)
           this.nbnotif= this.unseenNotifications.length
-            console.log("nbnotif :==>",this.nbnotif)
             this.seennotif= this.seenNotifications.length 
          
         }
@@ -120,16 +112,12 @@ export class ListeNotifComponent implements OnInit {
   markAsSeen(notification: Notifications) {
     if (!notification.seenRecipients.some(user => user.id === this.currentuser.id)) {
         notification.seenRecipients.push(this.currentuser);
-  
-      this.service.updateNotify(notification.id, notification).subscribe(
+      
+
+        this.service.updateNotify(notification.id, notification).subscribe(
         updatedNotif => {
-          console.log('Notification updated successfully:', updatedNotif);
-        //  this.updateNotificationLists(updatedNotif);
-         // this.LoadNotification()
-          this.service.getNotificationByMatricule(this.currentuser.matricule).subscribe(
-            savednotif=>{
-                          this.listenotif=savednotif;
-             //filtrer les notifications unseenNotifications :
+          this.service.getNotificationByMatricule(this.currentuser.matricule).subscribe(savednotif=>{
+             this.listenotif=savednotif;
              this.seenNotifications =[];
              this.unseenNotifications=[];
               for (let notif of this.listenotif) {
@@ -139,9 +127,7 @@ export class ListeNotifComponent implements OnInit {
                   this.unseenNotifications.push(notif);
                 }
               }
-              console.log("this.unseenNotifications",this.unseenNotifications)
               this.nbnotif= this.unseenNotifications.length
-                console.log("nbnotif :==>",this.nbnotif)
                 this.seennotif= this.seenNotifications.length 
              
             }
@@ -164,7 +150,6 @@ export class ListeNotifComponent implements OnInit {
 OpenDetailOKD(dialog: TemplateRef<any>,IdMesure:number) {
   this.service.getMesureOKDDetailById(IdMesure).subscribe(mesure=>{
     this.mesure=mesure
-    console.log("notre mesure à pour details : ", mesure )
     this.extractMesureDetails()
     this.dialogservice.open(dialog);
   })

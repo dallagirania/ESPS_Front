@@ -145,7 +145,7 @@ export class VerifComponent implements OnInit {
  
   pager: {
     display: true,
-    perPage: 5, // Limiter le nombre de lignes par page à 5
+    perPage: 5,
   },
  columns: {
 
@@ -236,6 +236,8 @@ userConnecte:any
  mesureokd=new MesureOKD()
  dialogRef1:NbDialogRef<any>
  dialogvalideCarte:TemplateRef<any>
+
+ currentuserUnite:any
  @ViewChild('dialogValideCarte', { static: false }) dialogValideCarte: TemplateRef<any>;
   constructor(
     private service:CrudService,
@@ -312,11 +314,16 @@ Valider(event: any): void {
 }
 
 LoadMesureCC(){
-  this.service.getAllMesureCC().subscribe(mesure=>{
-    this.listeMesure=mesure.reverse()
-     console.log("la liste des mesure Carte Controle :=> ",mesure)
-     this.sourceMesure.load(mesure);
-   })
+  this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
+    this.currentuser=utilisateur
+    this.currentuserUnite=this.currentuser.unite.id 
+    this.service.getAllMesureCC(this.currentuserUnite).subscribe(mesure=>{
+      this.listeMesure=mesure.reverse()
+       console.log("la liste des mesure Carte Controle :=> ",mesure)
+       this.sourceMesure.load(mesure);
+     })
+    })
+  
 }
 
 
@@ -380,10 +387,15 @@ Validerokd(event: any): void {
 }
 
 LoadMesureOKD(){
-  this.service.getMesureOKD().subscribe(mesure=>{
-    this.listemesureOKD=mesure.reverse();
-    console.log("liste okd : => :",this.listemesureOKD)
-    this.sourceMesureOKD = new LocalDataSource(this.listemesureOKD) 
-    })
+  this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
+    this.currentuser=utilisateur
+    this.currentuserUnite=this.currentuser.unite.id
+    this.service.getMesureOKD(this.currentuserUnite).subscribe(mesure=>{
+      this.listemesureOKD=mesure.reverse();
+      console.log("liste okd : => :",this.listemesureOKD)
+      this.sourceMesureOKD = new LocalDataSource(this.listemesureOKD) 
+      })
+     })
+ 
 }
 }

@@ -61,19 +61,9 @@ export class ListeHabilitationComponent implements OnInit {
         title: 'Titre',
         type: 'string',
       },
-      procede: {
+      procedeNom: {
         title: 'Procédé Speciale',
-  
           type: 'string',
-          valuePrepareFunction: (procede) => { return (procede?.nom); },
-          filterFunction: (procede, val) => {
-            if (procede != null) {
-              const activiteNomLowerCase = procede.nom.toLowerCase();
-              const valLowerCase = val.toLowerCase();
-              return activiteNomLowerCase.indexOf(valLowerCase) !== -1 || !val;
-            }
-            return false;
-          }
       },
       id:{
         title: 'Imprimer',
@@ -143,14 +133,11 @@ export class ListeHabilitationComponent implements OnInit {
         title: 'Etat',
         type: 'html',
         valuePrepareFunction: (cell, row) => {
-          console.log(row.etatactive)
           const etat =this.getEtat(row.etatactive);
            if(etat=="Activé"){
-            console.log(this.getEtat(row.etatactive))
              return "<p class='text-success'>Activé</p>"
            }
           else{
-            console.log(this.getEtat(row.etatactive))
             return "<p class='text-danger'>Désactivé</p>"
           }
         },
@@ -226,6 +213,7 @@ export class ListeHabilitationComponent implements OnInit {
   @ViewChild('dialogEditFormation', { static: false }) dialogEditFormation: TemplateRef<any>;
   currentuser:any
   userConnecte:any
+  currentuserUnite:any
   dropdownSettings = {};
   constructor( private service:CrudService,
     private route:Router,
@@ -236,8 +224,7 @@ export class ListeHabilitationComponent implements OnInit {
 //recupérer l'utilisateur connéctée :
 this.userConnecte=localStorage.getItem("user")
 this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
-  this.currentuser=utilisateur
-  console.log("Info header  :",this.currentuser )    
+  this.currentuser=utilisateur    
 })
 
   this.LoadHabilitation();
@@ -251,26 +238,27 @@ this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
     itemsShowLimit: 3,
     allowSearchFilter: true
   };
- //  this.LoadUserByHabilitationId();
   }
 
 
 
   LoadHabilitation() {
-    this.service.getHabilitation().subscribe(liste => {
-      console.log("test");
-      this.listeHabilitation=liste.reverse();
-      this.source = new LocalDataSource(this.listeHabilitation) 
-      console.log(liste);
-    });
+    this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
+      this.currentuser=utilisateur
+      this.currentuserUnite=this.currentuser.unite.id
+      this.service.getHabilitationByUnite(this.currentuserUnite).subscribe(liste => {
+        console.log(liste)
+        this.listeHabilitation=liste.reverse();
+        this.source = new LocalDataSource(this.listeHabilitation) 
+      });
+     })
+   
   }
  
   LoadFormationByHabilitation() {
     this.service.getFormationByDernierDate(this.habilitation1.id).subscribe(liste => {
-      console.log("test");
       this.listeFormation=liste.reverse();
       this.sourceFormation = new LocalDataSource(this.listeFormation)
-      console.log(liste); 
     });
   }
 
@@ -279,27 +267,26 @@ this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
     this.habilitation1 = { ...habilitation1 };
     this.service.getMOD().subscribe(users => {
       this.listeUser1 = users;
-      console.log("Liste complète des utilisateurs:", this.listeUser1);
+     
     });
     this.service.getFormationByDernierDate(this.habilitation1.id).subscribe(liste => {
-      console.log("test");
+     
       this.listeFormation=liste.reverse();
-      console.log(this.listeFormation);
+      
        //Eliminer la redondance des users  
       this.service.getAllUserByHabilitationId(this.habilitation1.id).subscribe(liste => {
-        console.log("test users ");
+       
         this.listeUser=liste.reverse();
-        console.log(this.listeUser);
+       
       // Filtrer listeUser1 pour obtenir les utilisateurs qui ne sont pas dans listeUser
       this.listeUserNotInListe = this.listeUser1.filter(user1 => !this.listeUser.some(user => user.id === user1.id));
 
-      console.log("Utilisateurs non présents dans listeUser:", this.listeUserNotInListe);
       
       });
       this.sourceFormation = new LocalDataSource(this.listeFormation) 
       this.dialogRef = this.dialogservice.open(this.dialogEdit, { context: { habilitation1: this.habilitation1 } });
 
-      console.log(liste);
+    
     });
    }
 
@@ -400,20 +387,14 @@ this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
       })
   
     }
-    //ajout de nouveau formation 
-
+  
     SaveFormation(ref: NbDialogRef<any>): void {
-      console.log(this.selectedcollab[0].id)
       if (!this.formation.date_fin || !this.formation.date_init ||!this.selectedcollab||!this.files) {
          this.toastrService.danger('Veuillez remplir tous les champs', 'Erreur');
          return;
        }
-     console.log(this.formation);
      if (this.selectedcollab) {
-      // const selectedUserId = this.selectedUsers[i][0]; // Récupérer l'ID de l'utilisateur sélectionné
-      // console.log(selectedUserId)
-      //  const user: Utilisateur = { id: selectedUserId.id};
-      //  formation.utilisateur = user; 
+     
       const collabSelectionne: Utilisateur = { id: this.selectedcollab[0].id};
       this.formation.utilisateur = collabSelectionne;
 
@@ -430,7 +411,6 @@ this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
                   });
       this.service.addFormation(formData).subscribe(
        (unite1) => {
-         console.log('formation added successfully:', unite1);
           this.LoadFormationByHabilitation();
          ref.close(); // Fermer la boîte de dialogue
           // Réinitialiser les champs à vide
@@ -451,12 +431,10 @@ this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
    }
    }
 
-   //fermeture de boite de dialogue 
    close(ref: NbDialogRef<any>): void{
     ref.close();
    }
 
-   //telechargement des fichiers des formations
 
     uploadFiles(event) {
       this.r = true;
@@ -467,7 +445,6 @@ this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
       if (fileList.length > 0) {
     
         const file: File = fileList[0];
-        console.log(file)
     
     
         const maxSizeInBytes = 20 * 1024 * 1024; // 40MB in bytes
@@ -487,27 +464,25 @@ this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
           this.lf.push(file);
         });
       } 
-      console.log(this.lf)
+    
       this.listfiles = new LocalDataSource(this.lf); 
-      console.log(this.listfiles)    
+   
       this.files = event.target.files;
-      // this.lf.push(this.files);
-      console.log(this.lf)
+   
     }
 
 
 //Modifier liste  Habilitaion
 
     modifier(ref: NbDialogRef<any>): void {
-      console.log(ref)
+     
       this.habilitation1.titre= this.habilitation1.titre
       this.habilitation1.ref= this.habilitation1.ref
       this.habilitation1.etatactive= this.habilitation1.etatactive
       this.habilitation1.procede= this.habilitation1.procede
     
       this.service.updateHabilitation(this.habilitation1.id,this.habilitation1).subscribe(
-        () => {
-          console.log('User edited successfully:');
+        () => {  
           this.LoadHabilitation();
           if (ref) {
             ref.close();
@@ -536,7 +511,7 @@ this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
          this.toastrService.danger('Veuillez remplir tous les champs', 'Erreur');
          return;
        }
-     console.log(this.modFormation);
+    
       this.modFormation.formation = this.editformation;
       this.modFormation.qualit_id=this.currentuser.id
       const formData = new FormData();
@@ -549,7 +524,7 @@ this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
                   });
       this.service.addModFormation(formData).subscribe(
        (unite1) => {
-         console.log('Mise à jour added successfully:', unite1);
+        
         
          this.LoadFormationByHabilitation();
          ref.close(); // Fermer la boîte de dialogue
@@ -597,82 +572,25 @@ this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
       this.updateEndDate();
     }
 
-    // getDateFormation(id:number):string{
-    //   this.service.getModFormationByFormationId(id).subscribe(modif => {
-    //     this.ListeModif = modif;
-    //     this.nb_modif=this.ListeModif.length
-    //     console.log("les modif  actuel est ",  this.ListeModif) 
-    //     if(this.nb_modif==0) {
-    //       this.service.getFormationById(id).subscribe(form => {
-    //         this.currentFormation = form;
-    //         console.log("current Formation actuel est ",  this.currentFormation) 
-    //         console.log( this.currentFormation.date_init.toString())
-    //        });
-        
-    //        this.resultat=this.currentFormation.date_init.toString()
-    //        console.log(this.resultat)
-    //     }else{
-    //       this.resultat= this.ListeModif.slice(-1)[0].date_init.toString()
-    //       console.log(this.resultat)
-    //     }
-    //    });
-    //    return this.resultat 
-    // }
+   
 
-    // async fetchDateFormation(id: number): Promise<string> {
-    //   try {
-    //     const dateFormation = await this.getDateFormation(id);
-    //     return dateFormation;
-    //   } catch (error) {
-    //     console.error('Erreur lors de la récupération de la date de formation:', error);
-    //     return ''; // Retourne une chaîne vide en cas d'erreur
-    //   }
-    // }
+   
 
-    // getDateFormation(id: number): Promise<string> {
-    //   return new Promise<string>((resolve, reject) => {
-    //     this.service.getModFormationByFormationId(id).subscribe(
-    //       modif => {
-    //         this.ListeModif = modif;
-    //         this.nb_modif = this.ListeModif.length;
-    //         console.log("Les modifications actuelles sont ", this.ListeModif);
-    //         if (this.nb_modif === 0) {
-    //           this.service.getFormationById(id).subscribe(
-    //             form => {
-    //               this.currentFormation = form;
-    //               console.log("La formation actuelle est ", this.currentFormation);
-    //               const dateInitString = this.currentFormation.date_init ? this.currentFormation.date_init.toString() : '';
-    //               resolve(dateInitString);
-    //             },
-    //             error => reject(error)
-    //           );
-    //         } else {
-    //           const dateInitString = this.ListeModif.slice(-1)[0].date_init.toString();
-    //           console.log(dateInitString);
-    //           resolve(dateInitString);
-    //         }
-    //       },
-    //       error => reject(error)
-    //     );
-    //   });
-    // }
+   
     getDateFormation(id: number): Observable<string> {
       return this.service.getModFormationByFormationId(id).pipe(
         switchMap(modif => {
           this.ListeModif = modif;
           this.nb_modif = this.ListeModif.length;
-          console.log("Les modifications actuelles sont ", this.ListeModif);
           if (this.nb_modif === 0) {
             return this.service.getFormationById(id).pipe(
               map(form => {
                 this.currentFormation = form;
-                console.log("La formation actuelle est ", this.currentFormation);
                 return this.currentFormation.date_init ? this.currentFormation.date_init.toString() : '';
               })
             );
           } else {
             const dateInitString = this.ListeModif.slice(-1)[0].date_init.toString();
-            console.log(dateInitString);
             return of(dateInitString);
           }
         }),
@@ -695,14 +613,12 @@ this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
     userDetail(index: number): void {
       if (this.selectedcollab) {
         const selectedUserId = this.selectedcollab[0]; // Récupérer l'ID de l'utilisateur sélectionné
-        console.log(selectedUserId)
+        
         this.service.getUserById(selectedUserId.id).subscribe(procede => {
         this.user = procede;
-        console.log("le user actuel est ",procede)
+      
         this.UserNom=this.user.username
-        this.UserPrenom=this.user.prenom
-        console.log(this.UserNom , this.UserPrenom)
-          
+        this.UserPrenom=this.user.prenom   
         });
       }}
   

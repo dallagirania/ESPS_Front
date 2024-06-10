@@ -464,13 +464,8 @@ export class ProcedeOKDComponent implements OnInit {
   ngOnInit(): void {
     this.service.getProcede().subscribe(procede => {
       this.listeProcede = procede;
-      console.log("la liste des procédés : ",this.listeProcede)
-
       this.procede = this.listeProcede.slice(-1)[0];
-      console.log("Le dernier élément de la liste : ",  this.procede);  
-      console.log(this.procede.id)
       this.id=this.procede.id
-      console.log("testtttttttttt",this.id)
       this.getCarteByProcedeId(this.id)
       this.getOKDByProcedeId(this.id)
       this.getHabilitationByProcedeId(this.id)
@@ -490,7 +485,7 @@ export class ProcedeOKDComponent implements OnInit {
   getMOD(): void {
     this.service.getMOD().subscribe(user=>{
       this.listeUser=user;
-      console.log("test1111",this.listeUser)
+      
     })
   }
 
@@ -498,7 +493,7 @@ export class ProcedeOKDComponent implements OnInit {
     this.service.getOKDByProcedeId(procedeId).subscribe(carte=>{
       this.listeOKD = carte;
       this.nb_OKD=this.listeOKD.length
-      console.log(this.listeOKD);
+     
       this.sourceOKD = new LocalDataSource(this.listeOKD); 
     });
   }
@@ -507,7 +502,6 @@ export class ProcedeOKDComponent implements OnInit {
   getCarteByProcedeId(procedeId: number): void {
     this.service.getCarteByProcedeId(procedeId).subscribe(carte=>{
       this.listeCc = carte;
-      console.log(this.listeCc);
       this.sourceCarte = new LocalDataSource(this.listeCc); 
     });
   }
@@ -516,21 +510,17 @@ export class ProcedeOKDComponent implements OnInit {
     this.service.getHabilitationByProcedeId(procedeId).subscribe(carte=>{
       this.listeHabilitation = carte;
       this.nb_habilistation=  this.listeHabilitation.length
-      console.log(this.listeHabilitation, this.nb_habilistation);
       this.sourceListe= new LocalDataSource(this.listeHabilitation); 
     });
   }
   LoadFormationByHabilitation(id:any) {
     this.service.getFormationByDernierDate(id).subscribe(liste => {
-      console.log("test");
       this.listeFormation=liste;
       this.sourceFormation = new LocalDataSource(this.listeFormation) 
-      console.log(liste);
-      
+   
     const usedUserIds = this.listeFormation.map(formation => formation.utilisateur.id);
     this.listefin=this.listeUser.filter(user => !usedUserIds.includes(user.id));
-      console.log("liste useer final n'est pas inclus dans formations :",this.listefin)
-    });
+      });
   }
   toggleCC() {
     this.accordionCC.toggle();
@@ -557,11 +547,9 @@ SaveOKD(): void {
   }
     this.okd.procede=this.procede,
     this.okd.date_init=this.mydate.toISOString().slice(0,10)
-    console.log(this.okd);
-    this.service.addOKD(this.okd).subscribe(
+   this.service.addOKD(this.okd).subscribe(
     (site1) => {
-      console.log('Check-List "OK DEMARRAGE" added successfully:', site1);
-      Swal.fire({
+     Swal.fire({
         title: 'Succès!',
         text: 'L\'ajout a été effectué avec succès.',
         icon: 'success',
@@ -602,7 +590,6 @@ checkInput() {
 
 
 SaveCC(): void {
-  console.log(this.carte);
   if (!this.carte.nom||!this.carte.ref||!this.carte.nb_valeur) {
     // Afficher un toast d'erreur
     this.toastrService.danger('Veuillez remplir tous les champs', 'Erreur');
@@ -615,7 +602,6 @@ SaveCC(): void {
   }
   const min = parseInt(this.carte.min.toString());
   const max = parseInt(this.carte.max.toString());
-  console.log("min : ",min, "max : " ,max)
   if (min >= max) {
     this.toastrService.danger('La valeur de min doit être inférieure à la valeur de max', 'Erreur');
     return;
@@ -638,7 +624,6 @@ SaveCC(): void {
       const dernierNombre = match[match.length - 1];
       const nombreMaxDeValeurs = parseInt(dernierNombre.substring(1), 10);
       const nbValeurs = this.carte.nb_valeur || 0;
-      console.log(nombreMaxDeValeurs, nbValeurs)
       // Vérification si le nombre de valeurs est inférieur au nombre maximum
       if (nbValeurs < nombreMaxDeValeurs) {
         this.toastrService.danger('Veuillez verifier votre Fonction  !!!  La fonction est composée par un excés de valeur..', 'Erreur');
@@ -650,10 +635,10 @@ SaveCC(): void {
   }
 
   this.carte.procede=this.procede,
-  console.log(this.carte);
+
   this.service.addCC(this.carte).subscribe(
   (site1) => {
-    console.log('Carte De Controle added successfully:', site1);
+  
     Swal.fire({
       title: 'Succès!',
       text: 'L\'ajout a été effectué avec succès.',
@@ -682,19 +667,7 @@ removeCritere(index: number) {
 }
 
 SaveCriteres() {
-  // Logique pour sauvegarder les informations des critères
-  // const EmptyCriteres = this.criteres.filter(critere => {
-  //   if((critere.nom && critere.type)||(critere.type === 'valeur' && (!critere.min && !critere.max))) {
-  //     return critere.nom.trim() === '' && critere.type.trim() === '';
-  //   } else {
-  //     return true;
-  //   }
-  // });
-  // console.log(EmptyCriteres.length);
-  // if (EmptyCriteres.length !== 0) {
-  //   this.toastrService.danger('Veuillez remplir tous les champs', 'Erreur');
-  //   return;
-  // }
+ 
 
   for (let critere of this.criteres) {
     if (!critere.nom|| !critere.mesureNC || !critere.type || (critere.type === 'valeur' && (!critere.min || !critere.max))) {
@@ -704,7 +677,6 @@ SaveCriteres() {
     if (critere.type === 'valeur') {
       const min = parseInt(critere.min.toString());
       const max = parseInt(critere.max.toString());
-      console.log("min : ",min, "max : " ,max)
       if (min >= max) {
         this.toastrService.danger('La valeur de min doit être inférieure à la valeur de max', 'Erreur');
         return;
@@ -714,15 +686,12 @@ SaveCriteres() {
   //extraction du dernier okd enregistrer   
   this.service.getOKD().subscribe(procede => {
     this.listeOKDExtraction = procede;
-    console.log("la liste des okds : ",this.listeOKDExtraction)
 
     this.okdFinale = this.listeOKDExtraction.slice(-1)[0];
-    console.log("Le dernier élément de la liste : ",  this.okdFinale);  
-    console.log(this.okdFinale.id)
-  console.log("Critères saved: ", this.criteres);
+  
   for(let critere of this.criteres){
     critere.okd=this.okdFinale,
-    console.log(critere);
+
     this.service.addCritere(critere).subscribe(
     (site1) => {
       console.log('La Liste Des Critéres added successfully:', site1);
@@ -760,7 +729,7 @@ SaveHabilitation(): void {
  
     this.service.addHabilitation(this.habilitation).subscribe(
     (site1) => {
-      console.log('la liste d\'habilitation added successfully:', site1);
+     
       Swal.fire({
         title: 'Succès!',
         text: 'L\'ajout a été effectué avec succès.',
@@ -804,27 +773,14 @@ onSelectUser(event: any, index: number) {
   this.selectedUsers[index] = event; // Stocker l'utilisateur sélectionné dans la liste selectedUsers
 }
 
-// userDetail(index: number): void {
-//   if (this.selectedUsers[index]) {
-//     const selectedUserId = this.selectedUsers[index][0]; // Récupérer l'ID de l'utilisateur sélectionné
-//     console.log(selectedUserId)
-//     this.service.getUserById(selectedUserId.id).subscribe(procede => {
-//     this.user = procede;
-//     console.log("le user actuel est ",procede)
-//     this.UserNom=this.user.username
-//     this.UserPrenom=this.user.prenom
-//     console.log(this.UserNom , this.UserPrenom)
-      
-//     });
-//   }
-// }
+
 userDetail(index: number): void {
   if (this.selectedUsers[index]) {
     const selectedUserId = this.selectedUsers[index][0]; // Récupérer l'ID de l'utilisateur sélectionné
-    console.log(selectedUserId);
+    
     this.service.getUserById(selectedUserId.id).subscribe(user => {
       this.selectedUserDetails[index] = { nom: user.username, prenom: user.prenom };
-      console.log("le user actuel est ", user);
+   
     });
   }
 }
@@ -832,8 +788,7 @@ userDetail(index: number): void {
 
 
 SaveFormation() {
-  console.log(this.selectedUsers)
-  console.log(this.formations)
+
  // Logique pour verifier que les collaborateurs existent une seule fois dans la liste des habilitations 
   const uniqueSelectedUsers = Array.from(new Set(this.selectedUsers.map(user => user[0].id)));
   if (uniqueSelectedUsers.length !== this.selectedUsers.length) {
@@ -863,16 +818,12 @@ SaveFormation() {
     for (let i = 0; i < this.formations.length && i < this.lf.length; i++) {
       const formation = this.formations[i];
       const file = this.lf[i];
-      console.log("l'user correspondant pour la formation :",i,this.selectedUsers[i]);
-     
       // Associer l'utilisateur sélectionné à la formation
       const selectedUserId = this.selectedUsers[i][0]; // Récupérer l'ID de l'utilisateur sélectionné
-      console.log(selectedUserId)
+     
        const user: Utilisateur = { id: selectedUserId.id};
        formation.utilisateur = user; 
-      // console.log(formation.utilisateur)
       formation.habilitation = this.habilitationfinal;
-      console.log("formation ",i,formation)
       // Créer un nouvel objet FormData pour chaque formation
       const formData = new FormData();
       formData.append('formation', new Blob([JSON.stringify(formation)], {
@@ -881,11 +832,9 @@ SaveFormation() {
 
       // Associer le fichier à la formation
       formData.append('files', file);
-      console.log("formation final",formation)
       // Envoyer la formation avec son fichier associé au serveur
       this.service.addFormation(formData).subscribe(
         (site1) => {
-          console.log('Formation added successfully:', site1);
           this.showSmartTable1 = false;
         },
         (error) => {
@@ -910,77 +859,10 @@ SaveFormation() {
   });
 }
 
-
-// SaveFormation() {
-//   // Logique pour sauvegarder les informations des critères
-//   const EmptyCriteres = this.formations.filter(formation => {
-//     if (formation.date_init && formation.date_fin&& formation.utilisateur) {
-//       return formation.date_init.trim() === '' && formation.date_fin.trim() === '';
-//     } else {
-//       return true;
-//     }
-//   });
-//   console.log(EmptyCriteres.length);
-//   if (EmptyCriteres.length !== 0) {
-//     this.toastrService.danger('Veuillez remplir tous les champs', 'Erreur');
-//     return;
-//   }
-//   //extraction du dernier okd enregistrer   
-//   this.service.getHabilitation().subscribe(procede => {
-//     this.listeHabilitationExtractés = procede;
-//     console.log("la liste des Habilitation Extractés : ",this.listeHabilitationExtractés)
-
-//     this.habilitationfinal = this.listeHabilitationExtractés.slice(-1)[0];
-//     console.log("Le dernier élément de la liste habilitation final : ",  this.habilitationfinal);  
-//     console.log(this.habilitationfinal.id)
-//   console.log("Critères saved: ", this.formations);
-
-//   const formData = new FormData();
-
-//   for(let formation of this.formations){
-//     formation.habilitation=this.habilitationfinal,
-//     console.log(formation);
-//     formData.append('formation', new Blob([JSON.stringify(formation)], {
-  
-//       type: 'application/json'
-//         }));
-//     if (this.lf.length > 0) {
-//           Array.from(this.lf).forEach(file => {
-//            formData.append('files', file);
-//           });
-//           this.service.addFormation(formData).subscribe(
-//             (site1) => {
-//               console.log('formation added successfully:', site1);
-//             },
-//             (error) => {
-//               console.error('Error adding site:', error);
-//               this.toastrService.danger('Erreur lors de l\'ajout du site', 'Erreur');
-          
-//             }
-//           );
-//   }
-//   Swal.fire({
-//     title: 'Succès!',
-//     text: 'L\'ajout a été effectué avec succès.',
-//     icon: 'success',
-//     confirmButtonColor: '#0CA417',
-//     confirmButtonText: 'OK'
-//   });
-//   this.criteres = [];
-//   this.route.navigate(["/pages/ProcedeOKD"]);
-//   this.resetFieldsCC();
-//   this.getOKDByProcedeId(this.procede.id)
-//   }
-// })
-   
-// }
-
-
-
  //supprision de Carte Controle 
  OnDeleteConfirmCarte(event) {
   this.carte= event.data;
-  console.log(this.carte.id)
+ 
   Swal.fire({
 
     title: 'Attention !',
@@ -1031,7 +913,6 @@ SaveFormation() {
  //supprision des OKD
  OnDeleteConfirmOKD(event) {
   this.okd= event.data;
-  console.log(this.okd.id)
   Swal.fire({
 
     title: 'Attention !',
@@ -1122,10 +1003,9 @@ OnDeleteConfirm(event) {
 }
 getCritereByOkdId(id:any){
   this.service.getCritereByOkdId(this.okd1.id).subscribe(liste => {
-    console.log("test");
     this.Listecriteres=liste;
     this.sourceCritere = new LocalDataSource(this.Listecriteres) 
-    console.log(liste);
+
   });
 }
 //supprision des Criteres
@@ -1222,9 +1102,6 @@ uploadFiles(event) {
   if (fileList.length > 0) {
 
     const file: File = fileList[0];
-    console.log(file)
-
-
     const maxSizeInBytes = 20 * 1024 * 1024; // 40MB in bytes
 
     if (file.size > maxSizeInBytes) {
@@ -1242,12 +1119,11 @@ uploadFiles(event) {
       this.lf.push(file);
     });
   } 
-  console.log(this.lf)
+
   this.listfiles = new LocalDataSource(this.lf); 
-  console.log(this.listfiles)    
+  
   this.files = event.target.files;
-  // this.lf.push(this.files);
-  console.log(this.lf)
+
 }
 
 //Modification Carte Controle :
@@ -1262,7 +1138,7 @@ uploadFiles(event) {
             modifierCarte(ref: NbDialogRef<any>): void {
               const min = parseInt(this.carte1.min.toString());
               const max = parseInt(this.carte1.max.toString());
-              console.log("min : ",min, "max : " ,max)
+             
               if (min >= max) {
                 this.toastrService.danger('La valeur de min doit être inférieure à la valeur de max', 'Erreur');
                 return;
@@ -1284,7 +1160,7 @@ uploadFiles(event) {
                   const dernierNombre = match[match.length - 1];
                   const nombreMaxDeValeurs = parseInt(dernierNombre.substring(1), 10);
                   const nbValeurs = this.carte1.nb_valeur || 0;
-                  console.log(nombreMaxDeValeurs, nbValeurs)
+                 
                   // Vérification si le nombre de valeurs est inférieur au nombre maximum
                   if (nbValeurs < nombreMaxDeValeurs) {
                     this.toastrService.danger('Veuillez verifier votre Fonction  !!!  La fonction est composée par un excés de valeur..', 'Erreur');
@@ -1306,7 +1182,6 @@ uploadFiles(event) {
              this.carte1.procede=this.procede
              this.service.updateCC(this.carte1.id,this.carte1).subscribe(
                () => {
-                 console.log('Carte edited successfully:');
                  this.getCarteByProcedeId(this.procede.id);
                  ref.close();
                  this.toastrService.success('Carte de controle modifié avec succès', 'Succès', {
@@ -1329,10 +1204,10 @@ uploadFiles(event) {
           this.okd1 = { ...okd1 };
           this.dialogRef1 = this.dialogservice.open(this.dialogEditOKD, { context: { okd1: this.okd1 } });
           this.service.getCritereByOkdId(this.okd1.id).subscribe(liste => {
-            console.log("test");
+       
             this.Listecriteres=liste;
             this.sourceCritere = new LocalDataSource(this.Listecriteres) 
-            console.log(liste);
+          
           });
          }
               
@@ -1344,7 +1219,7 @@ uploadFiles(event) {
              this.okd1.procede=this.procede
              this.service.updateOKD(this.okd1.id,this.okd1).subscribe(
                () => {
-                 console.log('okd1 edited successfully:');
+               
                  this.getOKDByProcedeId(this.procede.id);
                  ref.close();
                  this.toastrService.success('OK DEMARRAGE modifié avec succès', 'Succès', {
@@ -1373,7 +1248,7 @@ uploadFiles(event) {
       if (this.critere1.type === 'valeur') {
         const min = parseInt(this.critere1.min.toString());
         const max = parseInt(this.critere1.max.toString());
-        console.log("min : ",min, "max : " ,max)
+     
         if (min >= max) {
           this.toastrService.danger('La valeur de min doit être inférieure à la valeur de max', 'Erreur');
           return;
@@ -1387,7 +1262,7 @@ uploadFiles(event) {
          this.critere1.okd=this.okd1
          this.service.updateCritere(this.critere1.id,this.critere1).subscribe(
                () => {
-                 console.log('okd1 edited successfully:');
+               
                  this.getCritereByOkdId(this.okd1.id);
                  ref.close();
                  this.toastrService.success('OK DEMARRAGE modifié avec succès', 'Succès', {
@@ -1418,7 +1293,7 @@ add(dialog: TemplateRef<any>) {
     if (this.newCritere.type === 'valeur') {
       const min = parseInt(this.newCritere.min.toString());
       const max = parseInt(this.newCritere.max.toString());
-      console.log("min : ",min, "max : " ,max)
+   
       if (min >= max) {
         this.toastrService.danger('La valeur de min doit être inférieure à la valeur de max', 'Erreur');
         return;
@@ -1428,7 +1303,6 @@ add(dialog: TemplateRef<any>) {
    
       this.service.addCritere(this.newCritere).subscribe(
       (site1) => {
-        console.log('Critere added successfully:', site1);
         Swal.fire({
           title: 'Succès!',
           text: 'L\'ajout a été effectué avec succès.',
@@ -1460,21 +1334,16 @@ add(dialog: TemplateRef<any>) {
           this.dialogRef3 = this.dialogservice.open(this.dialogEditHabilitation, { context: { habilitation1: this.habilitation1 } });
           this.service.getMOD().subscribe(users => {
             this.listeUser1 = users;
-            console.log("Liste complète des utilisateurs:", this.listeUser1);
           });
           this.service.getFormationByDernierDate(this.habilitation1.id).subscribe(liste => {
-            console.log("test");
             this.listeFormation=liste.reverse();
-            console.log(this.listeFormation);
+          
              //Eliminer la redondance des users  
             this.service.getAllUserByHabilitationId(this.habilitation1.id).subscribe(liste => {
-              console.log("test users ");
               this.listeUser=liste.reverse();
-              console.log(this.listeUser);
             // Filtrer listeUser1 pour obtenir les utilisateurs qui ne sont pas dans listeUser
             this.listeUserNotInListe = this.listeUser1.filter(user1 => !this.listeUser.some(user => user.id === user1.id));
       
-            console.log("Utilisateurs non présents dans listeUser:", this.listeUserNotInListe);
             
             });
             this.sourceFormation = new LocalDataSource(this.listeFormation) 
@@ -1488,7 +1357,6 @@ add(dialog: TemplateRef<any>) {
              this.habilitation1.procede=this.procede
              this.service.updateHabilitation(this.habilitation1.id,this.habilitation1).subscribe(
                () => {
-                 console.log('habilitation1 edited successfully:');
                  this.getHabilitationByProcedeId(this.procede.id);
                  ref.close();
                  this.toastrService.success('Liste habilitation modifiée avec succès', 'Succès', {
@@ -1527,23 +1395,19 @@ add(dialog: TemplateRef<any>) {
     userDetail1(index: number): void {
       if (this.selectedCollab) {
         const selectedUserId = this.selectedCollab[0]; // Récupérer l'ID de l'utilisateur sélectionné
-        console.log(selectedUserId)
         this.service.getUserById(selectedUserId.id).subscribe(procede => {
         this.user = procede;
-        console.log("le user actuel est ",procede)
+
         this.UserNom1=this.user.username
         this.UserPrenom1=this.user.prenom
-        console.log(this.UserNom1 , this.UserPrenom1)
           
         });
       }}
 SaveNewFormation(ref: NbDialogRef<any>): void {
-       console.log(this.newFormation);
       if ( !this.newFormation.date_init ||!this.selectedCollab||!this.files) {
          this.toastrService.danger('Veuillez remplir tous les champs', 'Erreur');
          return;
        }
-     console.log(this.newFormation);
      if (this.selectedCollab) {
 
       const collabSelectionne: Utilisateur = { id: this.selectedCollab[0].id};
@@ -1562,7 +1426,6 @@ SaveNewFormation(ref: NbDialogRef<any>): void {
                   });
       this.service.addFormation(formData).subscribe(
        (unite1) => {
-         console.log('formation added successfully:', unite1);
         
          this.LoadFormationByHabilitation(this.habilitation1.id);
          ref.close(); // Fermer la boîte de dialogue
@@ -1594,7 +1457,6 @@ SaveNewFormation(ref: NbDialogRef<any>): void {
     if (fileList.length > 0) {
   
       const file: File = fileList[0];
-      console.log(file)
   
   
       const maxSizeInBytes = 20 * 1024 * 1024; // 40MB in bytes
@@ -1614,9 +1476,7 @@ SaveNewFormation(ref: NbDialogRef<any>): void {
         this.lf.push(file);
       });
     } 
-    console.log("lf update : ",this.lf)
     this.listfiles = new LocalDataSource(this.lf); 
-    console.log(this.listfiles)    
     this.files = event.target.files;
     // this.lf.push(this.files);
   }
@@ -1676,7 +1536,6 @@ OnDeleteConfirmFor(event) {
               
             //Open model edite  :
       modifierFormation(ref: NbDialogRef<any>): void {
-             console.log(this.lf)
              this.formation1.date_fin= this.formation1.date_fin
              this.formation1.date_init= this.formation1.date_init
              this.formation1.utilisateur= this.formation1.utilisateur
@@ -1694,7 +1553,6 @@ OnDeleteConfirmFor(event) {
                          
              this.service.updateFormation(formData).subscribe(
                () => {
-                 console.log('formation edited successfully:');
                  this.LoadFormationByHabilitation(this.habilitation1.id);
                  ref.close();
                  this.toastrService.success('Habilitation modifié avec succès', 'Succès', {

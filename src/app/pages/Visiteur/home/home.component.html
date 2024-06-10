@@ -14,17 +14,19 @@
   <nb-card >
     <div class="row">
       <div class="col-6 d-flex" >
-        <i class="fa-solid fa-location-dot" style="margin-right: 3px;font-size: 25px;"></i>
-        <select class="select-Label"  placeholder="Sélectionnez un Site" id="site" [(ngModel)]="selectedSite"  (ngModelChange)="loadUnite()" #site="ngModel" name="site">
-          <option [ngValue]="null">Sélectionnez un Site</option>
+        <label style=" font-size: 14px; display: flex;align-items: center;justify-content: center; border-radius: 25px 0 0 25px;width: 190px;
+        height: 40px; border: none;"><i class="fa-solid fa-location-dot" style="margin-right: 3px;font-size: 25px;"></i>Choisir Un Site</label>
+        <select class="select-Label"  placeholder="Sélectionnez un Site" id="site" [(ngModel)]="selectedSite"  (ngModelChange)="loadUnite();onSiteChange()" #site="ngModel" name="site">
+          <option [ngValue]="null">All</option>
           <option *ngFor="let site of listeSite" [ngValue]="site.id">{{ site.nom }}</option>
         </select>
       </div>
     
       <div class="col-6  d-flex">
-       <i class="fa-solid fa-gears" style="margin-right: 3px;font-size: 25px;"></i>
-        <select class="select-Label" id="unite" [(ngModel)]="selectedUnite" (ngModelChange)="loadProcedes()" #unite="ngModel" name="unite">
-          <option [ngValue]="null">Sélectionnez Une Unité Opérationnel</option>
+        <label style=" font-size: 14px; display: flex;align-items: center;justify-content: center; border-radius: 25px 0 0 25px;width: 190px;
+        height: 40px; border: none;"> <i class="fa-solid fa-gears" style="margin-right: 3px;font-size: 25px;"></i>Choisir Une U.O</label>
+         <select class="select-Label" id="unite" [(ngModel)]="selectedUnite" (ngModelChange)="loadProcedes()" #unite="ngModel" name="unite">
+          <option [ngValue]="null" disabled selected hidden>All</option>
           <option *ngFor="let unite of listeUnit" [ngValue]="unite.id">{{ unite.ref }} ~ {{ unite.nom }}</option>
         </select>
       </div>

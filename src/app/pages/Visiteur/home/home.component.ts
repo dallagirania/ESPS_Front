@@ -38,8 +38,7 @@ export class HomeComponent implements OnInit {
       this.liste=procede.reverse()
       this.nbprocede=this.liste.length  
       this.liste2=this.liste
-      console.log("liste totale :=> ",this.liste2)
-      console.log("longueur du liste totale :=> ",this.liste2.length)
+    
     })
   }  
   
@@ -49,7 +48,7 @@ export class HomeComponent implements OnInit {
       const dateSysteme = new Date();
       const troisMoisApres = new Date();
       troisMoisApres.setMonth(dateSysteme.getMonth() + 3);
-      console.log(troisMoisApres)
+    
   
       if (dateFinProc > troisMoisApres) {
         return 'Qualifié';
@@ -66,12 +65,9 @@ export class HomeComponent implements OnInit {
 getProgressBarWidth(date_fin: string): string {
   // Calculate and return the width of the progress bar based on the qualification status
  const dateFinProc = new Date(date_fin);
-   //  console.log("date fin est : ",date_fin)
      const dateSysteme = new Date();
-   //  console.log(dateSysteme)
      const troisMoisApres = new Date();
      troisMoisApres.setMonth(dateSysteme.getMonth() + 3);
-   //  console.log(troisMoisApres)
      if (dateFinProc > troisMoisApres) {
        return '100%';
      }else if(dateFinProc < dateSysteme){
@@ -87,12 +83,9 @@ getProgressBarWidth(date_fin: string): string {
 getProgressBarColor(date_fin: string): string {
 // Determine and return the color of the progress bar based on the qualification status
  const dateFinProc = new Date(date_fin);
-  //   console.log("date fin est : ",date_fin)
      const dateSysteme = new Date();
-   //  console.log(dateSysteme)
      const troisMoisApres = new Date();
      troisMoisApres.setMonth(dateSysteme.getMonth() + 3);
-  //   console.log(troisMoisApres)
      if (dateFinProc > troisMoisApres) {
        return 'green';
      }else if(dateFinProc < dateSysteme){
@@ -135,13 +128,28 @@ getProgressBarColor(date_fin: string): string {
     }
     this.selectedUnite = null;
   }
+  onSiteChange() {
+    if (this.selectedSite && this.selectedSite !== 'null') {
+      // Si un site spécifique est sélectionné
+      this.show = true;
+      this.service.getProcedeDernierBySite(parseInt(this.selectedSite)).subscribe(at => {
+        this.listeProcedefinal = at.reverse();
+      });
+    } else {
+      // Si l'option "All" est sélectionnée
+      this.show = true;
+      this.service.getProcedeDernier().subscribe(procede => {
+        this.listeProcedefinal = procede.reverse();
+      });
+    }
+  }
+  
   loadProcedes() {
     if (this.selectedUnite) {
       this.show=true
-      console.log('Loading procedes for unit:', this.selectedUnite); // Log de débogage
       this.service.getProcedeDernierByUnite(parseInt(this.selectedUnite)).subscribe(at => {
         this.listeProcedefinal = at.reverse();
-        console.log('Procedes loaded:', this.listeProcedefinal); // Log de débogage
+      
       });
     }
   }

@@ -181,7 +181,10 @@ export class CrudService {
         getRUO():Observable<Utilisateur[]>{
           return this.http.get<Utilisateur[]>(this.apiUrl+"/user/RUO");
         }
-        public getUserById(id : number):Observable<any>{
+        getUserByUnit(id : number):Observable<any>{
+          return this.http.get<Utilisateur[]>(`${this.apiUrl}/user/unit/${id}`);
+        }
+        getUserById(id : number):Observable<any>{
           return this.http.get<any>(`${this.apiUrl}/user/${id}`);
         }
         updateUser(id: number, user: Utilisateur): Observable<Role> {
@@ -307,6 +310,9 @@ export class CrudService {
             return this.http.get<Habilitation[]>(`${this.apiUrl}/habilitation/procede/${procedeId}`);
           }
 
+          getHabilitationByUnite(id: number): Observable<Habilitation[]> {
+            return this.http.get<Habilitation[]>(`${this.apiUrl}/habilitation/unite/${id}`);
+          }
    /******************    Formation    ******************/
     
           addFormation(formData: FormData): Observable<any> {
@@ -341,8 +347,6 @@ export class CrudService {
           getAllUserByHabilitationIdandDate(habId: number): Observable<Utilisateur[]> {
             return this.http.get<Utilisateur[]>(`${this.apiUrl}/habilitation/date/${habId}/users`);
           }
-          
-          
           getFormationByDernierDate(habId: number): Observable<Formation[]> {
             return this.http.get<Formation[]>(`${this.apiUrl}/formation/denier_date/${habId}`);
           }
@@ -410,6 +414,9 @@ export class CrudService {
           getProcedeDernierByUnite(IdUnite: number):Observable<Procede[]>{
             return this.http.get<Procede[]>(`${this.apiUrl}/procede/denier/${IdUnite}`);
           }
+          getProcedeDernierBySite(IdSite: number):Observable<Procede[]>{
+            return this.http.get<Procede[]>(`${this.apiUrl}/procede/site/${IdSite}`);
+          }
 
            /******************    MesureCC    ******************/
        
@@ -420,8 +427,8 @@ export class CrudService {
           getMesureCC():Observable<MesureCC[]>{
             return this.http.get<MesureCC[]>(this.apiUrl+"/mesureCC");
           }
-          getAllMesureCC():Observable<MesureCC[]>{
-            return this.http.get<MesureCC[]>(this.apiUrl+"/mesureCC/All");
+          getAllMesureCC(id:number):Observable<MesureCC[]>{
+            return this.http.get<MesureCC[]>(`${this.apiUrl}/mesureCC/All/${id}`);
           }
           public getMesureCCById(id : number):Observable<any>{
             return this.http.get<any>(`${this.apiUrl}/mesureCC/${id}`);
@@ -444,10 +451,6 @@ export class CrudService {
             return this.http.post<any>(this.apiUrl+"/mesureCC/notifyNC", mesureCC);
           }
          
-             /*   getValByCarteControle(id: number): Observable<number[]> {
-                return this.http.get<number[]>(`${this.baseUrl}/valByCarteControle/${id}`);
-         }*/
-
          getMesureCCData(id: number): Observable<any[]> {
           const url = `${this.apiUrl}/mesureCC/valWithDateByCarteControle1/${id}`;
           return this.http.get<any[]>(url);
@@ -467,8 +470,8 @@ export class CrudService {
             return this.http.post<any>(this.apiUrl+"/mesureOKD", mesureOKD);
           }
       
-          getMesureOKD():Observable<MesureOKD[]>{
-            return this.http.get<MesureOKD[]>(this.apiUrl+"/mesureOKD/All");
+          getMesureOKD(id:number):Observable<MesureOKD[]>{
+            return this.http.get<MesureOKD[]>(`${this.apiUrl}/mesureOKD/All/${id}`);
           }
           public getMesureOKDById(id : number):Observable<any>{
             return this.http.get<any>(`${this.apiUrl}/mesureOKD/${id}`);
@@ -575,7 +578,20 @@ export class CrudService {
           countMesureCCByUniteId(uniteId: number): Observable<number> {
             return this.http.get<number>(`${this.apiUrl}/mesureCC/countCCByUnite/${uniteId}`);
           }
-         
+          
+          countMesureCCBySiteId(uniteId: number): Observable<number> {
+            return this.http.get<number>(`${this.apiUrl}/mesureCC/countCCBySite/${uniteId}`);
+          }
+          countMesureOKDBySiteId(uniteId: number): Observable<number> {
+            return this.http.get<number>(`${this.apiUrl}/mesureOKD/countOKDBySite/${uniteId}`);
+          }
+          countOKDAll():Observable<number>{
+            return this.http.get<number>(this.apiUrl+"/mesureOKD/countOKDAll");
+          }
+          countCCAll():Observable<number>{
+            return this.http.get<number>(this.apiUrl+"/mesureCC/countCCAll");
+          }
+          
 
           countMesureTotalByProcedeAndMonth(procedes: Procede[]): Observable<any> {
             return this.http.post<any[]>(`${this.apiUrl}/mesureCC/totalCountByMonthForProcedes`, procedes);

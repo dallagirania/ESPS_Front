@@ -1,15 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { MesureCC } from '../../../Model/MesureCC.model';
+import { ConformiteStyleComponent } from '../../Controle/conformite-style/conformite-style.component';
+import { LocalDataSource } from 'ng2-smart-table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
 import { CrudService } from '../../../Service/crud.service';
 import { NbDialogService, NbThemeService, NbToastrService } from '@nebular/theme';
 import { LayoutService } from '../../../@core/utils';
-import { CarteControle } from '../../../Model/CarteControle.model';
-import { Subscription } from 'rxjs';
-import { ConformiteStyleComponent } from '../../Controle/conformite-style/conformite-style.component';
-import { OperateurRenderComponent } from '../../Controle/operateur-render/operateur-render.component';
-import { MesureCC } from '../../../Model/MesureCC.model';
-import { LocalDataSource } from 'ng2-smart-table';
 
 @Component({
   selector: 'ngx-mesure-cc',
@@ -49,7 +46,6 @@ export class MesureCCComponent implements OnInit {
       title: 'Validation',
       type: 'html',
       valuePrepareFunction: (cell, row) => {
-        //  console.log("Valeur de etatvalide :", row.etatvalide);
           if (row.etatvalide === false) {
             return '<i class="fas fa-times-circle fa-2x text-danger" ></i>';
         } else {

@@ -30,11 +30,10 @@ export class HistoriqueProcedeComponent implements OnInit, ViewCell {
   
   
     },
-    // add: {
-    //   addButtonContent: '<i class="nb-plus"></i>',
-    //   createButtonContent: '<i class="nb-checkmark"></i>',
-    //   cancelButtonContent: '<i class="nb-close"></i>',
-    // },  
+    pager: {
+      display: true,
+      perPage: 3,
+    },
    columns: {
   
     date_init: {
@@ -80,17 +79,16 @@ export class HistoriqueProcedeComponent implements OnInit, ViewCell {
 
   ngOnInit(): void {
    this.renderValue = this.value;
-  // console.log("====> " + this.value );
    this.service.getProcedeById(this.value).subscribe(liste => {
-   // console.log("test");
     this.ProcedeActuelle=liste;
-   // console.log(this.ProcedeActuelle);
     this.service.getModProcedeByProcedeId(this.value).subscribe(liste => {
-    //  console.log("test");
-      this.Historique=liste.reverse();
+      this.Historique=liste;
       this.Historique.push(this.ProcedeActuelle);
+      this.Historique.sort((a, b) => {
+        return new Date(b.date_init.toString()).getTime() - new Date(a.date_init.toString()).getTime();
+      });
       this.sourceHistorique = new LocalDataSource(this.Historique) 
-     // console.log("l'historique de cette PS :",this.Historique);
+    
     });
   });
     

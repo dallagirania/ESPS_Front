@@ -26,21 +26,7 @@ export class DownloadButtonComponent implements OnInit , ViewCell {
     this.renderValue = this.value;
     console.log("====> " + this.value );
   }
- /* download(){
-    this.service.getModFormationById(parseInt(this.value)).subscribe(mod => {
-     this.modif=mod
-     console.log(this.modif.files)
-     for(let file of this.modif.files )
-     {
-      this.service.downloadFile(file.nom).subscribe(res => {
-
-        saveAs(res, "habilitation" +file.nom);
-  
-      });
-     }
-
-    }); 
-  }*/
+ 
   download(){
     this.service.getModFormationById(parseInt(this.value)).subscribe(
       mod => {
@@ -57,11 +43,9 @@ export class DownloadButtonComponent implements OnInit , ViewCell {
           );
         }
       },
-      error => {
-        console.error("Erreur lors de la récupération de la modifFormation:", error);
-        
+      error => {    
         // Si une erreur est détectée, récupérez les fichiers de la formation correspondante
-        this.service.getFormationById(2).subscribe(
+        this.service.getFormationById(parseInt(this.value)).subscribe(
           formation => {
             console.log("le fichier du formation : ",formation.files)
             for(let file of formation.files) {

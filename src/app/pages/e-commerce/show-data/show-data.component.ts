@@ -418,14 +418,10 @@ SettingsMesureOKD = {
 
      }
   ngOnInit(): void {
-   // console.log(this.mydate)
-    //Extraction de user connecté 
     this.userConnecte=localStorage.getItem("user")
     this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
-      this.currentuser=utilisateur
-   //   console.log("Info header  :",this.currentuser )    
+      this.currentuser=utilisateur 
   })
-  //Extraction des procedes dont l'user connecté est impliqué
   this.service.getProcede().subscribe(pros=>{
     this.listeProcede=pros
     this.listeProcede.forEach(ps => {
@@ -439,13 +435,12 @@ SettingsMesureOKD = {
               this.habilitations.push(hab); 
             }
              this.habilitations.forEach(habi=>{
-             // this.listeProcedefinal.push(habi.procede) 
              if (!this.listeProcedefinal.some(proc => proc.id === habi.procede.id)) {
               this.listeProcedefinal.push(habi.procede);
             }
               
             })
-      //      console.log("listeUser  du ps :",ps.id ," Hab ",hab.id,"==>" , this.listeUser ) 
+     
           })  
           
         })
@@ -453,25 +448,8 @@ SettingsMesureOKD = {
     })
      
     }) 
-  //  console.log("ListeHabilitation " , this.habilitations ) 
-   // console.log("listeProcedefinal " , this.listeProcedefinal )
-})
-    // console.log("id envoye par pere : ",this.id)
-    // this.service.getCCById(this.id).subscribe(carte=>{
-    //   this.carte1=carte
-    //   console.log("la courbe correspond à cette carte de controle : ",this.carte1)
 
-    //   if(this.carte1.fonction) {
-    //     console.log("possede fonction : ",this.carte1.fonction)
-    //     this.fetchDataResultat(this.carte1.id);
-      
-    // } else {
-    //     console.log("Ne possede pas de  fonction : ",this.carte1.fonction)
-    //      this.fetchData1(this.carte1.id);
-    // }
-  
-    // })
-  
+})
   }
 
 fetchDataResultat(id: number): void {
@@ -1524,23 +1502,7 @@ getMaxCarteById(id:number): string {
 
 
 /************************************ Extraction Données EXCEL ************************************** */
-// transformDataCCForExport(data: MesureCC[]): any[] {
-//   return data.map(mesure => ({
-//     'ID': mesure.id,
-//     'Résultat': mesure.resultat,
-//     'Commentaire': mesure.Commentaire,
-//     'Date': mesure.date,
-//     'Motif Saisie': mesure.motif_saisie,
-//     'Opérateur ID': mesure.operateur,
-//     'Opérateur Nom': mesure.operateurNom,
-//     'Qualiticien ID': mesure.qualiticien,
-//     'Qualiticien Nom': mesure.qualiticienNom,
-//     'État Validation': mesure.etatactive,
-//     'Carte ID': mesure.carte?.id,
-//     'Carte Nom': mesure.carte?.nom,
-//     'Valeur': JSON.stringify(mesure.val)
-//   }));
-// }
+
 transformDataCCForExport(data: MesureCC[]): any[] {
   return data.map(mesure => {
     const transformedData: any = {
@@ -1584,65 +1546,6 @@ exportCCToExcel(id: number): void {
     XLSX.writeFile(wb, "MesureCC"+id+".xlsx");
   });
 }
-
-
-// transformDataForExportOKD(data: MesureOKD[]): any[] {
-//   return data.map(mesure => {
-//     const transformedMesure: any = {
-//       'ID': mesure.id,
-//       'Commentaire': mesure.Commentaire,
-//       'Date Ajout': mesure.date_add,
-//       'Date Modification': mesure.date_modif,
-//       'Événement': mesure.evenement,
-//       'Équipe': mesure.equipe,
-//       'Nom Opérateur': mesure.operateurNom,
-//       'Prénom Opérateur': mesure.operateurPrenom,
-//       'Nom Qualiticien': mesure.qualiticienNom,
-//       'Prénom Qualiticien': mesure.qualiticienPrenom,
-//       'État Validation': mesure.etatactive,
-//       'OKD REF': mesure.okd?.ref,
-//       'OKD Nom': mesure.okd?.nom,
-//     };
-
-//     for (const key in mesure.val) {
-//       if (mesure.val.hasOwnProperty(key)) {
-//         transformedMesure[`Valeur ${key}`] = mesure.val[key];
-//       }
-//     }
-
-//     return transformedMesure;
-//   });
-// }
-
-// transformDataForExportOKD(data: MesureOKD[]): any[] {
-//   return data.map(mesure => {
-//     // Extraction des valeurs du champ val
-//     const valKeys = Object.keys(mesure.val);
-//     const valData = valKeys.reduce((acc, key) => {
-//       acc[`Critére ${key}`] = mesure.val[key];
-//       return acc;
-//     }, {});
-
-//     return {
-//       'ID': mesure.id,
-//       'Commentaire': mesure.Commentaire,
-//       'Date Ajout': mesure.date_add,
-//       'Date Modification': mesure.date_modif,
-//       'Événement': mesure.evenement,
-//       'Équipe': mesure.equipe,
-//       'Nom Opérateur': mesure.operateurNom,
-//       'Prenom Opérateur': mesure.operateurPrenom,
-//       'Nom qualiticien': mesure.qualiticienNom,
-//       'Prenom qualiticien': mesure.qualiticienPrenom,
-//       'État Validation': mesure.etatactive,
-//       'OKD ID': mesure.okd?.id,
-//       'OKD REF': mesure.okd?.ref,
-//       'OKD Nom': mesure.okd?.nom,
-//       ...valData  // Ajoute les valeurs extraites du champ val
-//     };
-//   });
-// }
-
 
 transformDataForExportOKD(data: MesureOKD[]): Observable<any[]> {
   const observables = data.map(mesure =>

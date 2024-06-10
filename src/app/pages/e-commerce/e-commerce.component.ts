@@ -17,68 +17,31 @@ import { MesureOKD } from '../../Model/MesureOKD.model';
 import { Critere } from '../../Model/Critere.model';
 import { NbUser } from '@nebular/auth';
 import { log } from 'console';
+import { Site } from '../../Model/Site.model';
 
 @Component({
   selector: 'ngx-ecommerce',
   templateUrl: './e-commerce.component.html',
 })
 export class ECommerceComponent  implements OnInit  {
-
-  @ViewChildren('inputElement') inputElements: QueryList<ElementRef>;
-  @ViewChild('PS', { static: true }) accordionPS;
-  showFunctionInput: boolean = false;
+  liste:Procede[]=[]
+  liste2:Procede[]=[]
+  liste3:Procede[]=[]
+  listepro:Procede[]=[]
+  nom:any
+  selectedUn: any;
+  page :number=1
+  nbprocede:number
+  procede:Procede=new Procede()
   currentuser:any
-  userConnecte:any
-  listeHabilitaion: Habilitation[]=[]
-  listeProcede:Procede[]=[]
-  listeProcedefinal:Procede[]=[]
-  listeUser:Utilisateur[]=[]
-  habilitations:Habilitation[]=[]
-  listeCarte:CarteControle[]=[]
-  listeOKD:OKD[]=[]
-  listemesureOKD: MesureOKD[]=[]
-  imageUrl: string;
-  currentProcede:Procede=new Procede()
-
-  imageUrls: { [key: string]: string } = {};
-
-  sourceCarte: LocalDataSource = new LocalDataSource();
-  sourceOKD :LocalDataSource = new LocalDataSource();
-  sourceMesureOKD :LocalDataSource = new LocalDataSource();
-
-  carte :CarteControle=new CarteControle()
-  carte1 :CarteControle=new CarteControle()
-  okd :OKD=new OKD()
-  min:number
-  max:number
-  dialogRef:NbDialogRef<any>
-  dialogedit:TemplateRef<any>
-  @ViewChild('dialogEdit', { static: false }) dialogEdit: TemplateRef<any>;
-
+  currentuserUnite:number
+  listeSite:Site[]=[]
+  selectedSite: string | null = null;
+  selectedUnite: string | null = null;
   
-  dialogRef1:NbDialogRef<any>
-  dialogeditOKD:TemplateRef<any>
-  @ViewChild('dialogEditOKD', { static: false }) dialogEditOKD: TemplateRef<any>;
-
-
-  numberOfInputs:number
-  inputValues: number[] = [];
-
-  newMesure:MesureCC= new MesureCC()
-  newMesureOKD:MesureOKD= new MesureOKD()
-  mydate=new Date()
-  listeCritere:Critere[]=[]
-  nbCritere:number=0
-  tempVal: Record<number, string> = {};
-  
-  chartData1: any[] = [];
-  chartDataRes: any[] = [];
-// Reference lines for y=10 and y=20
-
-data: any;
-options: any;
-colors: any;
-chartjs: any;
+  listeProcedefinal = [];
+  listeUnit = [];
+  show:boolean=false
   constructor( private service:CrudService,
     private route:Router,
     private dialogservice: NbDialogService,
@@ -88,8 +51,30 @@ chartjs: any;
 
     }
   ngOnInit(): void {
- 
- 
+ this.loadSite();
+  }
+
+  loadSite(){
+    this.service.getSite().subscribe(site=>{
+      this.listeSite=site
+    })
+  }
+  loadUnite() {
+    if (parseInt(this.selectedSite)) {
+      this.service.getUniteBySite(parseInt(this.selectedSite)).subscribe(unite=>{
+        this.listeUnit = unite;
+      })
+     
+    } else {
+      this.listeUnit = [];
+    }
+    this.selectedUnite = null;
+    this.show = this.selectedSite !== null;
+  }
+  loadData() {
+    if (this.selectedUnite) {
+      this.show=true
+    }
   }
 
  

@@ -125,7 +125,7 @@ export class ProcedeDetailComponent implements OnInit, ViewCell {
    
   });
 
-   this.service.getFormationByDernierDate(this.idP).subscribe(liste => {
+   this.service.getFormationByAcce(this.idP).subscribe(liste => {
     console.log("test");
     this.listeFormation=liste.reverse();
     console.log("liste formation : ",this.listeFormation); 

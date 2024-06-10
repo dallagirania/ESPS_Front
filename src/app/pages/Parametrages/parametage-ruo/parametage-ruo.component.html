@@ -10,117 +10,7 @@
     </nb-card>
    
   
-    <!-- <ng-template #dialogEdit let-data let-ref="dialogRef">
-
-      <nb-card class="col-12 " style="width: 800px;">
-  
-        <nb-card-header>Modifier Responsable Unité Opérationnelle </nb-card-header>
-  
-        <nb-card-body>
-          <div class="form-group row col-12">
-  
-            <label for="nouveauSalaire" class="label col-4 col-form-label"> Image : </label>
-
-            <div class="col-sm-6">
-
-              <input id="file" #fileInput accept="image/*" class="input-file" type="file" (change)="handleInputChange(fileInput)">
-            </div>
-
-          </div>
-          <div class="form-group row col-12">
-  
-            <label for="nouveauSalaire" class="label col-4 col-form-label"> Matricule : </label>
-
-            <div class="col-sm-6">
-
-              <input type="text" class="form-control col-sm-12" required fullWidth id="matricule"
-
-                [ngModel]="user1.matricule" (ngModelChange)="user1.matricule= $event" #matricule="ngModel"
-
-                name="matricule"
-
-                [ngClass]="{'alert alert-danger':matricule.invalid && (matricule.dirty || matricule.touched)}">
-
-            </div>
-
-          </div>
-
-          <div class="form-group row col-12">
-  
-            <label for="nouveauSalaire" class="label col-4 col-form-label"> Nom : </label>
-
-            <div class="col-sm-6">
-
-              <input type="text" class="form-control col-sm-12" required fullWidth id="username"
-
-                [ngModel]="user1.username" (ngModelChange)="user1.username= $event" #username="ngModel"
-
-                name="username"
-
-                [ngClass]="{'alert alert-danger':username.invalid && (username.dirty || username.touched)}">
-
-            </div>
-          </div>
-          <div class="form-group row col-12">
-  
-            <label for="nouveauSalaire" class="label col-4 col-form-label"> Prenom : </label>
-
-            <div class="col-sm-6">
-
-              <input type="text" class="form-control col-sm-12" required fullWidth id="prenom"
-
-                [ngModel]="user1.prenom" (ngModelChange)="user1.prenom= $event" #prenom="ngModel"
-
-                name="prenom"
-
-                [ngClass]="{'alert alert-danger':prenom.invalid && (prenom.dirty || prenom.touched)}">
-
-            </div>
-          </div>
-
-          <div class="form-group row col-12">
-  
-            <label for="nouveauSalaire" class="label col-4 col-form-label"> Email : </label>
-
-            <div class="col-sm-6">
-
-              <input type="text" class="form-control col-sm-12" required fullWidth id="email"
-
-                [ngModel]="user1.email" (ngModelChange)="user1.email= $event" #email="ngModel"
-
-                name="email"
-
-                [ngClass]="{'alert alert-danger':email.invalid && (email.dirty || email.touched)}">
-
-            </div>
-
-          </div>
-
-        
-  
-        </nb-card-body>
-  
-   
-  
-        <nb-card-footer>
-  
-          <button nbButton (click)="ref.close()" class=" float-right btn btn-danger "
-  
-            style="background-color: crimson;color: aliceblue;">Fermer</button>
-  
-          <button nbButton (click)="modifierRUO(ref)" class=" float-right btn btn-success mr-1"
-  
-            style="background-color: green;color: aliceblue;">Modifier</button>
-  
-   
-  
-        </nb-card-footer>
-  
-      </nb-card>
-  
-    </ng-template> -->
-
-    <ng-template #addCollab let-data let-ref="dialogRef">
+   <ng-template #addCollab let-data let-ref="dialogRef">
 
       <nb-card class="col-12 " style="width: 800px;">
   
@@ -343,7 +233,7 @@
                     <input type="text" nbInput fullWidth placeholder="Entrer la matricule du collaborateur" shape="semi-round"status="info" id="matricule"
                     [ngModel]="user1.matricule" (ngModelChange)="user1.matricule= $event" #matricule="ngModel"
                     name="matricule"
-                    [ngClass]="{'alert alert-danger':matricule.invalid && (matricule.dirty || matricule.touched)}">
+                    [ngClass]="{'alert alert-danger':matricule.invalid && (matricule.dirty || matricule.touched)}" readonly>
                   </div>
                 </div>
                 <div class="col-sm-6">

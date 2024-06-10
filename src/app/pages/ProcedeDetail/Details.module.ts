@@ -80,7 +80,7 @@ import { CourbeCCComponent } from './courbe-cc/courbe-cc.component';
    DetailComponent,
    MesureCCComponent,
    MesureOKDComponent,
-   CourbeCCComponent
+   CourbeCCComponent,
        
   ],
 })

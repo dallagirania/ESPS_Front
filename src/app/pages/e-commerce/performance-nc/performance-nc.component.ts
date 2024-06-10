@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NbThemeService, NbToastrService } from '@nebular/theme';
@@ -14,7 +14,7 @@ import { re } from 'mathjs';
   templateUrl: './performance-nc.component.html',
   styleUrls: ['./performance-nc.component.scss']
 })
-export class PerformanceNCComponent implements OnInit {
+export class PerformanceNCComponent implements OnInit ,OnChanges{
   currentuser:any
   currentuserUnite:any
   mesureOKDCount:number
@@ -35,6 +35,9 @@ export class PerformanceNCComponent implements OnInit {
   chartjs: any;
 
   private themeSubscription: Subscription;
+  resultatTotal:any
+  @Input() selectedUnite: number | null;
+  @Input() selectedSite: string | null;
   constructor(
     private service: CrudService,
     private router: Router,
@@ -43,30 +46,33 @@ export class PerformanceNCComponent implements OnInit {
     private toastrService: NbToastrService) { }
 
   ngOnInit(): void {
+    console.log("selectedUnite NC",this.selectedUnite)
       this.getNbConformite();
       this.CourbeBar();
       this.CourbePie();
 
   }
+  ngOnChanges(changes: SimpleChanges) {
+    if  ((changes.selectedUnite && this.selectedUnite)||(changes.selectedSite && this.selectedSite)) {
+      this.getNbConformite();
+      this.CourbeBar();
+      this.CourbePie();
+    }
+  }
   getNbConformite() {
-    this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur => {
-      this.currentuser = utilisateur;
-      this.currentuserUnite = this.currentuser.unite.id;
-      this.service.LeadTime(this.currentuserUnite).subscribe(res=>{
+    if (this.selectedUnite){
+      this.service.LeadTime(this.selectedUnite).subscribe(res=>{
         console.log("lesdTime",res)
         this.leadTime=res
       })
   
-      // Utilisez forkJoin pour attendre que les deux observables soient complétés
       forkJoin({
-        mesureOKDCount: this.service.countMesureOKDByUniteId(this.currentuserUnite),
-        mesureCCCount: this.service.countMesureCCByUniteId(this.currentuserUnite)
+        mesureOKDCount: this.service.countMesureOKDByUniteId(this.selectedUnite),
+        mesureCCCount: this.service.countMesureCCByUniteId(this.selectedUnite)
       }).subscribe(results => {
         this.mesureOKDCount = results.mesureOKDCount;
         this.mesureCCCount = results.mesureCCCount;
         this.TotalMesure = this.mesureOKDCount + this.mesureCCCount;
-  
-        // Vérifiez que TotalMesure n'est pas zéro avant de calculer les pourcentages pour éviter une division par zéro
         if (this.TotalMesure > 0) {
           this.pourcentageCC = parseFloat(((this.mesureCCCount / this.TotalMesure) * 100).toFixed(2));
           this.pourcentageOKD = parseFloat(((this.mesureOKDCount / this.TotalMesure) * 100).toFixed(2));
@@ -74,26 +80,121 @@ export class PerformanceNCComponent implements OnInit {
           this.pourcentageCC = 0;
           this.pourcentageOKD = 0;
         }
-  
-        // Affichage des résultats dans la console
         console.log("TotalMesure = ", this.TotalMesure, ", mesureCCCount : ", this.mesureCCCount, ", mesureOKDCount : ", this.mesureOKDCount);
         console.log("Pourcentage CC = ", this.pourcentageCC, ", Pourcentage OKD = ", this.pourcentageOKD);
       });
-    });
+    }else if(this.selectedSite){
+      forkJoin({
+        mesureOKDCount: this.service.countMesureOKDBySiteId(parseInt(this.selectedSite)),
+        mesureCCCount: this.service.countMesureCCBySiteId(parseInt(this.selectedSite))
+      }).subscribe(results => {
+        this.mesureOKDCount = results.mesureOKDCount;
+        this.mesureCCCount = results.mesureCCCount;
+        this.TotalMesure = this.mesureOKDCount + this.mesureCCCount;
+        if (this.TotalMesure > 0) {
+          this.pourcentageCC = parseFloat(((this.mesureCCCount / this.TotalMesure) * 100).toFixed(2));
+          this.pourcentageOKD = parseFloat(((this.mesureOKDCount / this.TotalMesure) * 100).toFixed(2));
+        } else {
+          this.pourcentageCC = 0;
+          this.pourcentageOKD = 0;
+        }
+        console.log("TotalMesure = ", this.TotalMesure, ", mesureCCCount : ", this.mesureCCCount, ", mesureOKDCount : ", this.mesureOKDCount);
+        console.log("Pourcentage CC = ", this.pourcentageCC, ", Pourcentage OKD = ", this.pourcentageOKD);
+      });
+    }else if(this.selectedSite=="null"){
+      forkJoin({
+        mesureOKDCount: this.service.countOKDAll(),
+        mesureCCCount: this.service.countCCAll()
+      }).subscribe(results => {
+        this.mesureOKDCount = results.mesureOKDCount;
+        this.mesureCCCount = results.mesureCCCount;
+        this.TotalMesure = this.mesureOKDCount + this.mesureCCCount;
+        if (this.TotalMesure > 0) {
+          this.pourcentageCC = parseFloat(((this.mesureCCCount / this.TotalMesure) * 100).toFixed(2));
+          this.pourcentageOKD = parseFloat(((this.mesureOKDCount / this.TotalMesure) * 100).toFixed(2));
+        } else {
+          this.pourcentageCC = 0;
+          this.pourcentageOKD = 0;
+        }
+        console.log("TotalMesure = ", this.TotalMesure, ", mesureCCCount : ", this.mesureCCCount, ", mesureOKDCount : ", this.mesureOKDCount);
+        console.log("Pourcentage CC = ", this.pourcentageCC, ", Pourcentage OKD = ", this.pourcentageOKD);
+      });
+    }else{
+      forkJoin({
+        mesureOKDCount: this.service.countOKDAll(),
+        mesureCCCount: this.service.countCCAll()
+      }).subscribe(results => {
+        this.mesureOKDCount = results.mesureOKDCount;
+        this.mesureCCCount = results.mesureCCCount;
+        this.TotalMesure = this.mesureOKDCount + this.mesureCCCount;
+        if (this.TotalMesure > 0) {
+          this.pourcentageCC = parseFloat(((this.mesureCCCount / this.TotalMesure) * 100).toFixed(2));
+          this.pourcentageOKD = parseFloat(((this.mesureOKDCount / this.TotalMesure) * 100).toFixed(2));
+        } else {
+          this.pourcentageCC = 0;
+          this.pourcentageOKD = 0;
+        }
+        console.log("TotalMesure = ", this.TotalMesure, ", mesureCCCount : ", this.mesureCCCount, ", mesureOKDCount : ", this.mesureOKDCount);
+        console.log("Pourcentage CC = ", this.pourcentageCC, ", Pourcentage OKD = ", this.pourcentageOKD);
+      });
+    }
   }
 
 
   CourbeBar(): void {
-    this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur => {
-      this.currentuser = utilisateur;
-      this.currentuserUnite = this.currentuser.unite.id;
-      this.service.getProcedeDernierByUnite(this.currentuserUnite).subscribe(procede => {
+    if (this.selectedUnite){
+      this.service.getProcedeDernierByUnite(this.selectedUnite).subscribe(procede => {
         this.liste = procede.reverse();
-        this.service.countMesureTotalByProcedeAndMonth(this.liste).subscribe(res => {
-          this.createStackedBarChart(res);
+        forkJoin({
+          resultatTotal: this.service.countMesureTotalByProcedeAndMonth(this.liste)
+         
+        }).subscribe(results => {
+          this.resultatTotal = results.resultatTotal;
+          this.createStackedBarChart(this.resultatTotal);
         });
+       
       });
-    });
+      
+    } else if(this.selectedSite){
+      this.service.getProcedeDernierBySite(parseInt(this.selectedSite)).subscribe(procede => {
+        this.liste = procede.reverse();
+        forkJoin({
+          resultatTotal: this.service.countMesureTotalByProcedeAndMonth(this.liste)
+         
+        }).subscribe(results => {
+          this.resultatTotal = results.resultatTotal;
+          this.createStackedBarChart(this.resultatTotal);
+        });
+       
+      });
+    }
+    
+    else if(this.selectedSite=="null"){
+      this.service.getProcedeDernier().subscribe(procede => {
+        this.liste = procede.reverse();
+        forkJoin({
+          resultatTotal: this.service.countMesureTotalByProcedeAndMonth(this.liste)
+         
+        }).subscribe(results => {
+          this.resultatTotal = results.resultatTotal;
+          this.createStackedBarChart(this.resultatTotal);
+        });
+       
+      });
+    }
+    else{
+      this.service.getProcedeDernier().subscribe(procede => {
+        this.liste = procede.reverse();
+        forkJoin({
+          resultatTotal: this.service.countMesureTotalByProcedeAndMonth(this.liste)
+         
+        }).subscribe(results => {
+          this.resultatTotal = results.resultatTotal;
+          this.createStackedBarChart(this.resultatTotal);
+        });
+       
+      });
+    }
   }
   
   createStackedBarChart(data: any): void {
@@ -107,21 +208,28 @@ export class PerformanceNCComponent implements OnInit {
         '#AC64AD', '#F7464A', '#46BFBD', '#FDB45C'
       ];
   
-      // Construire les datasets pour les barres empilées
-      const datasets = Object.keys(data).map((procede, index) => ({
-        label: procede,
-        backgroundColor: customColors[index % customColors.length],
-        data: Object.values(data[procede]),
-      }));
-  
-      this.chartDataBar = {
+     
+  if(data!=="null"){
+     // Construire les datasets pour les barres empilées
+     const datasets = Object.keys(data).map((procede, index) => ({
+      label: procede,
+      backgroundColor: customColors[index % customColors.length],
+      data: Object.values(data[procede]),
+    }));
+     this.chartDataBar = {
         labels: Object.keys(data[Object.keys(data)[0]]),
         datasets: datasets,
       };
+  }
+     
   
       this.options = {
         responsive: true,
         maintainAspectRatio: false,
+        title: {
+          display: true,
+          text: 'Suivi Mensuel Des Non-Conformités'
+        },
         scales: {
           xAxes: [{
             stacked: true,
@@ -150,23 +258,49 @@ export class PerformanceNCComponent implements OnInit {
           labels: {
             fontColor: this.chartjs.textColor,
           },
+         
         },
       };
     });
   }
 
   CourbePie(): void {
-    this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur => {
-      this.currentuser = utilisateur;
-      this.currentuserUnite = this.currentuser.unite.id;
-      this.service.getProcedeDernierByUnite(this.currentuserUnite).subscribe(procede => {
+    if (this.selectedUnite){
+      this.service.getProcedeDernierByUnite(this.selectedUnite).subscribe(procede => {
         this.liste = procede.reverse();
         this.service.countMesureTotalByProcede(this.liste).subscribe(res=>{
           console.log(res)
           this.createPieChart(res);
         })
-      });
-    });
+      });}
+      else if(this.selectedSite){
+        this.service.getProcedeDernierBySite(parseInt(this.selectedSite)).subscribe(procede => {
+          this.liste = procede.reverse();
+          this.service.countMesureTotalByProcede(this.liste).subscribe(res=>{
+            console.log(res)
+            this.createPieChart(res);
+          })
+        });
+      }
+      else if(this.selectedSite=="null"){
+        this.service.getProcedeDernier().subscribe(procede => {
+          this.liste = procede.reverse();
+          this.service.countMesureTotalByProcede(this.liste).subscribe(res=>{
+            console.log(res)
+            this.createPieChart(res);
+          })
+        });
+      }
+      else{
+        this.service.getProcedeDernier().subscribe(procede => {
+          this.liste = procede.reverse();
+          this.service.countMesureTotalByProcede(this.liste).subscribe(res=>{
+            console.log(res)
+            this.createPieChart(res);
+          })
+        });
+      }
+
   }
 
   createPieChart(data: any): void {
@@ -195,6 +329,7 @@ export class PerformanceNCComponent implements OnInit {
       this.options1 = {
         responsive: true,
         maintainAspectRatio: false,
+       
         legend: {
           position: 'right',
           display: false,

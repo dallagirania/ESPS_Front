@@ -15,7 +15,9 @@ import { MesureCC } from '../../../Model/MesureCC.model';
 import * as XLSX from 'xlsx';
 import { MesureOKD } from '../../../Model/MesureOKD.model';;
 import { forkJoin, of,Observable } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, filter, map } from 'rxjs/operators';
+import { ModProcede } from '../../../Model/ModProcede.model';
+import { DownloadFilesComponent } from '../../Add/download-files/download-files.component';
 
 
 @Component({
@@ -71,6 +73,51 @@ export class DetailComponent implements OnInit {
     },
   };
 
+  SettingsHistorique= {
+
+    noDataMessage: 'L\'Historique du PS est vide',
+  
+    mode: "external",
+  
+    actions: {
+      add:false,
+      edit: false,
+      delete: false,
+      position: 'right',
+  
+  
+  
+    },
+    pager: {
+      display: true,
+      perPage: 3,
+    },
+    
+   columns: {
+  
+    date_init: {
+  
+        title: 'Date Debut',
+  
+        type: 'string',
+  
+      },
+      date_fin: {
+  
+        title: 'Date Fin',
+  
+        type: 'string',
+  
+      },
+      id: {
+        title: 'Fiches Procédés Spéciaux',
+        type: 'custom',
+        filter:false,
+        renderComponent: DownloadFilesComponent,
+      },
+    }
+  }
+  
 
   listemesureOKD: MesureOKD[]=[]
   source: LocalDataSource = new LocalDataSource();
@@ -95,6 +142,11 @@ export class DetailComponent implements OnInit {
   imageUrl: string;
   etatQualif:string;
   activeProgress:number
+
+  Historique:ModProcede[]=[]
+  ProcedeActuelle= new Procede()
+  sourceHistorique: LocalDataSource = new LocalDataSource();
+  
   constructor(
     private dialogservice: NbDialogService,
     private service: CrudService,
@@ -107,10 +159,7 @@ export class DetailComponent implements OnInit {
   ngOnInit(): void {
     this.idP=this.rout.snapshot.params["id"];
     this.detail(this.idP)
- 
-    //bar de progression 
-
-
+    
   }
 
   detail(id:number) {
@@ -173,7 +222,7 @@ this.listeHabilitation = carte;
 this.sourceCritere = new LocalDataSource(this.listeHabilitation) 
 
 for(let h of this.listeHabilitation ){
-  this.service.getFormationByDernierDate(h.id).subscribe(liste => {
+  this.service.getFormationByAcce(h.id).subscribe(liste => {
     this.listeFormation=liste;
     this.source = new LocalDataSource(this.listeFormation);
   
@@ -305,6 +354,23 @@ getProgressBarColor(date_fin: string): string {
     MesureOKD(dialog: TemplateRef<any>) {
         this.dialogservice.open(dialog);
   } 
+
+  HistoriquePS(dialog: TemplateRef<any>,id:number) {
+    this.service.getProcedeById(id).subscribe(proc => {
+      this.ProcedeActuelle=proc;
+      this.service.getModProcedeByProcedeId(id).subscribe(liste => {
+        this.Historique=liste;
+        this.Historique.push(this.ProcedeActuelle);
+        this.Historique.sort((a, b) => {
+          return new Date(b.date_init.toString()).getTime() - new Date(a.date_init.toString()).getTime();
+        });
+        this.sourceHistorique = new LocalDataSource(this.Historique) 
+        this.dialogservice.open(dialog);
+      
+      });
+    });
+   
+  }
        
     /************************** Exporter données  CC ***********************************************/
     transformDataCCForExport(data: MesureCC[]): any[] {
@@ -413,5 +479,5 @@ getProgressBarColor(date_fin: string): string {
       });
     }
     
-       
+   
 }

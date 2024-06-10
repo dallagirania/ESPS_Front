@@ -38,37 +38,47 @@ detail(dialog: TemplateRef<any>) {
   this.dialogservice.open(dialog);
 }
 
-
-
 extractMesureDetails() {
   if (this.mesure && this.mesure.val) {
     const critereObservables = [];
     for (const [critereId, valeur] of Object.entries(this.mesure.val)) {
-      const critereObservable = this.findCritereName(parseInt(critereId)).pipe(
-        map(nomCritere => {
-          return { critere: nomCritere, valeur: valeur };
+      const critereObservable = this.findCritereNameAndDetails(parseInt(critereId)).pipe(
+        map(critereDetails => {
+          return { critere: critereDetails.nomCritere, valeur: valeur, critereDetails: critereDetails };
         })
       );
       critereObservables.push(critereObservable);
     }
     forkJoin(critereObservables).subscribe((result: any) => {
-      this.mesureDetails = result;
+      this.mesureDetails = result.map(detail => {
+        const critere = detail.critereDetails.critere;
+        if (critere && critere.type === 'valeur') {
+          detail.color = (parseFloat(detail.valeur) >= critere.min && parseFloat(detail.valeur) <= critere.max) ? 'green' : 'red';
+        } else if (detail.valeur === 'ok' || detail.valeur === 'nok') {
+          detail.color = detail.valeur === 'ok' ? 'green' : 'red';
+        } else {
+          detail.color = 'black';
+        }
+        return detail;
+      });
     });
   }
 }
 
-findCritereName(critereId: number) {
+findCritereNameAndDetails(critereId: number) {
   return this.service.getCritere().pipe(
     map(criteres => {
       const critere = criteres.find(critere => critere.id === critereId);
       if (critere) {
+        let nomCritere: string;
         if (critere.type === 'valeur') {
-          return `${critere.nom} : entre[${critere.min} , ${critere.max}]`;
+          nomCritere = `${critere.nom} : entre [${critere.min} , ${critere.max}]`;
         } else {
-          return `${critere.nom} (Ok/Nok) `;
+          nomCritere = `${critere.nom} (Ok/Nok) `;
         }
+        return { nomCritere: nomCritere, critere: critere };
       } else {
-        return undefined;
+        return { nomCritere: undefined, critere: undefined };
       }
     })
   );

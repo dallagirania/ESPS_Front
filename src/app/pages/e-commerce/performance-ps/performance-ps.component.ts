@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NbThemeService, NbToastrService } from '@nebular/theme';
@@ -11,7 +11,7 @@ import { Subscription, forkJoin } from 'rxjs';
   templateUrl: './performance-ps.component.html',
   styleUrls: ['./performance-ps.component.scss']
 })
-export class PerformancePSComponent implements OnInit {
+export class PerformancePSComponent implements OnInit ,OnChanges  {
   currentuser:any
   currentuserUnite:number
   liste:Procede[]=[]
@@ -32,55 +32,147 @@ export class PerformancePSComponent implements OnInit {
   options1:any
   colors: any;
   chartjs: any;
-
   private themeSubscription: Subscription;
 
-  constructor( private service: CrudService,
+  @Input() selectedUnite: string | null;
+  @Input() selectedSite: string | null;
+  constructor(
+    private service: CrudService,
     private router: Router,
     private fb: FormBuilder,
     private theme: NbThemeService,
     private toastrService: NbToastrService) { }
 
   ngOnInit(): void {
+  console.log("selectedUnite PS",this.selectedUnite)
+  console.log("selectedSite PS",this.selectedSite)
   this.CourbePie();
   this.CourbeLine()
+  }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if ((changes.selectedUnite && this.selectedUnite)||(changes.selectedSite && this.selectedSite)) {
+      this.CourbePie();
+      this.CourbeLine()
+    }
   }
-  navigateListe(){
-    this.router.navigate(["/pages/ListeProcede"]);
-  }
- 
   CourbePie(): void {
-    this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur => {
-      this.currentuser = utilisateur;
-      this.currentuserUnite = this.currentuser.unite.id;
-      this.service.getProcedeDernierByUnite(this.currentuserUnite).subscribe(procede => {
-        this.liste = procede.reverse();
-        this.nbprocedeTotal = this.liste.length;
-
-        forkJoin({
-          nbprocedeC: this.service.countQualifiedProcedes(this.liste),
-          nbprocedeNC: this.service.countNonQualifiedProcedes(this.liste),
-          nbprocedeAR: this.service.countRequalificationNeededProcedes(this.liste)
-        }).subscribe(results => {
-          this.nbprocedeC = results.nbprocedeC;
-          this.nbprocedeNC = results.nbprocedeNC;
-          this.nbprocedeAR = results.nbprocedeAR;
-
-          this.PourcentageprocedeC = parseFloat(((this.nbprocedeC / this.nbprocedeTotal) * 100).toFixed(2));
-          this.PourcentageprocedeNC = parseFloat(((this.nbprocedeNC / this.nbprocedeTotal) * 100).toFixed(2));
-          this.PourcentageprocedeAR = parseFloat(((this.nbprocedeAR / this.nbprocedeTotal) * 100).toFixed(2));
-
-          this.listeResultat = [
-            { label: 'Ps Qualifiés', value: this.nbprocedeC },
-            { label: 'Ps Non Qualifiés', value: this.nbprocedeNC },
-            { label: 'Ps A Requalifiés', value: this.nbprocedeAR }
-          ];
-
-          this.updateChart();
+    if (this.selectedUnite)
+      {
+        this.service.getProcedeDernierByUnite(parseInt(this.selectedUnite)).subscribe(procede => {
+          this.liste = procede.reverse();
+          this.nbprocedeTotal = this.liste.length;
+  
+          forkJoin({
+            nbprocedeC: this.service.countQualifiedProcedes(this.liste),
+            nbprocedeNC: this.service.countNonQualifiedProcedes(this.liste),
+            nbprocedeAR: this.service.countRequalificationNeededProcedes(this.liste)
+          }).subscribe(results => {
+            this.nbprocedeC = results.nbprocedeC;
+            this.nbprocedeNC = results.nbprocedeNC;
+            this.nbprocedeAR = results.nbprocedeAR;
+  
+            this.PourcentageprocedeC = parseFloat(((this.nbprocedeC / this.nbprocedeTotal) * 100).toFixed(2));
+            this.PourcentageprocedeNC = parseFloat(((this.nbprocedeNC / this.nbprocedeTotal) * 100).toFixed(2));
+            this.PourcentageprocedeAR = parseFloat(((this.nbprocedeAR / this.nbprocedeTotal) * 100).toFixed(2));
+  
+            this.listeResultat = [
+              { label: 'Ps Qualifiés', value: this.nbprocedeC },
+              { label: 'Ps Non Qualifiés', value: this.nbprocedeNC },
+              { label: 'Ps A Requalifiés', value: this.nbprocedeAR }
+            ];
+  
+            this.updateChart();
+          });
         });
-      });
-    });
+      }else if (this.selectedSite){
+        this.service.getProcedeDernierBySite(parseInt(this.selectedSite)).subscribe(procede => {
+          this.liste = procede.reverse();
+          this.nbprocedeTotal = this.liste.length;
+  
+          forkJoin({
+            nbprocedeC: this.service.countQualifiedProcedes(this.liste),
+            nbprocedeNC: this.service.countNonQualifiedProcedes(this.liste),
+            nbprocedeAR: this.service.countRequalificationNeededProcedes(this.liste)
+          }).subscribe(results => {
+            this.nbprocedeC = results.nbprocedeC;
+            this.nbprocedeNC = results.nbprocedeNC;
+            this.nbprocedeAR = results.nbprocedeAR;
+  
+            this.PourcentageprocedeC = parseFloat(((this.nbprocedeC / this.nbprocedeTotal) * 100).toFixed(2));
+            this.PourcentageprocedeNC = parseFloat(((this.nbprocedeNC / this.nbprocedeTotal) * 100).toFixed(2));
+            this.PourcentageprocedeAR = parseFloat(((this.nbprocedeAR / this.nbprocedeTotal) * 100).toFixed(2));
+  
+            this.listeResultat = [
+              { label: 'Ps Qualifiés', value: this.nbprocedeC },
+              { label: 'Ps Non Qualifiés', value: this.nbprocedeNC },
+              { label: 'Ps A Requalifiés', value: this.nbprocedeAR }
+            ];
+  
+            this.updateChart();
+          });
+        });
+
+      }
+      else if(this.selectedSite=="null"){
+        this.service.getProcedeDernier().subscribe(procede=>{
+          this.liste=procede.reverse()
+          this.nbprocedeTotal = this.liste.length;
+  
+          forkJoin({
+            nbprocedeC: this.service.countQualifiedProcedes(this.liste),
+            nbprocedeNC: this.service.countNonQualifiedProcedes(this.liste),
+            nbprocedeAR: this.service.countRequalificationNeededProcedes(this.liste)
+          }).subscribe(results => {
+            this.nbprocedeC = results.nbprocedeC;
+            this.nbprocedeNC = results.nbprocedeNC;
+            this.nbprocedeAR = results.nbprocedeAR;
+  
+            this.PourcentageprocedeC = parseFloat(((this.nbprocedeC / this.nbprocedeTotal) * 100).toFixed(2));
+            this.PourcentageprocedeNC = parseFloat(((this.nbprocedeNC / this.nbprocedeTotal) * 100).toFixed(2));
+            this.PourcentageprocedeAR = parseFloat(((this.nbprocedeAR / this.nbprocedeTotal) * 100).toFixed(2));
+  
+            this.listeResultat = [
+              { label: 'Ps Qualifiés', value: this.nbprocedeC },
+              { label: 'Ps Non Qualifiés', value: this.nbprocedeNC },
+              { label: 'Ps A Requalifiés', value: this.nbprocedeAR }
+            ];
+  
+            this.updateChart();
+          });
+        })
+      }else{
+          this.service.getProcedeDernier().subscribe(procede=>{
+            this.liste=procede.reverse()
+            this.nbprocedeTotal = this.liste.length;
+    
+            forkJoin({
+              nbprocedeC: this.service.countQualifiedProcedes(this.liste),
+              nbprocedeNC: this.service.countNonQualifiedProcedes(this.liste),
+              nbprocedeAR: this.service.countRequalificationNeededProcedes(this.liste)
+            }).subscribe(results => {
+              this.nbprocedeC = results.nbprocedeC;
+              this.nbprocedeNC = results.nbprocedeNC;
+              this.nbprocedeAR = results.nbprocedeAR;
+    
+              this.PourcentageprocedeC = parseFloat(((this.nbprocedeC / this.nbprocedeTotal) * 100).toFixed(2));
+              this.PourcentageprocedeNC = parseFloat(((this.nbprocedeNC / this.nbprocedeTotal) * 100).toFixed(2));
+              this.PourcentageprocedeAR = parseFloat(((this.nbprocedeAR / this.nbprocedeTotal) * 100).toFixed(2));
+    
+              this.listeResultat = [
+                { label: 'Ps Qualifiés', value: this.nbprocedeC },
+                { label: 'Ps Non Qualifiés', value: this.nbprocedeNC },
+                { label: 'Ps A Requalifiés', value: this.nbprocedeAR }
+              ];
+    
+              this.updateChart();
+            });
+          })
+        
+      }
+  
+     
+   
   }
 
   updateChart(): void {
@@ -94,9 +186,8 @@ export class PerformancePSComponent implements OnInit {
         labels: this.listeResultat.map(item => item.label),
         datasets: [{
           data: series1Data,
-          label: 'Courbe de controle',
-          backgroundColor: [ '#91b510d5', '#fa5e43','#FFA500',],
-          hoverBackgroundColor: ['#91b510d5','#fa5e43','#FFA500'],
+          backgroundColor: [ '#91b510d5', '#fa5e43','#FFA005',],
+          hoverBackgroundColor: ['#91b510d5','#fa5e43','#FFA005'],
           borderWidth: 1,
         }]
       };
@@ -113,10 +204,8 @@ export class PerformancePSComponent implements OnInit {
   }
 
   CourbeLine(): void {
-    this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur => {
-      this.currentuser = utilisateur;
-      this.currentuserUnite = this.currentuser.unite.id;
-      this.service.getProcedeDernierByUnite(this.currentuserUnite).subscribe(procede => {
+    if (this.selectedUnite){
+      this.service.getProcedeDernierByUnite(parseInt(this.selectedUnite)).subscribe(procede => {
         this.liste = procede.reverse();
         this.nbprocedeTotal = this.liste.length;
 
@@ -128,7 +217,51 @@ export class PerformancePSComponent implements OnInit {
           this.updateChartLine();
         });
       });
-    });
+    } else if (this.selectedSite){
+      this.service.getProcedeDernierBySite(parseInt(this.selectedSite)).subscribe(procede => {
+        this.liste = procede.reverse();
+        this.nbprocedeTotal = this.liste.length;
+
+        forkJoin({
+          nbprocedeC: this.service.countQualificationProcedesMensuel(this.liste),
+        
+        }).subscribe(results => {
+          this.ListeResultatMensuel = results.nbprocedeC;
+          this.updateChartLine();
+        });
+      });
+     
+    }else if (this.selectedSite=="null"){
+      this.service.getProcedeDernierBySite(parseInt(this.selectedSite)).subscribe(procede => {
+        this.liste = procede.reverse();
+        this.nbprocedeTotal = this.liste.length;
+
+        forkJoin({
+          nbprocedeC: this.service.countQualificationProcedesMensuel(this.liste),
+        
+        }).subscribe(results => {
+          this.ListeResultatMensuel = results.nbprocedeC;
+          this.updateChartLine();
+        });
+      });
+     
+    }
+    else{
+      this.service.getProcedeDernier().subscribe(procede => {
+        this.liste = procede.reverse();
+        this.nbprocedeTotal = this.liste.length;
+
+        forkJoin({
+          nbprocedeC: this.service.countQualificationProcedesMensuel(this.liste),
+        
+        }).subscribe(results => {
+          this.ListeResultatMensuel = results.nbprocedeC;
+          this.updateChartLine();
+        });
+      }); 
+    }
+    
+
   }
   updateChartLine(): void {
     this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
@@ -141,7 +274,7 @@ export class PerformancePSComponent implements OnInit {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         datasets: [{
           data: series1Data,
-          label: 'Qualification Mensuelle des PS ',
+          label: 'Procédés Spéciaux Qualifiés',
           backgroundColor: 'rgba(145, 181, 16, 0.875)',
           borderColor: 'rgba(145, 181, 16, 1)',
         }]
@@ -151,6 +284,10 @@ export class PerformancePSComponent implements OnInit {
          
         responsive: true,
         maintainAspectRatio: false,
+        title: {
+          display: true,
+          text: 'Taux Mensuel de Procédés Spéciaux Qualifiés'
+        },
         scales: {
           xAxes: [{
             gridLines: {

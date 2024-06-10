@@ -21,51 +21,7 @@ export class ParametageRUOComponent implements OnInit {
   
   @ViewChild('typedText') typedTextElement: ElementRef;
   
-    // ngAfterViewInit() {
-  
-    //   this.typeTextEffect();
-  
-    // }
-  
-   
-  
-    // typeTextEffect() {
-  
-    //   const textElement = this.typedTextElement.nativeElement;
-  
-    //   const text = "Paramètres Travaux";
-  
-    //   let index = 0;
-  
-   
-  
-    //   function type() {
-  
-    //     if (index < text.length) {
-  
-    //       textElement.innerHTML += text.charAt(index);
-  
-    //       index++;
-  
-    //       setTimeout(type, 100);
-  
-    //     } else {
-  
-    //        index = 0;
-  
-    //     }
-  
-    //   }
-  
-   
-  
-    //   type();
-  
-    // }
-  
-    //Declaration Settings Activités
-     
-    settingsRUO = {
+   settingsRUO = {
   
       noDataMessage: 'Liste des Collaborateurs UO est vide',
   
@@ -226,7 +182,8 @@ export class ParametageRUOComponent implements OnInit {
     user :Utilisateur=new Utilisateur()
     user1 :Utilisateur=new Utilisateur()
     role:Role=new Role()
-
+    currentuser:any
+    currentuserUnite:number
     constructor(
       private service:CrudService,
       private route:Router,
@@ -235,22 +192,27 @@ export class ParametageRUOComponent implements OnInit {
     
     ) {  }
     onRoleChange() {
-      console.log('Selected Role:', this.selectedRole);
       this.showActivites = this.selectedRole !== 2;
-      console.log('Show Activities:', this.showActivites);
     }
   
      //Affichege Site 
      LoadUserRUO(){
-     
+      const role = localStorage.getItem("user");
+      if(role=='RPUO'){
+        this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
+          this.currentuser=utilisateur
+          this.currentuserUnite=this.currentuser.unite.id 
+          this.service.getUserByUnit(this.currentuserUnite).subscribe(user=>{
+            this.listeUser=user.reverse();
+            this.sourceRUO = new LocalDataSource(this.listeUser) 
+          })
+        })
+      }else if(role=='RPS'){
         this.service.getUser().subscribe(user=>{
-          console.log("test1111111111111111111")
           this.listeUser=user.reverse();
-          console.log("resultat:"+this.listeUser)
           this.sourceRUO = new LocalDataSource(this.listeUser) 
         })
-      
-       
+      }   
       }
     
         
@@ -258,7 +220,7 @@ export class ParametageRUOComponent implements OnInit {
    getUnite(id:number){
     this.service.getUniteById(id).subscribe(unite=>{
     this.unite=unite
-    console.log(this.activite)
+   
     })
     }
    
@@ -287,7 +249,7 @@ modifier(event: any): void {
       this.user1.activite_id= this.user1.activite_id
       this.service.updateUser(this.user1.id,this.user1).subscribe(
         () => {
-          console.log('User edited successfully:');
+         
           this.LoadUserRUO();
           ref.close();
           this.toastrService.success('Collaborateur modifié avec succès', 'Succès', {
@@ -327,12 +289,8 @@ modifier(event: any): void {
   
     }
     handleReaderLoaded(e: any): void {
-  
       const reader = e.target;
-  
       this.image = reader.result;
-  
-      console.log('Image chargée:', this.image);
       this.user1.image=this.image
   
     }
@@ -341,7 +299,6 @@ modifier(event: any): void {
     //supprision de RPUO 
     OnDeleteConfirm(event) {
           this.user= event.data;
-          console.log(this.user.id)
           Swal.fire({
       
             title: 'Attention !',
@@ -402,7 +359,6 @@ modifier(event: any): void {
          this.toastrService.danger('Veuillez remplir tous les champs', 'Erreur');
          return;
        }
-     console.log(this.user);
      if (this.selectedUnite) {
 
       const roleSelectionne: Role = { id: this.selectedRole };
@@ -413,7 +369,6 @@ modifier(event: any): void {
       this.user.activite_id=this.selectedActivite
       this.service.registerUser(this.user).subscribe(
        (unite1) => {
-         console.log('Collaborateur added successfully:', unite1);
          this.selectedRole = null;
          this.selectedUnite = null;
          this.selectedActivite = null;
@@ -435,7 +390,6 @@ modifier(event: any): void {
        this.toastrService.danger('Veuillez remplir tous les champs', 'Erreur');
        return;
      }
-   console.log(this.user , this.selectedUnite);
    if (this.selectedUnite) {
     const roleSelectionne: Role = { id:2 };
     this.user.role = roleSelectionne;
@@ -444,7 +398,6 @@ modifier(event: any): void {
     this.user.unite = uniteSelectionne;
     this.service.registerUser(this.user).subscribe(
      (unite1) => {
-       console.log('Collaborateur added successfully:', unite1);
        this.selectedUnite = null;
        this.LoadUserRUO();
        ref.close();
@@ -463,7 +416,6 @@ modifier(event: any): void {
     if (this.selectedUnite) {
        this.service.getActivitiesByUniteId(this.selectedUnite).subscribe(at=>{
          this.activite=at
-         console.log(this.activite)
      }) 
    }
    }
@@ -472,16 +424,11 @@ modifier(event: any): void {
     ngOnInit(): void {
      //recuperation du user connecté :
      this.userConnecte=localStorage.getItem("user")
-      //Liste des utilisateur avec role reponsable =2:
       this.LoadUserRUO();
-
       this.service.getRole().subscribe(roles => {
-        console.log("test");
         this.listeRole=roles.filter(role=>role.id!=1 && role.id!=2);
-        //this.listeRole=roles;
-        console.log(roles);
+        
       });
-
        this.service.getUnite().subscribe(unite=>{
        this.listeUnite=unite
      

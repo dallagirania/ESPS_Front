@@ -100,6 +100,12 @@ export class PagesComponent implements OnInit {
      
     },
     {
+      title: 'Liste d\'Habilitation',
+      icon:'list-outline',
+      link:'/pages/ListeHabilitation'
+     
+    },
+    {
       title: 'Notifications ',
       //icon: 'keypad-outline',
       icon:'bell-outline',

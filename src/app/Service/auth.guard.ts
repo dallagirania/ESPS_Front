@@ -44,7 +44,7 @@ export class AuthGuard implements CanActivate {
           
           case "Verif": return role == "Qualiticien" ? true: false;
 
-          case "ListeHabilitation": return role == "AEF" ? true: false;
+          case "ListeHabilitation": return role == "AEF" ? true:role == "RPUO" ? true: false;
          
         }
   

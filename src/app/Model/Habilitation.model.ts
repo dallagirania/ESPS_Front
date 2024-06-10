@@ -7,6 +7,7 @@ export class Habilitation{
         public ref?:String ,
         public etatactive?:Boolean,  
         public procede?:Procede, 
+        public procedeNom?:String,  
   
     ){
     }

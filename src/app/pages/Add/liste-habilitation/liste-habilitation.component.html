@@ -1,12 +1,9 @@
 
 <div class="col-12" style="text-align: center;justify-content: center;">
-  <h2 style="font-family: 'Times New Roman', Times, serif;color: #0f2a9e;font-size:24px;margin:0px">Parametrages des Listes D'habilitation </h2>
-  <!-- <img src="../assets/images/avion1.png" alt="Image par défaut" style="width: 900px;"> -->
+  <h2 style="color: #0f2a9e;font-size:24px;margin:0px">Parametrages des Listes D'habilitation </h2>
+
 </div>
 <nb-card>
-    <!-- <nb-card-header style="color: #1927bd;">
-     La Liste Des Procédés 
-    </nb-card-header> -->
   
     <nb-card-body style="padding: 0px;">
       <ng2-smart-table [settings]="settings" [source]="source" (edit)="createHabilitation($event)" (delete)="OnDeleteConfirm($event)">
