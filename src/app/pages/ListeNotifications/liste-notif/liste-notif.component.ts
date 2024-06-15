@@ -10,6 +10,7 @@ import { Critere } from '../../../Model/Critere.model';
 import { Subject, forkJoin } from 'rxjs';
 import { MesureCC } from '../../../Model/MesureCC.model';
 import { map, takeUntil } from 'rxjs/operators';
+import { UpdateNotifService } from '../../../Service/update-notif.service';
 
 @Component({
   selector: 'ngx-liste-notif',
@@ -38,6 +39,7 @@ export class ListeNotifComponent implements OnInit {
     private layoutService: LayoutService,
     private breakpointService: NbMediaBreakpointsService,
     private service: CrudService,
+    private notificationService: UpdateNotifService, 
     private route:Router,
     private toastrService: NbToastrService,
     private webSocketService: WebSocketService,
@@ -129,7 +131,7 @@ export class ListeNotifComponent implements OnInit {
               }
               this.nbnotif= this.unseenNotifications.length
                 this.seennotif= this.seenNotifications.length 
-             
+                this.notificationService.updateNotifications(savednotif);
             }
           )
         },

@@ -46,7 +46,6 @@ export class PerformanceNCComponent implements OnInit ,OnChanges{
     private toastrService: NbToastrService) { }
 
   ngOnInit(): void {
-    console.log("selectedUnite NC",this.selectedUnite)
       this.getNbConformite();
       this.CourbeBar();
       this.CourbePie();
@@ -62,7 +61,6 @@ export class PerformanceNCComponent implements OnInit ,OnChanges{
   getNbConformite() {
     if (this.selectedUnite){
       this.service.LeadTime(this.selectedUnite).subscribe(res=>{
-        console.log("lesdTime",res)
         this.leadTime=res
       })
   
@@ -80,9 +78,7 @@ export class PerformanceNCComponent implements OnInit ,OnChanges{
           this.pourcentageCC = 0;
           this.pourcentageOKD = 0;
         }
-        console.log("TotalMesure = ", this.TotalMesure, ", mesureCCCount : ", this.mesureCCCount, ", mesureOKDCount : ", this.mesureOKDCount);
-        console.log("Pourcentage CC = ", this.pourcentageCC, ", Pourcentage OKD = ", this.pourcentageOKD);
-      });
+       });
     }else if(this.selectedSite){
       forkJoin({
         mesureOKDCount: this.service.countMesureOKDBySiteId(parseInt(this.selectedSite)),
@@ -98,9 +94,7 @@ export class PerformanceNCComponent implements OnInit ,OnChanges{
           this.pourcentageCC = 0;
           this.pourcentageOKD = 0;
         }
-        console.log("TotalMesure = ", this.TotalMesure, ", mesureCCCount : ", this.mesureCCCount, ", mesureOKDCount : ", this.mesureOKDCount);
-        console.log("Pourcentage CC = ", this.pourcentageCC, ", Pourcentage OKD = ", this.pourcentageOKD);
-      });
+         });
     }else if(this.selectedSite=="null"){
       forkJoin({
         mesureOKDCount: this.service.countOKDAll(),
@@ -116,9 +110,7 @@ export class PerformanceNCComponent implements OnInit ,OnChanges{
           this.pourcentageCC = 0;
           this.pourcentageOKD = 0;
         }
-        console.log("TotalMesure = ", this.TotalMesure, ", mesureCCCount : ", this.mesureCCCount, ", mesureOKDCount : ", this.mesureOKDCount);
-        console.log("Pourcentage CC = ", this.pourcentageCC, ", Pourcentage OKD = ", this.pourcentageOKD);
-      });
+     });
     }else{
       forkJoin({
         mesureOKDCount: this.service.countOKDAll(),
@@ -134,9 +126,7 @@ export class PerformanceNCComponent implements OnInit ,OnChanges{
           this.pourcentageCC = 0;
           this.pourcentageOKD = 0;
         }
-        console.log("TotalMesure = ", this.TotalMesure, ", mesureCCCount : ", this.mesureCCCount, ", mesureOKDCount : ", this.mesureOKDCount);
-        console.log("Pourcentage CC = ", this.pourcentageCC, ", Pourcentage OKD = ", this.pourcentageOKD);
-      });
+         });
     }
   }
 
@@ -208,8 +198,10 @@ export class PerformanceNCComponent implements OnInit ,OnChanges{
         '#AC64AD', '#F7464A', '#46BFBD', '#FDB45C'
       ];
   
-     
-  if(data!=="null"){
+   if (data === null || Object.keys(data).length === 0) {
+    this.chartDataBar = null;
+    return;
+  }
      // Construire les datasets pour les barres empilées
      const datasets = Object.keys(data).map((procede, index) => ({
       label: procede,
@@ -220,7 +212,6 @@ export class PerformanceNCComponent implements OnInit ,OnChanges{
         labels: Object.keys(data[Object.keys(data)[0]]),
         datasets: datasets,
       };
-  }
      
   
       this.options = {
@@ -269,7 +260,7 @@ export class PerformanceNCComponent implements OnInit ,OnChanges{
       this.service.getProcedeDernierByUnite(this.selectedUnite).subscribe(procede => {
         this.liste = procede.reverse();
         this.service.countMesureTotalByProcede(this.liste).subscribe(res=>{
-          console.log(res)
+         
           this.createPieChart(res);
         })
       });}
@@ -277,7 +268,7 @@ export class PerformanceNCComponent implements OnInit ,OnChanges{
         this.service.getProcedeDernierBySite(parseInt(this.selectedSite)).subscribe(procede => {
           this.liste = procede.reverse();
           this.service.countMesureTotalByProcede(this.liste).subscribe(res=>{
-            console.log(res)
+         
             this.createPieChart(res);
           })
         });
@@ -286,7 +277,7 @@ export class PerformanceNCComponent implements OnInit ,OnChanges{
         this.service.getProcedeDernier().subscribe(procede => {
           this.liste = procede.reverse();
           this.service.countMesureTotalByProcede(this.liste).subscribe(res=>{
-            console.log(res)
+         
             this.createPieChart(res);
           })
         });
@@ -295,7 +286,6 @@ export class PerformanceNCComponent implements OnInit ,OnChanges{
         this.service.getProcedeDernier().subscribe(procede => {
           this.liste = procede.reverse();
           this.service.countMesureTotalByProcede(this.liste).subscribe(res=>{
-            console.log(res)
             this.createPieChart(res);
           })
         });

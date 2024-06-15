@@ -378,13 +378,10 @@ export class CrudService {
           }
 
           downloadFile(filename): Observable<any>{
-            console.log(filename);
-            
             return this.http.get(this.apiUrl+"/modformation/telechargement/"+filename,
             {
               responseType: 'blob'
             })
-        
             }
 
               /******************   Historiques Procede    ******************/

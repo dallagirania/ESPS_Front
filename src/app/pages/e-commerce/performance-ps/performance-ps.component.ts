@@ -169,10 +169,7 @@ export class PerformancePSComponent implements OnInit ,OnChanges  {
             });
           })
         
-      }
-  
-     
-   
+      } 
   }
 
   updateChart(): void {

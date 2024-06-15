@@ -16,6 +16,7 @@ import { ConformiteStyleComponent } from '../../../pages/Controle/conformite-sty
 import { LocalDataSource } from 'ng2-smart-table';
 import { MesureOKD } from '../../../Model/MesureOKD.model';
 import { Critere } from '../../../Model/Critere.model';
+import { UpdateNotifService } from '../../../Service/update-notif.service';
 
 @Component({  
   selector: 'ngx-header',
@@ -80,6 +81,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private layoutService: LayoutService,
               private breakpointService: NbMediaBreakpointsService,
               private service: CrudService,
+              private notificationService: UpdateNotifService, 
               private route:Router,
               private toastrService: NbToastrService,
               private webSocketService: WebSocketService  ,
@@ -126,11 +128,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
             }
           }
           this.nbnotif= this.unseenNotifications.length
-    
+          // this.notificationService.unseenCount$.subscribe(count => {
+          //    this.nbnotif = count;
+          // });
          
         }
       )
+     
   })
+
+  
 
   // this.LoadNotification()
  
@@ -252,12 +259,9 @@ markAsSeen(notification: Notifications) {
 
     this.service.updateNotify(notification.id, notification).subscribe(
       updatedNotif => {
-      
-      //  this.updateNotificationLists(updatedNotif);
-       // this.LoadNotification()
         this.service.getNotificationByMatricule(this.currentuser.matricule).subscribe(
           savednotif=>{
-                        this.listenotif=savednotif;
+            this.listenotif=savednotif;
            //filtrer les notifications unseenNotifications :
            this.seenNotifications =[];
            this.unseenNotifications=[];
@@ -269,10 +273,7 @@ markAsSeen(notification: Notifications) {
               }
             }
            
-            this.nbnotif= this.unseenNotifications.length
-            
-      
-           
+            this.nbnotif= this.unseenNotifications.length   
           }
         )
       },
@@ -282,20 +283,6 @@ markAsSeen(notification: Notifications) {
     );
   }
 }
-updateNotificationLists(notification: Notifications) {
-  // Retirer la notification de unseenNotifications
-  const unseenIndex = this.unseenNotifications.findIndex(notif => notif.id === notification.id);
-  if (unseenIndex !== -1) {
-    this.unseenNotifications.splice(unseenIndex, 1);
-  }
-
-  // Ajouter la notification à seenNotifications
-  this.seenNotifications.push(notification);
-
-  // Actualiser le nombre de notifications non vues
-  this.nbnotif = this.unseenNotifications.length;
-}
-
 
 OpenDetailCC(dialog: TemplateRef<any>,IdMesure:number) {
 
