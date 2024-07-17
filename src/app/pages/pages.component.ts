@@ -50,9 +50,9 @@ export class PagesComponent implements OnInit {
           title: 'FONCTIONNALITES',
           group: true,
         },
+       
         {
           title: 'Notifications ',
-          //icon: 'keypad-outline',
           icon:'bell-outline',
           link: '/pages/notify',
          
@@ -86,14 +86,12 @@ export class PagesComponent implements OnInit {
     },
     {
       title: 'Procédés Spéciaux',
-      //icon: 'keypad-outline',
       icon:'layers-outline',
       link:'/pages/ListProcede'
      
     },
     {
       title: 'Collaborateur',
-      //icon: 'keypad-outline',
       icon:'people',
       link: '/pages/ParametrageRUO',
       home: true,
@@ -107,7 +105,6 @@ export class PagesComponent implements OnInit {
     },
     {
       title: 'Notifications ',
-      //icon: 'keypad-outline',
       icon:'bell-outline',
       link: '/pages/notify',
      
@@ -144,14 +141,12 @@ export class PagesComponent implements OnInit {
       },
         {
           title: 'Paramétrages Sites',
-          //icon: 'keypad-outline',
           icon: 'settings-2-outline',
           link: '/pages/ParametrageSite',
           home: true,
         },
         {
           title: 'Collaborateur',
-          //icon: 'keypad-outline',
           icon:'people',
           link: '/pages/ParametrageRUO',
           home: true,
@@ -159,7 +154,6 @@ export class PagesComponent implements OnInit {
         },
         {
           title: 'Notifications ',
-          //icon: 'keypad-outline',
           icon:'bell-outline',
           link: '/pages/notify',
          
@@ -205,7 +199,6 @@ export class PagesComponent implements OnInit {
       },
       {
         title: 'Notifications ',
-        //icon: 'keypad-outline',
         icon:'bell-outline',
         link: '/pages/notify',
        
@@ -241,14 +234,12 @@ export class PagesComponent implements OnInit {
       },
       {
         title: 'Procédés Spéciaux',
-        //icon: 'keypad-outline',
         icon:'layers-outline',
         link:'/pages/ListProcede'
        
       },
       {
         title: 'Notifications ',
-        //icon: 'keypad-outline',
         icon:'bell-outline',
         link: '/pages/notify',
        
@@ -290,7 +281,6 @@ export class PagesComponent implements OnInit {
   },
   {
     title: 'Notifications ',
-    //icon: 'keypad-outline',
     icon:'bell-outline',
     link: '/pages/notify',
    

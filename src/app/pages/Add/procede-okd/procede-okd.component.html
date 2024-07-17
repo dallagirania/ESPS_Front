@@ -93,8 +93,8 @@
                               <input type="text" nbInput fullWidth placeholder="Entrer la fonction du carte de Controle" shape="semi-round" status="info" id="fonction"
                                   [(ngModel)]="carte.fonction" (ngModelChange)="carte.fonction = $event" #fonction="ngModel" name="fonction"
                                   [ngClass]="{'alert alert-danger': fonction.invalid && (fonction.dirty || fonction.touched)}"
-                                  pattern="(\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\)|V\d+|\d+)([+\-*\/](\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\)|V\d+|\d+))*"
-                                   title="La fonction doit être une expression mathématique avec des inconnues de la forme 'V' suivie d'un chiffre et des opérateurs mathématiques">
+                                  pattern="^(\((V\d+|\d+|(\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\)))([+\-*\/](V\d+|\d+|(\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\))))*\)|V\d+|\d+)([+\-*\/](\((V\d+|\d+|(\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\)))([+\-*\/](V\d+|\d+|(\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\))))*\)|V\d+|\d+))*$"
+                                  title="La fonction doit être une expression mathématique avec des inconnues de la forme 'V' suivie d'un chiffre et des opérateurs mathématiques">
                             <p class="description-input" style="font-size: 10px;color: rgb(123, 170, 12);">
                                     V1:Premier valeur ; V2:Deuxième valeur ; V3:Troisième valeur ==> Exemple Fonction: (V1+V2+V3)/3
                             </p>

@@ -22,12 +22,14 @@ import {
   NbWindowModule,
 } from '@nebular/theme';
 import { LoginModule } from './Authentification/Login.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
     LoginModule,
+    FormsModule,
     BrowserAnimationsModule,
     NbSpinnerModule,
     HttpClientModule,

@@ -166,6 +166,7 @@ export class ParametageRUOComponent implements OnInit {
     liste :Utilisateur[]=[]
     liste3:Unite[]=[]
     listeUnite:Unite[]=[]
+
     userFile:any
     message?:String
     imgURL:any
@@ -184,6 +185,8 @@ export class ParametageRUOComponent implements OnInit {
     role:Role=new Role()
     currentuser:any
     currentuserUnite:number
+
+    currentUnite=new Unite()
     constructor(
       private service:CrudService,
       private route:Router,
@@ -355,36 +358,43 @@ modifier(event: any): void {
   
     }
     SaveCollab(ref: NbDialogRef<any>): void {
-      if (!this.user.username || !this.user.prenom  || !this.user.matricule ||!this.selectedUnite||!this.selectedRole) {
+      if (!this.user.username || !this.user.prenom  || !this.user.matricule||!this.selectedRole) {
          this.toastrService.danger('Veuillez remplir tous les champs', 'Erreur');
          return;
        }
-     if (this.selectedUnite) {
 
-      const roleSelectionne: Role = { id: this.selectedRole };
-      this.user.role = roleSelectionne;
-      this.user.mdp=this.user.matricule;
-      const uniteSelectionne: Unite = { id: this.selectedUnite };
-      this.user.unite = uniteSelectionne;
-      this.user.activite_id=this.selectedActivite
-      this.service.registerUser(this.user).subscribe(
-       (unite1) => {
-         this.selectedRole = null;
-         this.selectedUnite = null;
-         this.selectedActivite = null;
-         this.LoadUserRUO();
-         ref.close();
-         this.toastrService.success('Collaborateur ajouté avec succès', 'Succès', {
-           duration: 5000,
-             });
-       },
-       (error) => {
-         console.error('Error adding site:', error);
-         this.toastrService.danger('Erreur lors de l\'ajout du nouvelle Unité', 'Erreur');
-       }
-     );
+      this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
+        this.currentuser=utilisateur
+        this.currentUnite=this.currentuser.unite 
+
+        const roleSelectionne: Role = { id: this.selectedRole };
+        this.user.role = roleSelectionne;
+        this.user.mdp=this.user.matricule;
+      //  const uniteSelectionne: Unite = { id: this.selectedUnite };
+        this.user.unite = this.currentUnite;
+        this.user.activite_id=this.selectedActivite
+        this.service.registerUser(this.user).subscribe(
+         (unite1) => {
+           this.selectedRole = null;
+           this.selectedUnite = null;
+           this.selectedActivite = null;
+           this.LoadUserRUO();
+           ref.close();
+           this.toastrService.success('Collaborateur ajouté avec succès', 'Succès', {
+             duration: 5000,
+               });
+         },
+         (error) => {
+           console.error('Error adding site:', error);
+           this.toastrService.danger('Erreur lors de l\'ajout du nouvelle Unité', 'Erreur');
+         }
+       );
+      })
+    
+   
    }
-   }
+
+
     SaveRUO(ref: NbDialogRef<any>): void {
     if (!this.user.username || !this.user.prenom  || !this.user.matricule ||!this.user.email ||!this.selectedUnite) {
        this.toastrService.danger('Veuillez remplir tous les champs', 'Erreur');
@@ -412,13 +422,13 @@ modifier(event: any): void {
    );
  }
  }
-   loadActivites() {
-    if (this.selectedUnite) {
-       this.service.getActivitiesByUniteId(this.selectedUnite).subscribe(at=>{
-         this.activite=at
-     }) 
-   }
-   }
+  //  loadActivites() {
+  //   if (this.selectedUnite) {
+  //      this.service.getActivitiesByUniteId(this.selectedUnite).subscribe(at=>{
+  //        this.activite=at
+  //    }) 
+  //  }
+  //  }
   
   
     ngOnInit(): void {
@@ -433,8 +443,18 @@ modifier(event: any): void {
        this.listeUnite=unite
      
     })
-  
+
+    this.service.getUserById(this.service.userDetail().id).subscribe(utilisateur=>{
+      this.currentuser=utilisateur
+      this.currentUnite=this.currentuser.unite
+    
+      this.service.getActivitiesByUniteId(this.currentUnite.id).subscribe(at=>{
+        this.activite=at})
+    })
+   
+    
     }
+    
    
   }
   

@@ -464,7 +464,7 @@ fetchDataResultat(id: number): void {
       this.chartjs = config.variables.chartjs;
 
       this.service.getResultatData(id).subscribe(data => {
-    //    console.log('Données brutes :', data);
+        data=data.slice(-30);
 
         if (!data) {
        //   console.log("data nul !!! ")
@@ -643,7 +643,7 @@ fetchData1(id: number): void {
       this.chartjs = config.variables.chartjs;
 
       this.service.getMesureCCData(id).subscribe(data => {
-      //  console.log('Données brutes :', data);
+        data=data.slice(-30);
 
         if (!data) {
        //   console.log("data nul ou <2 !!! ")

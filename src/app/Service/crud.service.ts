@@ -447,11 +447,20 @@ export class CrudService {
           mailNonConformite(mesureCC:MesureCC){
             return this.http.post<any>(this.apiUrl+"/mesureCC/notifyNC", mesureCC);
           }
-         
+
+          getMesureCCPrediction(id: number): Observable<any[]> {
+            const url = `${this.apiUrl}/mesureCC/valByCarteControle/${id}`;
+            return this.http.get<any[]>(url);
+          }
+          getMesureCCPredictionResult(id: number): Observable<any[]> {
+            const url = `${this.apiUrl}/mesureCC/resByCarteControle/${id}`;
+            return this.http.get<any[]>(url);
+          }
          getMesureCCData(id: number): Observable<any[]> {
           const url = `${this.apiUrl}/mesureCC/valWithDateByCarteControle1/${id}`;
           return this.http.get<any[]>(url);
         }
+
         
          getResultatData(id: number): Observable<any[]> {
           const url = `${this.apiUrl}/mesureCC/ResultatWithDateByCarteControle1/${id}`;

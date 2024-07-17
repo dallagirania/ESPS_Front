@@ -4,7 +4,7 @@
 
     <nb-card>     
       <nb-card-body style="padding: 0px;">
-          <ng2-smart-table [settings]="settingsRUO" [source]="sourceRUO"(create)="createCollab(addCollab)" (delete)="OnDeleteConfirm($event)" (edit)="modifier($event)" >
+          <ng2-smart-table style="zoom: 0.8;" [settings]="settingsRUO" [source]="sourceRUO"(create)="createCollab(addCollab)" (delete)="OnDeleteConfirm($event)" (edit)="modifier($event)" >
           </ng2-smart-table>
         </nb-card-body>
     </nb-card>
@@ -146,7 +146,7 @@
              
             
             </div>
-            <div class="row">
+            <!-- <div class="row">
               <div class="col-sm-12">
                 <div class="form-group">
                 <label for="inputWebsite" class="label" style="color: black;margin-left: 5px;">Unité Opérationnelle : <span style="color: red;">*</span>  </label>
@@ -159,8 +159,8 @@
               </nb-select>  
               </div>
               </div>
-            </div>
-            <div class="row"  *ngIf="showActivites">
+            </div>*ngIf="showActivites" -->
+            <div class="row"  >
               <div class="col-sm-12">
                 <div class="form-group">
                 <label for="inputWebsite" class="label" style="color: black;margin-left: 5px;">Activité  <span style="color: red;">*</span>  </label>

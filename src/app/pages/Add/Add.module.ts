@@ -40,6 +40,8 @@ import { ImprimerHabilitationComponent } from './imprimer-habilitation/imprimer-
 import { MesureCCComponent } from './mesure-cc/mesure-cc.component';
 import { MesureOKDComponent } from './mesure-okd/mesure-okd.component';
 import { CourbeCCComponent } from './courbe-cc/courbe-cc.component';
+import { NgxEchartsModule } from 'ngx-echarts';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 
 @NgModule({
@@ -65,7 +67,10 @@ import { CourbeCCComponent } from './courbe-cc/courbe-cc.component';
     NbTabsetModule,
     NbRouteTabsetModule,
     NgMultiSelectDropDownModule,
-    ChartModule
+    ChartModule,
+    NgxEchartsModule,
+    NgxChartsModule,
+    
     
   
   ],

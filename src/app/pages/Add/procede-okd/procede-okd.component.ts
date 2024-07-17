@@ -607,8 +607,9 @@ SaveCC(): void {
     return;
   }
   if(this.carte.fonction){
-    const fonctionRegExp = /^(\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\)|V\d+|\d+)([+\-*\/](\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\)|V\d+|\d+))*$/;
+  //  const fonctionRegExp = /^(\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\)|V\d+|\d+)([+\-*\/](\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\)|V\d+|\d+))*$/;
    //const fonctionRegExp = /^(\(((V\d+|\d+)([+\-*\/]\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\)|V\d+|\d+))*\)|V\d+|\d+)([+\-*\/]\(((V\d+|\d+)([+\-*\/]\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\)|V\d+|\d+))*\))*$/;
+   const fonctionRegExp = /^(\((V\d+|\d+|(\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\)))([+\-*\/](V\d+|\d+|(\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\))))*\)|V\d+|\d+)([+\-*\/](\((V\d+|\d+|(\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\)))([+\-*\/](V\d+|\d+|(\((V\d+|\d+)([+\-*\/](V\d+|\d+))*\))))*\)|V\d+|\d+))*$/;
 
 
     // Vérification si la fonction correspond au modèle spécifié

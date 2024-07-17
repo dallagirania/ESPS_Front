@@ -13,7 +13,7 @@ import { DetailModule } from './ProcedeDetail/Details.module';
 import { NotifyModule } from './ListeNotifications/Notify.module';
 import { HomeComponent } from './Visiteur/home/home.component';
 import { HomeModule } from './Visiteur/Home.module';
-
+import { PredictionModule } from './PredictionCarte/Prediction.module';
 @NgModule({
   imports: [
     PagesRoutingModule,
@@ -27,7 +27,8 @@ import { HomeModule } from './Visiteur/Home.module';
     VerifModule,
     DetailModule,
     NotifyModule,
-    HomeModule
+    HomeModule,
+    PredictionModule
 
   ],
   declarations: [

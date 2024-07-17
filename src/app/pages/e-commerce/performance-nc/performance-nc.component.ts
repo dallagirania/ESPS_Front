@@ -188,6 +188,7 @@ export class PerformanceNCComponent implements OnInit ,OnChanges{
   }
   
   createStackedBarChart(data: any): void {
+    console.log("data",data)
     this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
       this.chartjs = config.variables.chartjs;
   

@@ -21,6 +21,7 @@ import { ListeProcedeComponent } from './ProcedeDetail/liste-procede/liste-proce
 import { DetailComponent } from './ProcedeDetail/detail/detail.component';
 import { ListeNotifComponent } from './ListeNotifications/liste-notif/liste-notif.component';
 import { HomeComponent } from './Visiteur/home/home.component';
+import { PredictionComponent } from './PredictionCarte/prediction/prediction.component';
 
 const routes: Routes = [{
   path: '',
@@ -98,6 +99,10 @@ const routes: Routes = [{
     {
       path: 'home',
       component: HomeComponent,
+    },
+    {
+      path: 'prediction/:id',
+      component: PredictionComponent,
     },
 /*     {
       path: 'show',

@@ -58,17 +58,15 @@ export class CourbeCCComponent implements OnInit {
       this.carte1 = carte;
       this.min = parseFloat(this.carte1.min.toString());
       this.max = parseFloat(this.carte1.max.toString());
-    //  console.log("min/max ==>", this.min, this.max);
   
       this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
         this.colors = config.variables;
         this.chartjs = config.variables.chartjs;
   
         this.service.getResultatData(id).subscribe(data => {
-      //    console.log('Données brutes :', data);
+          data=data.slice(-30);
   
           if (!data) {
-         //   console.log("data nul !!! ")
             const yMinData = new Array(2).fill(this.min);
             const yMaxData = new Array(2).fill(this.max);
             this.chartDataRes = {
@@ -89,14 +87,10 @@ export class CourbeCCComponent implements OnInit {
             return; // Sortie anticipée
           }
           if (data.length ==1 ) {
-         //   console.log("data  ==1  !!! ")
-          //  console.log("this.min",this.min,"this.max",this.max)
             const yMinData = new Array(2).fill(this.min);
             const yMaxData = new Array(2).fill(this.max);
             const series1 = data.map(measure => measure.value);
             const currentDate = new Date().toLocaleString(); 
-        //    console.log("series1",series1)
-        //    console.log("labels",[currentDate].concat(data.map(measure => new Date(measure.date).toLocaleString())), )
             this.chartDataRes = {
               labels: [currentDate].concat(data.map(measure => new Date(measure.date).toLocaleString())), 
               datasets: [
@@ -121,7 +115,6 @@ export class CourbeCCComponent implements OnInit {
   
           const series1Data = data.map(measure => measure.value);
           this.maximal = Math.max(...series1Data);
-      //    console.log("la valeur max du courbe est : ",this.maximal)
           const yMinData = new Array(data.length).fill(this.min);
           const yMaxData = new Array(data.length).fill(this.max);
           if(this.maximal>this.max){
@@ -225,8 +218,6 @@ export class CourbeCCComponent implements OnInit {
               }
             }
           };
-  
-       //   console.log('Données finales pour le graphique chartDataRes :', this.chartDataRes);
         });
       });
     });
@@ -237,17 +228,15 @@ export class CourbeCCComponent implements OnInit {
       this.carte1 = carte;
       this.min = parseFloat(this.carte1.min.toString());
       this.max = parseFloat(this.carte1.max.toString());
-    //  console.log("min/max ==>", this.min, this.max);
   
       this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
         this.colors = config.variables;
         this.chartjs = config.variables.chartjs;
   
         this.service.getMesureCCData(id).subscribe(data => {
-        //  console.log('Données brutes :', data);
+           data=data.slice(-30);
   
           if (!data) {
-         //   console.log("data nul ou <2 !!! ")
             const yMinData = new Array(2).fill(this.min);
             const yMaxData = new Array(2).fill(this.max);
             this.chartData1 = {
@@ -268,7 +257,6 @@ export class CourbeCCComponent implements OnInit {
             return; // Sortie anticipée
           }
           if (data.length < 2) {
-        //    console.log("data nul ou <2 !!! ")
             const yMinData = new Array(2).fill(this.min);
             const yMaxData = new Array(2).fill(this.max);
             const series1 = data.map(measure => measure.value);
@@ -296,7 +284,6 @@ export class CourbeCCComponent implements OnInit {
   
           const series1 = data.map(measure => measure.value);
           this.maximal = Math.max(...series1);
-        //  console.log("la valeur max du courbe est : ",this.maximal)
           const yMinData = new Array(data.length).fill(this.min);
           const yMaxData = new Array(data.length).fill(this.max);
   
@@ -352,42 +339,7 @@ export class CourbeCCComponent implements OnInit {
                 backgroundColor: 'rgba(252, 181, 178, 0.3)',
               }],
             };
-    
           }
-          
-          // this.chartData1 = {
-          //   labels: data.map(measure => new Date(measure.date).toLocaleString()),
-          //   datasets: [{
-          //     data: series1,
-          //     label: 'Courbe de controle',
-          //     backgroundColor: 'rgba(0, 0, 0, 0)',
-          //     borderColor: this.colors.primary,
-          //   }, {
-          //     data: yMinData,
-          //     label: 'y=min',
-          //     backgroundColor: 'rgba(252, 181, 178 , 0.3)',
-          //     borderColor: 'rgba(176, 243, 120, 1)',
-          //   }, {
-          //     data: yMaxData,
-          //     label: 'y=max',
-          //     backgroundColor: 'rgba(135, 231, 53, 0.3)',
-          //     borderColor: 'rgba(176, 243, 120, 1)',
-          //   }, {
-          //     data: yFinData,
-          //     label: 'Cadre',
-          //     backgroundColor: 'rgba(252, 181, 178, 0.3)',
-          //   }],
-          // };
-           // Ajout des options de zoom
-        // this.options.plugins = {
-        //   zoom: {
-        //     zoom: {
-        //       enabled: true,
-        //       mode: 'xy',
-        //     },
-        //   },
-        // };
-  
           this.options = {
            
             responsive: true,
@@ -435,7 +387,7 @@ export class CourbeCCComponent implements OnInit {
               }
             }
           };
-        //  console.log('Données finales pour le graphique :', this.chartData1);
+      
         });
       });
     });
@@ -456,35 +408,15 @@ EtenduVal(id: number): void {
       this.chartjs = config.variables.chartjs;
 
       this.service.getValEtendu(id).subscribe(data => {
-        console.log("Les données du différence sont :=>", data);
-
-        // Directly use the data array as series1Data
+        data=data.slice(-30);
         const series1Data = data;
         this.maximal = Math.max(...series1Data);
         const yMinData = new Array(data.length).fill(this.min);
         const yMaxData = new Array(data.length).fill(this.max);
         const yFinData = new Array(data.length).fill(this.max + 20);
-        console.log("Series Data: ", series1Data); // Debugging line to check data
 
         if (series1Data.length === 0) {
           console.warn('No data found for series1Data');
-            // const yMinData = new Array(2).fill(this.min);
-            // const yMaxData = new Array(2).fill(this.max);
-            // this.chartDataDiff = {
-            //   labels: ['Label 1', 'Label 2'],
-            //   datasets: [
-            //     {
-            //       data: yMinData,
-            //       label: 'y=min',
-            //       backgroundColor: 'rgba(252, 181, 178 , 0.3)',
-            //       borderColor: 'rgba(176, 243, 120, 1)',
-            //     }, {
-            //       data: yMaxData,
-            //       label: 'y=max',
-            //       backgroundColor: 'rgba(135, 231, 53, 0.3)',
-            //       borderColor: 'rgba(176, 243, 120, 1)',
-            //     }],
-            // };
           return;
         }
 
@@ -497,21 +429,7 @@ EtenduVal(id: number): void {
             borderColor: 'rgba(115, 199, 7, 0.5)',
             borderWidth: 1,
           },
-          //  {
-          //   data: yMinData,
-          //   label: 'y=min',
-          //   backgroundColor: 'rgba(252, 181, 178 , 0.3)',
-          //   borderColor: 'rgba(176, 243, 120, 1)',
-          // }, {
-          //   data: yMaxData,
-          //   label: 'y=max',
-          //   backgroundColor: 'rgba(135, 231, 53, 0.3)',
-          //   borderColor: 'rgba(176, 243, 120, 1)',
-          // }, {
-          //   data: yFinData,
-          //   label: 'Cadre',
-          //   backgroundColor: 'rgba(252, 181, 178, 0.3)',
-          // }
+         
         ],
         };
 
@@ -572,35 +490,15 @@ getResEtendu(id: number): void {
       this.chartjs = config.variables.chartjs;
 
       this.service.getResEtendu(id).subscribe(data => {
-        console.log("Les données du différence sont :=>", data);
-
-        // Directly use the data array as series1Data
+        data=data.slice(-30);
         const series1Data = data;
         this.maximal = Math.max(...series1Data);
         const yMinData = new Array(data.length).fill(this.min);
         const yMaxData = new Array(data.length).fill(this.max);
         const yFinData = new Array(data.length).fill(this.max + 20);
-        console.log("Series Data: ", series1Data); // Debugging line to check data
 
         if (series1Data.length === 0) {
           console.warn('No data found for series1Data');
-            // const yMinData = new Array(2).fill(this.min);
-            // const yMaxData = new Array(2).fill(this.max);
-            // this.chartDataDiff = {
-            //   labels: ['Label 1', 'Label 2'],
-            //   datasets: [
-            //     {
-            //       data: yMinData,
-            //       label: 'y=min',
-            //       backgroundColor: 'rgba(252, 181, 178 , 0.3)',
-            //       borderColor: 'rgba(176, 243, 120, 1)',
-            //     }, {
-            //       data: yMaxData,
-            //       label: 'y=max',
-            //       backgroundColor: 'rgba(135, 231, 53, 0.3)',
-            //       borderColor: 'rgba(176, 243, 120, 1)',
-            //     }],
-            // };
           return;
         }
 
@@ -613,21 +511,7 @@ getResEtendu(id: number): void {
             borderColor: 'rgba(115, 199, 7, 0.5)',
             borderWidth: 1,
           },
-          //  {
-          //   data: yMinData,
-          //   label: 'y=min',
-          //   backgroundColor: 'rgba(252, 181, 178 , 0.3)',
-          //   borderColor: 'rgba(176, 243, 120, 1)',
-          // }, {
-          //   data: yMaxData,
-          //   label: 'y=max',
-          //   backgroundColor: 'rgba(135, 231, 53, 0.3)',
-          //   borderColor: 'rgba(176, 243, 120, 1)',
-          // }, {
-          //   data: yFinData,
-          //   label: 'Cadre',
-          //   backgroundColor: 'rgba(252, 181, 178, 0.3)',
-          // }
+         
         ],
         };
 

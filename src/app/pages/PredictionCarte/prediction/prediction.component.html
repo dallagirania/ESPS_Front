@@ -1,0 +1,9 @@
+    <div *ngIf="forecast.length">
+    <h3 *ngIf="carte1.fonction" >Prévisions res </h3>
+    <h3 *ngIf="!carte1.fonction" >Prévisions val </h3>
+    <chart type="line" [data]="chartDataDiff" [options]="diffOptions" class="custom-chart"></chart>
+  </div>
+  <div *ngIf="!forecast.length ">
+    Loading...
+  </div>
+  
